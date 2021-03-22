@@ -46,7 +46,7 @@ class AgoraSurfaceView(
     Uri.parse(BanubaSdkManager.getResourcesBase())
       .buildUpon()
       .appendPath("effects")
-      .appendPath("UnluckyWitch")
+      .appendPath("HeadphoneMusic")
       .build()
   }
 

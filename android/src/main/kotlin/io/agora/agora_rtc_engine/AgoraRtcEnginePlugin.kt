@@ -1,12 +1,9 @@
 package io.agora.agora_rtc_engine
 
 import android.content.Context
-import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.view.SurfaceView
 import androidx.annotation.NonNull
-import com.banuba.sdk.manager.BanubaSdkManager
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -58,9 +55,6 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   }
 
   private fun initPlugin(context: Context, binaryMessenger: BinaryMessenger, platformViewRegistry: PlatformViewRegistry) {
-    BanubaSdkManager.initialize(context,
-      "rXyaDKtsn260PUlL+DwHJDRKfEC8pkAjGbiOTzWJyEaMqlrVtV87NGPBUPLRGelwp9IcJVPjeeYVAiDzShXDW7UsioCXOLTGR4VoKK+Ljg4e1qwndj3t3maiwEeT6eOwCU3tZMQA+sgK0l/eZ2RPBg7giVAXGrMYjsT/8siO91AtKiNiUHnjABrJKAaFR+Y+Rfd4aaJvs8fWP5msgWbBOFYyFhupQ++pVkGD02qZq0j+DO88yc2gAIBz1+4+nkLN+EsOnt5tw/DeocpdyOPPkohFzjZzwA0D0f79qsVRngQccF37+bNkYqVowwvrm+YFBxHXSaL67nAU5KvOJFLyZb4evIfGzVVCeGlWjFXP8jAiMXoT1G2xmlZYgrUHIGhiWI0/owGiq2Prmv+6MU9XB7wj5IK3DMGuCwZ4rqlWfe41nFJv6UbfnpPDcF5zINiMfwuC+7lbHdHtH5g2jnpIxdywkEln4dy78mgPdbRPrQvwiWIsGiXwdjkikZxf6ARWFHgHV7Bn63S8B63oxS2NSduCIllHdhowcdJZCzWjCkP3AcTmuAz0rD3BynPCrwgEOL58g3GT+w7ZbNX8JDVE9mZVKORCRp7iMmNsR6Uxy/egcm5ylaV1QfBS6xaxK0gZLimBsvc5fFbEzb448VECxqOXpq9S5kt2S50gvKJA6OENB3wUXnoTbytkS0fIF1+UH6XvG6u1wfNPDJ4CKetTEP0pfYC0HdYStBxgbe5xIkI2/fjxQNTyRX8AynR70FFZVZhqbLklpkffQWvTmMCfVTAij9xJth+znvL4W5IG165L45mAmC2JstuCCGLR3+EXL8+2IOIANOrCfC+sMoMJqwuI/y5A9REqGWBYCqZBkkVYdz88Jcw1ri243ewq9nJzD1f+IxpXqMFLLKrpgEs3CWJs0ax4rUz1OQLpGQ1dnkgdVts3CJ57EigLrKCoP3K7mU9pptW8+Kk+tdPgjR4Eb2RtulIGHcOz6+uW7UQfrtd/6ceGgPd1YUTklda815UNQhAnHDuWXRMybQLFaPgtAP4r+cY49IEyuAoL6cRz8owxxb6RpAU1XN9TYWkZfez7eYFD2PrGt16pvPLMDBZFK4YmgmpDjSzPiHh4c11zz+poQHOA+DcLsBoh3RRAHCClKsdCVEpzb5ygwv242AXteBA3A9DImRpRlibqiqsN3hFGhUJF4UcJqPyRk3VJLfeO4dTLc5Ac2jQojpOrp4Gl8+1decC+8FuT2+e1X6U4tOb0WHNuNxBzTFVSSee+kjEIAJZAif5mmfYvTrg2XDbEBOcV4a/pKrXrChUTU/3HFldUtuRuMIKcmHDSfRftuAT+jxTIDvSMq5uwTO09gUHyXfdWPuIjTbqiaL3KCdrHL3OulEDgEqbddobHZYz1tpQnibdgzFYN2IXCvHTjz8YjeNgoEK6jZvYqeE0xFBT3DdLrqznQkJWrQ6R5XYbA1kVgC4JMKv78Oan+R2a58PXuF7XMahOj5k65tq4THj5FguDCcFB0xSXZGlf++c4l3mxlAv2mbouM4737ecIbj4/ksAJX35rx+swOs72kL3LdgFF4lktUx2WXySp9Ap2WRb2v4oUTsacF1TA8MQBCZzuYjDFAr+kcpNpHBUeErPxuCJFHs+HHyrKJocco2vmY2QPqt8Ha80AzB0g17pMcV41n6h65WU7PPVXN8VOv9iaO9hMl3scyd8ImX/t0OUjzlfElL/mFbsKAmXtTJLfEKO4MnaH57EBgV16GodTupVG7cAY04Rv4/wS8NwRKveePz9TTnMbmgPEJNqYIEoEGjOlcagsElVfTP6P0LS9TUS69O/m0MClRRF/peDHjBeNo3PQnQQ8yK/uRSO8iyGPS9e511kE4e6lemdCFWEwqypAkzLBb6lDbsg=="
-    )
     applicationContext = context.applicationContext
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
@@ -75,8 +69,6 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     this.binding = binding
     rtcChannelPlugin.onAttachedToEngine(binding)
     initPlugin(binding.applicationContext, binding.binaryMessenger, binding.platformViewRegistry)
-    banubaSdkManager.attachSurface(agoraView.view as SurfaceView?)
-    configureSdkManager()
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -144,23 +136,5 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
       return@getAssetAbsolutePath
     }
     result.error(IllegalArgumentException::class.simpleName, null, null)
-  }
-
-  private val banubaSdkManager by lazy(LazyThreadSafetyMode.NONE) {
-    BanubaSdkManager(applicationContext)
-  }
-
-  private val maskUri by lazy(LazyThreadSafetyMode.NONE) {
-    Uri.parse(BanubaSdkManager.getResourcesBase())
-      .buildUpon()
-      .appendPath("effects")
-      .appendPath("UnluckyWitch")
-      .build()
-  }
-
-  private fun configureSdkManager() {
-    /*val banubaTouchListener = BanubaSdkTouchListener(this, banubaSdkManager.effectPlayer)
-    localSurfaceView.setOnTouchListener(banubaTouchListener)*/
-    banubaSdkManager.effectManager.loadAsync(maskUri.toString())
   }
 }

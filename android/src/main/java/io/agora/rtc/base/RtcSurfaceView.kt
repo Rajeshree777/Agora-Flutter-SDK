@@ -37,6 +37,7 @@ class RtcSurfaceView(
       banubaSdkManager.attachSurface(surface)
       banubaSdkManager.openCamera()
       banubaSdkManager.effectManager.loadAsync(maskUri.toString())
+      print("init Block called")
     } catch (e: UnsatisfiedLinkError) {
       throw RuntimeException("Please init RtcEngine first!")
     }
@@ -87,6 +88,10 @@ class RtcSurfaceView(
     surface = RtcEngine.CreateRendererView(context.applicationContext)
     surface.setZOrderMediaOverlay(isMediaOverlay)
     surface.setZOrderOnTop(onTop)
+    banubaSdkManager.attachSurface(surface)
+//    banubaSdkManager.openCamera()
+    banubaSdkManager.effectManager.loadAsync(maskUri.toString())
+    print("Set up Canvas called")
     addView(surface)
     surface.layout(0, 0, width, height)
     canvas.view = surface

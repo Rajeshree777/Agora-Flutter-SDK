@@ -1,10 +1,8 @@
 package io.agora.rtc.base
 
 import android.content.Context
-import android.net.Uri
 import android.view.SurfaceView
 import android.widget.FrameLayout
-import com.banuba.sdk.manager.BanubaSdkManager
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoCanvas
@@ -19,24 +17,9 @@ class RtcSurfaceView(
   private var onTop = false
   private var channel: WeakReference<RtcChannel>? = null
 
-  private val banubaSdkManager by lazy(LazyThreadSafetyMode.NONE) {
-    BanubaSdkManager(context)
-  }
-
-  private val maskUri by lazy(LazyThreadSafetyMode.NONE) {
-    Uri.parse(BanubaSdkManager.getResourcesBase())
-      .buildUpon()
-      .appendPath("effects")
-      .appendPath("HeadphoneMusic")
-      .build()
-  }
-
   init {
     try {
       surface = RtcEngine.CreateRendererView(context)
-      banubaSdkManager.attachSurface(surface)
-      banubaSdkManager.openCamera()
-      banubaSdkManager.effectManager.loadAsync(maskUri.toString())
       print("init Block called")
     } catch (e: UnsatisfiedLinkError) {
       throw RuntimeException("Please init RtcEngine first!")
@@ -88,10 +71,6 @@ class RtcSurfaceView(
     surface = RtcEngine.CreateRendererView(context.applicationContext)
     surface.setZOrderMediaOverlay(isMediaOverlay)
     surface.setZOrderOnTop(onTop)
-    banubaSdkManager.attachSurface(surface)
-//    banubaSdkManager.openCamera()
-    banubaSdkManager.effectManager.loadAsync(maskUri.toString())
-    print("Set up Canvas called")
     addView(surface)
     surface.layout(0, 0, width, height)
     canvas.view = surface

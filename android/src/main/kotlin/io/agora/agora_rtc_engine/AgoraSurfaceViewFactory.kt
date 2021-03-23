@@ -1,10 +1,7 @@
 package io.agora.agora_rtc_engine
 
 import android.content.Context
-import android.net.Uri
-import android.view.SurfaceView
 import android.view.View
-import com.banuba.sdk.manager.BanubaSdkManager
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcSurfaceView
@@ -14,7 +11,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
-import kotlin.math.log
 import kotlin.reflect.full.declaredMemberFunctions
 import kotlin.reflect.jvm.javaMethod
 
@@ -39,22 +35,6 @@ class AgoraSurfaceView(
   private val view = RtcSurfaceView(context)
   private val channel = MethodChannel(messenger, "agora_rtc_engine/surface_view_$viewId")
 
-  private val banubaSdkManager by lazy(LazyThreadSafetyMode.NONE) {
-    BanubaSdkManager(context)
-  }
-
-  private val maskUri by lazy(LazyThreadSafetyMode.NONE) {
-    Uri.parse(BanubaSdkManager.getResourcesBase())
-      .buildUpon()
-      .appendPath("effects")
-      .appendPath("HeadphoneMusic")
-      .build()
-  }
-
-  private fun configureSdkManager() {
-    print("Mask UTI is >>>>> $maskUri")
-    banubaSdkManager.effectManager.loadAsync(maskUri.toString())
-  }
   init {
     args?.let { map ->
       (map["data"] as? Map<*, *>)?.let { setData(it) }
@@ -98,11 +78,7 @@ class AgoraSurfaceView(
   private fun setData(data: Map<*, *>) {
     val channel = (data["channelId"] as? String)?.let { getChannel(it) }
     getEngine()?.let {
-
       view.setData(it, channel, (data["uid"] as Number).toInt())
-      banubaSdkManager.openCamera()
-      banubaSdkManager.attachSurface(view as SurfaceView)
-      configureSdkManager()
     }
   }
 

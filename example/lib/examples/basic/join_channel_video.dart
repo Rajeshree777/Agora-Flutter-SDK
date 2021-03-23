@@ -42,6 +42,12 @@ class _State extends State<JoinChannelVideo> {
     this._addListeners();
 
     await widget._engine.enableVideo();
+    await widget._engine.setBeautyEffectOptions(true, BeautyOptions.fromJson({
+      'lighteningContrastLevel': 1,
+      'lighteningLevel': 0.7,
+      'smoothnessLevel': 0.5,
+      'rednessLevel': 0.1
+    }));
     await widget._engine.startPreview();
     await widget._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await widget._engine.setClientRole(ClientRole.Broadcaster);

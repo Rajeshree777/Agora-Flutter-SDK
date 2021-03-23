@@ -14,7 +14,7 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.banuba.sdk.BuildConfig;
+
 import com.banuba.sdk.Recycler;
 import com.banuba.sdk.camera.CameraFpsMode;
 import com.banuba.sdk.camera.Facing;

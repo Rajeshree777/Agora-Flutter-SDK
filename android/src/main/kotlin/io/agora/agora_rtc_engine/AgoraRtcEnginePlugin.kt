@@ -29,7 +29,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
   private lateinit var applicationContext: Context
-  private val MASK_NAME = "UnluckyWitch"
+  private val MASK_NAME = "HeadphoneMusic"
 
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -78,7 +78,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     eventChannel.setStreamHandler(this)
     platformViewRegistry.registerViewFactory("AgoraSurfaceView", AgoraSurfaceViewFactory(binaryMessenger, this, rtcChannelPlugin))
     platformViewRegistry.registerViewFactory("AgoraTextureView", AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin))
-    //banubaSdkManager.attachSurface(platformViewRegistry)
+    banubaSdkManager.attachSurface(platformViewRegistry)
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {

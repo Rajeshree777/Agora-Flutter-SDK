@@ -1,8 +1,17 @@
 package io.agora.rtc.base
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import android.util.Log
 import android.view.SurfaceView
 import android.widget.FrameLayout
+import com.banuba.sdk.entity.RecordedVideoInfo
+import com.banuba.sdk.manager.BanubaSdkManager
+import com.banuba.sdk.manager.BanubaSdkTouchListener
+import com.banuba.sdk.manager.IEventCallback
+import com.banuba.sdk.types.Data
+import io.agora.agora_rtc_engine.AgoraRtcEnginePlugin
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoCanvas
@@ -19,14 +28,21 @@ class RtcSurfaceView(
 
   init {
     try {
+
       surface = RtcEngine.CreateRendererView(context)
       print("init Block called")
     } catch (e: UnsatisfiedLinkError) {
       throw RuntimeException("Please init RtcEngine first!")
     }
+
     canvas = VideoCanvas(surface)
+
     addView(surface)
   }
+
+
+
+
 
   fun setZOrderMediaOverlay(isMediaOverlay: Boolean) {
     this.isMediaOverlay = isMediaOverlay
@@ -109,4 +125,6 @@ class RtcSurfaceView(
     surface.layout(0, 0, width, height)
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
   }
+
+
 }

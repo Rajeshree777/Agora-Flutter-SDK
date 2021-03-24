@@ -1,11 +1,20 @@
 package io.agora.agora_rtc_engine
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.annotation.NonNull
+import com.banuba.sdk.entity.RecordedVideoInfo
+import com.banuba.sdk.manager.BanubaSdkManager
+import com.banuba.sdk.manager.BanubaSdkTouchListener
+import com.banuba.sdk.manager.IEventCallback
+import com.banuba.sdk.types.Data
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
+import io.agora.rtc.video.AgoraVideoFrame
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -20,6 +29,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
   private lateinit var applicationContext: Context
+  private val MASK_NAME = "UnluckyWitch"
 
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -32,7 +42,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   private val manager = RtcEngineManager { methodName, data -> emit(methodName, data) }
   private val handler = Handler(Looper.getMainLooper())
   private val rtcChannelPlugin = AgoraRtcChannelPlugin(this)
-  lateinit var agoraView:AgoraSurfaceView
+  lateinit var agoraView: AgoraSurfaceView
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -56,12 +66,14 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 
   private fun initPlugin(context: Context, binaryMessenger: BinaryMessenger, platformViewRegistry: PlatformViewRegistry) {
     applicationContext = context.applicationContext
+    configureSdkManager()
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
     eventChannel.setStreamHandler(this)
     platformViewRegistry.registerViewFactory("AgoraSurfaceView", AgoraSurfaceViewFactory(binaryMessenger, this, rtcChannelPlugin))
     platformViewRegistry.registerViewFactory("AgoraTextureView", AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin))
+    //banubaSdkManager.attachSurface(platformViewRegistry)
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -123,7 +135,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     result.notImplemented()
   }
 
-   fun getAssetAbsolutePath(call: MethodCall, result: Result) {
+  fun getAssetAbsolutePath(call: MethodCall, result: Result) {
     call.arguments<String>()?.let {
       val assetKey = registrar?.lookupKeyForAsset(it)
         ?: binding?.flutterAssets?.getAssetFilePathByName(it)
@@ -137,4 +149,76 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     }
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
+
+  val banubaSdkManager by lazy(LazyThreadSafetyMode.NONE) {
+    BanubaSdkManager(applicationContext)
+
+  }
+
+  private fun configureSdkManager() {
+    val banubaTouchListener = BanubaSdkTouchListener(applicationContext, banubaSdkManager.effectPlayer)
+
+    banubaSdkManager.effectManager.loadAsync(maskUri.toString())
+    banubaSdkManager.setCallback(banubaSdkEventCallback)
+  }
+
+  private val banubaSdkEventCallback = object : IEventCallback {
+    override fun onCameraOpenError(error: Throwable) {
+
+    }
+
+    override fun onCameraStatus(opened: Boolean) {
+
+    }
+
+    override fun onScreenshotReady(photo: Bitmap) {
+
+    }
+
+    override fun onHQPhotoReady(photo: Bitmap) {
+
+    }
+
+    override fun onVideoRecordingFinished(videoInfo: RecordedVideoInfo) {
+
+    }
+
+    override fun onVideoRecordingStatusChange(started: Boolean) {
+
+    }
+
+    override fun onImageProcessed(processedBitmap: Bitmap) {
+
+    }
+
+    override fun onFrameRendered(data: Data, width: Int, height: Int) {
+      Log.e("Agora", "AgoraFrameData  ${data.data}")
+      pushCustomFrame(data, width, height)
+    }
+
+  }
+  private val maskUri by lazy(LazyThreadSafetyMode.NONE) {
+    Uri.parse(BanubaSdkManager.getResourcesBase())
+      .buildUpon()
+      .appendPath("effects")
+      .appendPath(MASK_NAME)
+      .build()
+
+
+  }
+
+  private fun pushCustomFrame(rawData: Data, width: Int, height: Int) {
+    val pixelData = ByteArray(rawData.data.remaining())
+    rawData.data.get(pixelData)
+    rawData.close()
+    val videoFrame = AgoraVideoFrame().apply {
+      timeStamp = System.currentTimeMillis()
+      format = AgoraVideoFrame.FORMAT_RGBA
+      this.height = height
+      stride = width
+      buf = pixelData
+    }
+    engine()?.pushExternalVideoFrame(videoFrame)
+  }
+
 }

@@ -62,7 +62,7 @@ class AgoraSurfaceView(
   }
 
   override fun getView(): View {
-
+    banubaSdkManager.attachSurface(view)
     return view
   }
 

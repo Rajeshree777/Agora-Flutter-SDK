@@ -1,0 +1,42 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "boolean", "DUMP_PUSHES", "false"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+    }
+    compileOptions {
+//        coreLibraryDesugaringEnabled true
+
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+    testBuildType "release"
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api project(":banuba_effect_player-release")
+    implementation 'androidx.annotation:annotation:1.0.0'
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    //androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+//    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+}

@@ -1,14 +1,7 @@
 package io.agora.agora_rtc_engine
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
-import android.util.Log
 import android.view.View
-import com.banuba.sdk.entity.RecordedVideoInfo
-import com.banuba.sdk.manager.BanubaSdkManager
-import com.banuba.sdk.manager.BanubaSdkTouchListener
-import com.banuba.sdk.manager.IEventCallback
 import com.banuba.sdk.types.Data
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
@@ -42,13 +35,11 @@ class AgoraSurfaceView(
   private val rtcChannelPlugin: AgoraRtcChannelPlugin
 ) : PlatformView, MethodChannel.MethodCallHandler {
   private val MASK_NAME = "HeadphoneMusic"
-  private val view = RtcSurfaceView(context)
+  private val view = RtcSurfaceView(context,rtcEnginePlugin)
   private val channel = MethodChannel(messenger, "agora_rtc_engine/surface_view_$viewId")
 
   init {
-    BanubaSdkManager.initialize(context,
-      AgoraRtcEnginePlugin.BANUBA_CLIENT_TOKEN
-    )
+
     args?.let { map ->
       (map["data"] as? Map<*, *>)?.let { setData(it) }
       (map["renderMode"] as? Number)?.let { setRenderMode(it.toInt()) }
@@ -57,12 +48,11 @@ class AgoraSurfaceView(
       (map["zOrderMediaOverlay"] as? Boolean)?.let { setZOrderMediaOverlay(it) }
     }
     channel.setMethodCallHandler(this)
-    configureSdkManager()
+
 
   }
 
   override fun getView(): View {
-    banubaSdkManager.attachSurface(view)
     return view
   }
 
@@ -123,62 +113,7 @@ class AgoraSurfaceView(
   }
 
 
-  val banubaSdkManager by lazy(LazyThreadSafetyMode.NONE) {
-    BanubaSdkManager(context)
 
-  }
-
-  private val banubaSdkEventCallback = object : IEventCallback {
-    override fun onCameraOpenError(error: Throwable) {
-
-    }
-
-    override fun onCameraStatus(opened: Boolean) {
-
-    }
-
-    override fun onScreenshotReady(photo: Bitmap) {
-
-    }
-
-    override fun onHQPhotoReady(photo: Bitmap) {
-
-    }
-
-    override fun onVideoRecordingFinished(videoInfo: RecordedVideoInfo) {
-
-    }
-
-    override fun onVideoRecordingStatusChange(started: Boolean) {
-
-    }
-
-    override fun onImageProcessed(processedBitmap: Bitmap) {
-
-    }
-
-    override fun onFrameRendered(data: Data, width: Int, height: Int) {
-      Log.e("Agora", "AgoraFrameData  ${data.data}")
-      pushCustomFrame(data, width, height)
-    }
-
-  }
-  private fun configureSdkManager() {
-    val banubaTouchListener = BanubaSdkTouchListener(view.context, banubaSdkManager.effectPlayer)
-
-    banubaSdkManager.effectManager.loadAsync(maskUri.toString())
-    banubaSdkManager.setCallback(banubaSdkEventCallback)
-    banubaSdkManager.attachSurface(view)
-  }
-  private val maskUri by lazy(LazyThreadSafetyMode.NONE) {
-    Uri.parse(BanubaSdkManager.getResourcesBase())
-      .buildUpon()
-      .appendPath("effects")
-      .appendPath(MASK_NAME)
-      .build()
-
-
-  }
   private fun pushCustomFrame(rawData: Data, width: Int, height: Int) {
     val pixelData = ByteArray(rawData.data.remaining())
     rawData.data.get(pixelData)

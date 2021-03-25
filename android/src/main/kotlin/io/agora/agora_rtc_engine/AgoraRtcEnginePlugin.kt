@@ -61,9 +61,9 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
       AgoraRtcEnginePlugin().apply {
         this.registrar = registrar
         rtcChannelPlugin.initPlugin(registrar.messenger())
-        BanubaSdkManager.initialize(applicationContext,
-          BANUBA_CLIENT_TOKEN
-        )
+//        BanubaSdkManager.initialize(applicationContext,
+//          BANUBA_CLIENT_TOKEN
+//        )
         initPlugin(registrar.context(), registrar.messenger(), registrar.platformViewRegistry())
       }
     }
@@ -71,14 +71,14 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 
   private fun initPlugin(context: Context, binaryMessenger: BinaryMessenger, platformViewRegistry: PlatformViewRegistry) {
     applicationContext = context.applicationContext
-    configureSdkManager()
+    //configureSdkManager()
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
     eventChannel.setStreamHandler(this)
     platformViewRegistry.registerViewFactory("AgoraSurfaceView", AgoraSurfaceViewFactory(binaryMessenger, this, rtcChannelPlugin))
     platformViewRegistry.registerViewFactory("AgoraTextureView", AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin))
-    banubaSdkManager.attachSurface(platformViewRegistry)
+   // banubaSdkManager.attachSurface(platformViewRegistry)
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {

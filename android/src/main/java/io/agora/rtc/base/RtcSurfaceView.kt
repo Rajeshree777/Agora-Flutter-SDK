@@ -93,7 +93,7 @@ class RtcSurfaceView(
 
     banubaSdkManager.effectManager.loadAsync(maskUri.toString())
     banubaSdkManager.setCallback(banubaSdkEventCallback)
-    banubaSdkManager.attachSurface(surface)
+   // banubaSdkManager.attachSurface()
     // banubaSdkManager.attachSurface(view)
   }
 

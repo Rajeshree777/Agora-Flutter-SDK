@@ -1012,7 +1012,8 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   void setExternalVideoSource(bool var1, bool var2, bool var3) {
-     _invokeMethod('setExternalVideoSource');
+    _invokeMethod(
+        'setExternalVideoSource', {'var1': var1, 'var2': var2, 'var3': var3});
   }
 }
 

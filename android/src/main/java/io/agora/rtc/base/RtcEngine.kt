@@ -112,7 +112,7 @@ class IRtcEngine {
 
     fun disableVideo(callback: Callback)
 
-    fun setExternalVideoSource(var1: Boolean, var2: Boolean, var3: Boolean, callback: Callback)
+    fun setExternalVideoSource(params: Map<String, *>, callback: Callback)
 
     fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback)
 
@@ -580,8 +580,8 @@ class RtcEngineManager(
     callback.code(engine?.disableVideo())
   }
 
-  override fun setExternalVideoSource(var1: Boolean, var2: Boolean, var3: Boolean, callback: Callback) {
-    engine?.setExternalVideoSource(var1, var2,var3)
+  override fun setExternalVideoSource(params: Map<String, *>, callback: Callback) {
+    engine?.setExternalVideoSource(params["var1"] as Boolean, params["var2"] as Boolean, params["var3"] as Boolean)
   }
 
   override fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback) {

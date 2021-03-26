@@ -10,7 +10,6 @@ import androidx.annotation.NonNull
 import com.banuba.sdk.entity.RecordedVideoInfo
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.manager.BanubaSdkTouchListener
-import com.banuba.sdk.manager.EffectInfo
 import com.banuba.sdk.manager.IEventCallback
 import com.banuba.sdk.types.Data
 import io.agora.rtc.RtcEngine
@@ -46,7 +45,6 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   private val manager = RtcEngineManager { methodName, data -> emit(methodName, data) }
   private val handler = Handler(Looper.getMainLooper())
   private val rtcChannelPlugin = AgoraRtcChannelPlugin(this)
-  private var effectsInfos: List<EffectInfo>? = null
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -75,7 +73,6 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     BanubaSdkManager.initialize(applicationContext,
       BANUBA_CLIENT_TOKEN
     )
-    effectsInfos = banubaSdkManager.loadEffects()
     configureSdkManager()
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)

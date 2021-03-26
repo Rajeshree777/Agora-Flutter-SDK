@@ -2,9 +2,11 @@ package io.agora.agora_rtc_engine
 
 import android.content.Context
 import android.view.View
+import com.banuba.sdk.types.Data
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcSurfaceView
+import io.agora.rtc.video.AgoraVideoFrame
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -32,10 +34,11 @@ class AgoraSurfaceView(
   private val rtcEnginePlugin: AgoraRtcEnginePlugin,
   private val rtcChannelPlugin: AgoraRtcChannelPlugin
 ) : PlatformView, MethodChannel.MethodCallHandler {
-  private val view = RtcSurfaceView(context, rtcEnginePlugin)
+  private val view = RtcSurfaceView(context)
   private val channel = MethodChannel(messenger, "agora_rtc_engine/surface_view_$viewId")
 
   init {
+
     args?.let { map ->
       (map["data"] as? Map<*, *>)?.let { setData(it) }
       (map["renderMode"] as? Number)?.let { setRenderMode(it.toInt()) }
@@ -44,6 +47,8 @@ class AgoraSurfaceView(
       (map["zOrderMediaOverlay"] as? Boolean)?.let { setZOrderMediaOverlay(it) }
     }
     channel.setMethodCallHandler(this)
+
+
   }
 
   override fun getView(): View {

@@ -58,6 +58,6 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', '1.4.31')}"
   implementation "org.jetbrains.kotlin:kotlin-reflect:${safeExtGet('kotlin_version', '1.4.31')}"
   implementation "io.agora.rtc:full-sdk:3.3.1"
-//  implementation files('.libs/flutter.jar')
+  implementation files('.libs/flutter.jar')
 
 }

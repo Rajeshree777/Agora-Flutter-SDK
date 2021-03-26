@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
+import com.banuba.sdk.BuildConfig;
 import com.banuba.sdk.Recycler;
 import com.banuba.sdk.camera.CameraFpsMode;
 import com.banuba.sdk.camera.Facing;
@@ -390,7 +391,7 @@ public final class BanubaSdkManager implements Choreographer.FrameCallback {
      * Open camera and start frame capturing. It is safe to call this method if camera is
      * already opened.
      */
-    public void openCamera() {
+    public int openCamera() {
         CameraHandler sender = getCameraMsgSender();
         if (sender != null) {
             sender.sendOpenCamera(mFacing, mCameraZoom, getScreenRotation(), mRequireMirroring);
@@ -401,7 +402,9 @@ public final class BanubaSdkManager implements Choreographer.FrameCallback {
                 sender.sendFaceOrient(mScreenOrientation);
             }
             rotateCurrentEffectBackground(isAutoRotationOff() ? getCorrectedScreenOrientation() : 0);
+            return 1;
         }
+        return 0;
     }
 
     /**

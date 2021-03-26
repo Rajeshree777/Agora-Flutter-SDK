@@ -10,13 +10,17 @@ import androidx.annotation.NonNull
 import com.banuba.sdk.entity.RecordedVideoInfo
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.manager.BanubaSdkTouchListener
+import com.banuba.sdk.manager.EffectInfo
 import com.banuba.sdk.manager.IEventCallback
 import com.banuba.sdk.types.Data
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.rtc.video.AgoraVideoFrame
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.plugin.common.*
+import io.flutter.plugin.common.BinaryMessenger
+import io.flutter.plugin.common.EventChannel
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
@@ -42,7 +46,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   private val manager = RtcEngineManager { methodName, data -> emit(methodName, data) }
   private val handler = Handler(Looper.getMainLooper())
   private val rtcChannelPlugin = AgoraRtcChannelPlugin(this)
-  lateinit var agoraView: AgoraSurfaceView
+  private var effectsInfos: List<EffectInfo>? = null
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -61,9 +65,6 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
       AgoraRtcEnginePlugin().apply {
         this.registrar = registrar
         rtcChannelPlugin.initPlugin(registrar.messenger())
-        BanubaSdkManager.initialize(applicationContext,
-          BANUBA_CLIENT_TOKEN
-        )
         initPlugin(registrar.context(), registrar.messenger(), registrar.platformViewRegistry())
       }
     }
@@ -71,6 +72,10 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 
   private fun initPlugin(context: Context, binaryMessenger: BinaryMessenger, platformViewRegistry: PlatformViewRegistry) {
     applicationContext = context.applicationContext
+    BanubaSdkManager.initialize(applicationContext,
+      BANUBA_CLIENT_TOKEN
+    )
+    effectsInfos = banubaSdkManager.loadEffects()
     configureSdkManager()
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
@@ -78,7 +83,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     eventChannel.setStreamHandler(this)
     platformViewRegistry.registerViewFactory("AgoraSurfaceView", AgoraSurfaceViewFactory(binaryMessenger, this, rtcChannelPlugin))
     platformViewRegistry.registerViewFactory("AgoraTextureView", AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin))
-    banubaSdkManager.attachSurface(platformViewRegistry)
+//    banubaSdkManager.attachSurface(platformViewRegistry)
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {

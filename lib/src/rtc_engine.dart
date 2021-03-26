@@ -1009,6 +1009,11 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('setVoiceConversionPreset',
         {'preset': VoiceConversionPresetConverter(preset).e});
   }
+
+  @override
+  void setExternalVideoSource(bool var1, bool var2, bool var3) {
+     _invokeMethod('setExternalVideoSource');
+  }
 }
 
 /// @nodoc
@@ -1583,6 +1588,9 @@ mixin RtcVideoInterface {
   ///   - [RtcEngine.muteRemoteVideoStream]: Whether to subscribe to and play the remote video stream.
   ///   - [RtcEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
   Future<void> disableVideo();
+
+  void setExternalVideoSource(bool var1, bool var2, bool var3);
+
 
   /// Sets the video encoder configuration.
   ///

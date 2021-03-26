@@ -40,7 +40,6 @@ class _State extends State<JoinChannelVideo> {
     widget._engine =
         await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
     this._addListeners();
-
     await widget._engine.enableVideo();
     await widget._engine.setBeautyEffectOptions(true, BeautyOptions.fromJson({
       'lighteningContrastLevel': 1,

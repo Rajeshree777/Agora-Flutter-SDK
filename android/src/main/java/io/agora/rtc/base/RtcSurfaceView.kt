@@ -1,15 +1,25 @@
 package io.agora.rtc.base
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import android.view.SurfaceView
 import android.widget.FrameLayout
+import com.banuba.sdk.entity.RecordedVideoInfo
+import com.banuba.sdk.manager.BanubaSdkManager
+import com.banuba.sdk.manager.IEventCallback
+import com.banuba.sdk.types.Data
+import io.agora.agora_rtc_engine.AgoraRtcEnginePlugin
 import io.agora.rtc.RtcChannel
 import io.agora.rtc.RtcEngine
+import io.agora.rtc.video.AgoraVideoFrame
 import io.agora.rtc.video.VideoCanvas
+import io.flutter.Log
 import java.lang.ref.WeakReference
 
 class RtcSurfaceView(
-  context: Context
+  context: Context,
+  val rtcEnginePlugin: AgoraRtcEnginePlugin
 ) : FrameLayout(context) {
   private var surface: SurfaceView
   private var canvas: VideoCanvas
@@ -17,15 +27,87 @@ class RtcSurfaceView(
   private var onTop = false
   private var channel: WeakReference<RtcChannel>? = null
 
+  val banubaSdkManager by lazy(LazyThreadSafetyMode.NONE) {
+    BanubaSdkManager(context)
+  }
+
+  val maskUri by lazy(LazyThreadSafetyMode.NONE) {
+    Uri.parse(BanubaSdkManager.getResourcesBase())
+      .buildUpon()
+      .appendPath("effects")
+      .appendPath("HeadphoneMusic")
+      .build()
+  }
+
   init {
     try {
       surface = RtcEngine.CreateRendererView(context)
+      banubaSdkManager.attachSurface(surface)
+      banubaSdkManager.openCamera()
+      banubaSdkManager.effectManager.loadAsync(maskUri.toString())
       print("init Block called")
     } catch (e: UnsatisfiedLinkError) {
       throw RuntimeException("Please init RtcEngine first!")
     }
     canvas = VideoCanvas(surface)
     addView(surface)
+  }
+
+  private val banubaSdkEventCallback = object : IEventCallback {
+    override fun onCameraOpenError(error: Throwable) {
+
+    }
+
+    override fun onCameraStatus(opened: Boolean) {
+
+    }
+
+    override fun onScreenshotReady(photo: Bitmap) {
+
+    }
+
+    override fun onHQPhotoReady(photo: Bitmap) {
+
+    }
+
+    override fun onVideoRecordingFinished(videoInfo: RecordedVideoInfo) {
+
+    }
+
+    override fun onVideoRecordingStatusChange(started: Boolean) {
+
+    }
+
+    override fun onImageProcessed(processedBitmap: Bitmap) {
+
+    }
+
+    override fun onFrameRendered(data: Data, width: Int, height: Int) {
+      Log.e("Agora", "AgoraFrameData  ${data.data}")
+      pushCustomFrame(data, width, height)
+    }
+
+  }
+
+  private fun pushCustomFrame(rawData: Data, width: Int, height: Int) {
+    val pixelData = ByteArray(rawData.data.remaining())
+    rawData.data.get(pixelData)
+    rawData.close()
+    val videoFrame = AgoraVideoFrame().apply {
+      timeStamp = System.currentTimeMillis()
+      format = AgoraVideoFrame.FORMAT_RGBA
+      this.height = height
+      stride = width
+      buf = pixelData
+    }
+    //surface.pushExternalVideoFrame(videoFrame)
+    getEngine()?.pushExternalVideoFrame(videoFrame)
+
+
+  }
+
+  private fun getEngine(): RtcEngine? {
+    return rtcEnginePlugin.engine()
   }
 
   fun setZOrderMediaOverlay(isMediaOverlay: Boolean) {
@@ -71,6 +153,7 @@ class RtcSurfaceView(
     surface = RtcEngine.CreateRendererView(context.applicationContext)
     surface.setZOrderMediaOverlay(isMediaOverlay)
     surface.setZOrderOnTop(onTop)
+    banubaSdkManager.effectManager.loadAsync(maskUri.toString())
     addView(surface)
     surface.layout(0, 0, width, height)
     canvas.view = surface

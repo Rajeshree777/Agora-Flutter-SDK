@@ -1,7 +1,11 @@
 package io.agora.rtc.base
 
 import android.content.Context
-import io.agora.rtc.*
+import com.banuba.sdk.manager.BanubaSdkManager
+import io.agora.rtc.Constants
+import io.agora.rtc.IMetadataObserver
+import io.agora.rtc.RtcEngine
+import io.agora.rtc.RtcEngineEx
 import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.models.UserInfo
 
@@ -107,6 +111,8 @@ class IRtcEngine {
     fun enableVideo(callback: Callback)
 
     fun disableVideo(callback: Callback)
+
+    fun setExternalVideoSource(var1: Boolean, var2: Boolean, var3: Boolean, callback: Callback)
 
     fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback)
 
@@ -363,6 +369,7 @@ class RtcEngineManager(
     engine = null
     mediaObserver = null
   }
+  var banubaSdkManager: BanubaSdkManager? = null
 
   override fun create(params: Map<String, *>, callback: Callback) {
     engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
@@ -371,6 +378,7 @@ class RtcEngineManager(
         emit(methodName, data)
       }
     })
+    banubaSdkManager = BanubaSdkManager(params["context"] as Context)
     callback.code((engine as RtcEngineEx).setAppType((params["appType"] as Number).toInt()))
   }
 
@@ -570,6 +578,10 @@ class RtcEngineManager(
 
   override fun disableVideo(callback: Callback) {
     callback.code(engine?.disableVideo())
+  }
+
+  override fun setExternalVideoSource(var1: Boolean, var2: Boolean, var3: Boolean, callback: Callback) {
+    engine?.setExternalVideoSource(var1, var2,var3)
   }
 
   override fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback) {

@@ -32,7 +32,7 @@ class AgoraSurfaceView(
   private val rtcEnginePlugin: AgoraRtcEnginePlugin,
   private val rtcChannelPlugin: AgoraRtcChannelPlugin
 ) : PlatformView, MethodChannel.MethodCallHandler {
-  private val view = RtcSurfaceView(context)
+  private val view = RtcSurfaceView(context, rtcEnginePlugin)
   private val channel = MethodChannel(messenger, "agora_rtc_engine/surface_view_$viewId")
 
   init {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.view.SurfaceView
 import com.banuba.sdk.manager.BanubaSdkManager
+import io.agora.agora_rtc_engine.AgoraRtcEnginePlugin
 import io.agora.rtc.Constants
 import io.agora.rtc.IMetadataObserver
 import io.agora.rtc.RtcEngine
@@ -387,6 +388,9 @@ class RtcEngineManager(
   }
 
   override fun create(params: Map<String, *>, callback: Callback) {
+    BanubaSdkManager.initialize(params["context"] as Context,
+      AgoraRtcEnginePlugin.BANUBA_CLIENT_TOKEN
+    )
     banubaSdkManager = BanubaSdkManager(params["context"] as Context)
     banubaSdkManager?.effectManager?.loadAsync(maskUri.toString())
     engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {

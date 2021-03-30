@@ -1020,6 +1020,12 @@ class RtcEngine with RtcEngineInterface {
   void openBanubaCamera() {
     _invokeMethod('openBanubaCamera');
   }
+
+  @override
+  void attachSurface(SurfaceView view) {
+    _invokeMethod(
+        'attachSurface', {'surface': view});
+  }
 }
 
 /// @nodoc
@@ -1598,6 +1604,8 @@ mixin RtcVideoInterface {
   void setExternalVideoSource(bool var1, bool var2, bool var3);
 
   void openBanubaCamera();
+
+  void attachSurface(SurfaceView view);
 
 
   /// Sets the video encoder configuration.

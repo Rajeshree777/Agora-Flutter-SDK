@@ -2,6 +2,7 @@ package io.agora.rtc.base
 
 import android.content.Context
 import android.net.Uri
+import android.view.SurfaceView
 import com.banuba.sdk.manager.BanubaSdkManager
 import io.agora.rtc.Constants
 import io.agora.rtc.IMetadataObserver
@@ -116,6 +117,8 @@ class IRtcEngine {
     fun setExternalVideoSource(params: Map<String, *>, callback: Callback)
 
     fun openBanubaCamera(callback: Callback)
+
+    fun attachSurface(params: Map<String, *>, callback: Callback)
 
     fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback)
 
@@ -599,6 +602,10 @@ class RtcEngineManager(
 
   override fun openBanubaCamera(callback: Callback) {
     banubaSdkManager?.openCamera()
+  }
+
+  override fun attachSurface(params: Map<String, *>, callback: Callback) {
+    banubaSdkManager?.attachSurface(params["surface"] as SurfaceView)
   }
 
   override fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback) {

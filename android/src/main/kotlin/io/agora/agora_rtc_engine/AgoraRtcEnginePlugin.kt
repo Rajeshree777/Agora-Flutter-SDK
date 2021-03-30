@@ -159,51 +159,12 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 
   val banubaSdkManager by lazy(LazyThreadSafetyMode.NONE) {
     BanubaSdkManager(applicationContext)
-
   }
 
   private fun configureSdkManager() {
-    val banubaTouchListener = BanubaSdkTouchListener(applicationContext, banubaSdkManager.effectPlayer)
-
     banubaSdkManager.effectManager.loadAsync(maskUri.toString())
-    banubaSdkManager.setCallback(banubaSdkEventCallback)
   }
 
-  private val banubaSdkEventCallback = object : IEventCallback {
-    override fun onCameraOpenError(error: Throwable) {
-
-    }
-
-    override fun onCameraStatus(opened: Boolean) {
-
-    }
-
-    override fun onScreenshotReady(photo: Bitmap) {
-
-    }
-
-    override fun onHQPhotoReady(photo: Bitmap) {
-
-    }
-
-    override fun onVideoRecordingFinished(videoInfo: RecordedVideoInfo) {
-
-    }
-
-    override fun onVideoRecordingStatusChange(started: Boolean) {
-
-    }
-
-    override fun onImageProcessed(processedBitmap: Bitmap) {
-
-    }
-
-    override fun onFrameRendered(data: Data, width: Int, height: Int) {
-      Log.e("Agora", "AgoraFrameData  ${data.data}")
-      pushCustomFrame(data, width, height)
-    }
-
-  }
   private val maskUri by lazy(LazyThreadSafetyMode.NONE) {
     Uri.parse(BanubaSdkManager.getResourcesBase())
       .buildUpon()
@@ -214,18 +175,5 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 
   }
 
-  private fun pushCustomFrame(rawData: Data, width: Int, height: Int) {
-    val pixelData = ByteArray(rawData.data.remaining())
-    rawData.data.get(pixelData)
-    rawData.close()
-    val videoFrame = AgoraVideoFrame().apply {
-      timeStamp = System.currentTimeMillis()
-      format = AgoraVideoFrame.FORMAT_RGBA
-      this.height = height
-      stride = width
-      buf = pixelData
-    }
-    engine()?.pushExternalVideoFrame(videoFrame)
-  }
 
 }

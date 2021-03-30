@@ -1,6 +1,7 @@
 package io.agora.rtc.base
 
 import android.content.Context
+import android.net.Uri
 import com.banuba.sdk.manager.BanubaSdkManager
 import io.agora.rtc.Constants
 import io.agora.rtc.IMetadataObserver
@@ -113,6 +114,8 @@ class IRtcEngine {
     fun disableVideo(callback: Callback)
 
     fun setExternalVideoSource(params: Map<String, *>, callback: Callback)
+
+    fun openBanubaCamera(callback: Callback)
 
     fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback)
 
@@ -364,21 +367,31 @@ class RtcEngineManager(
     private set
   private var mediaObserver: MediaObserver? = null
 
+  var banubaSdkManager: BanubaSdkManager? = null
+
   fun release() {
     RtcEngine.destroy()
     engine = null
     mediaObserver = null
   }
-  var banubaSdkManager: BanubaSdkManager? = null
+
+  val maskUri by lazy(LazyThreadSafetyMode.NONE) {
+    Uri.parse(BanubaSdkManager.getResourcesBase())
+      .buildUpon()
+      .appendPath("effects")
+      .appendPath("HeadphoneMusic")
+      .build()
+  }
 
   override fun create(params: Map<String, *>, callback: Callback) {
+    banubaSdkManager = BanubaSdkManager(params["context"] as Context)
+    banubaSdkManager?.effectManager?.loadAsync(maskUri.toString())
     engine = RtcEngineEx.create(mapToRtcEngineConfig(params["config"] as Map<*, *>).apply {
       mContext = params["context"] as Context
       mEventHandler = RtcEngineEventHandler { methodName, data ->
         emit(methodName, data)
       }
     })
-    banubaSdkManager = BanubaSdkManager(params["context"] as Context)
     callback.code((engine as RtcEngineEx).setAppType((params["appType"] as Number).toInt()))
   }
 
@@ -582,6 +595,10 @@ class RtcEngineManager(
 
   override fun setExternalVideoSource(params: Map<String, *>, callback: Callback) {
     engine?.setExternalVideoSource(params["var1"] as Boolean, params["var2"] as Boolean, params["var3"] as Boolean)
+  }
+
+  override fun openBanubaCamera(callback: Callback) {
+    banubaSdkManager?.openCamera()
   }
 
   override fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback) {

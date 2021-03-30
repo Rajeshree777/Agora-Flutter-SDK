@@ -1015,6 +1015,11 @@ class RtcEngine with RtcEngineInterface {
     _invokeMethod(
         'setExternalVideoSource', {'var1': var1, 'var2': var2, 'var3': var3});
   }
+
+  @override
+  void openBanubaCamera() {
+    _invokeMethod('openBanubaCamera');
+  }
 }
 
 /// @nodoc
@@ -1591,6 +1596,8 @@ mixin RtcVideoInterface {
   Future<void> disableVideo();
 
   void setExternalVideoSource(bool var1, bool var2, bool var3);
+
+  void openBanubaCamera();
 
 
   /// Sets the video encoder configuration.

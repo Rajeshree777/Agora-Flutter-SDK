@@ -2,31 +2,21 @@ package io.agora.rtc.base
 
 import android.content.Context
 import android.net.Uri
-import android.view.Surface
 import android.view.SurfaceView
 import android.widget.FrameLayout
 import com.banuba.sdk.manager.BanubaSdkManager
-import com.banuba.sdk.manager.BanubaSdkTouchListener
-import io.agora.rtc.RtcChannel
-import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoCanvas
-import java.lang.Exception
-import java.lang.RuntimeException
-import java.lang.ref.WeakReference
 
-class BanubaSurfaceView(context: Context,val surface:SurfaceView) : FrameLayout(context) {
+class BanubaView(context: Context,val surface: SurfaceView) : FrameLayout(context) {
 
 
   private var canvas: VideoCanvas
-
   private val MASK_NAME = "HeadphoneMusic"
-
 
   init {
     canvas = VideoCanvas(surface)
     configureSdkManager()
     addView(surface)
-
   }
 
   val banubaSdkManager by lazy(LazyThreadSafetyMode.NONE) {
@@ -41,6 +31,7 @@ class BanubaSurfaceView(context: Context,val surface:SurfaceView) : FrameLayout(
       .appendPath(MASK_NAME)
       .build()
   }
+
 
   private fun configureSdkManager() {
     banubaSdkManager.attachSurface(surface)

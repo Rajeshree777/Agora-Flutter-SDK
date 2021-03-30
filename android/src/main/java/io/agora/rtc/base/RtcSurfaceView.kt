@@ -36,7 +36,7 @@ class RtcSurfaceView(
     try {
       surface = RtcEngine.CreateRendererView(context)
       banubaSdkManager.attachSurface(surface)
-      banubaSdkManager.openCamera()
+//      banubaSdkManager.openCamera()
       banubaSdkManager.effectManager.loadAsync(maskUri.toString())
       print("init Block called")
     } catch (e: UnsatisfiedLinkError) {

@@ -16,7 +16,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.banuba.sdk.entity.RecordedVideoInfo
 import com.banuba.sdk.manager.BanubaSdkTouchListener
@@ -72,10 +71,10 @@ class RtcSurfaceView(
       //canvas = VideoCanvas(surface, VideoCanvas.RENDER_MODE_HIDDEN, 0)
     //  configureRtcEngine()
       Log.e("logggggggg","loggggggggg2")
-      
+
       banubaSdkManager.attachSurface(surface)
       banubaSdkManager.openCamera()
-      
+
       Log.e("logggggggg","loggggggggg3")
     } catch (e: UnsatisfiedLinkError) {
       throw RuntimeException("Please init RtcEngine first!")

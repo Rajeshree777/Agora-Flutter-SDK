@@ -70,10 +70,10 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 
   private fun initPlugin(context: Context, binaryMessenger: BinaryMessenger, platformViewRegistry: PlatformViewRegistry) {
     applicationContext = context.applicationContext
-    BanubaSdkManager.initialize(applicationContext,
-      BANUBA_CLIENT_TOKEN
-    )
-    configureSdkManager()
+//    BanubaSdkManager.initialize(applicationContext,
+//      BANUBA_CLIENT_TOKEN
+//    )
+   // configureSdkManager()
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
@@ -157,23 +157,23 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
 
-  val banubaSdkManager by lazy(LazyThreadSafetyMode.NONE) {
-    BanubaSdkManager(applicationContext)
-  }
-
-  private fun configureSdkManager() {
-    banubaSdkManager.effectManager.loadAsync(maskUri.toString())
-  }
-
-  private val maskUri by lazy(LazyThreadSafetyMode.NONE) {
-    Uri.parse(BanubaSdkManager.getResourcesBase())
-      .buildUpon()
-      .appendPath("effects")
-      .appendPath(MASK_NAME)
-      .build()
-
-
-  }
+//  val banubaSdkManager by lazy(LazyThreadSafetyMode.NONE) {
+//    BanubaSdkManager(applicationContext)
+//  }
+//
+//  private fun configureSdkManager() {
+//    banubaSdkManager.effectManager.loadAsync(maskUri.toString())
+//  }
+//
+//  private val maskUri by lazy(LazyThreadSafetyMode.NONE) {
+//    Uri.parse(BanubaSdkManager.getResourcesBase())
+//      .buildUpon()
+//      .appendPath("effects")
+//      .appendPath(MASK_NAME)
+//      .build()
+//
+//
+//  }
 
 
 }

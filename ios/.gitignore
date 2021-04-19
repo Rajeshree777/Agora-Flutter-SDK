@@ -12,6 +12,8 @@ build/
 GeneratedPluginRegistrant.h
 GeneratedPluginRegistrant.m
 
+Framework/*.xcframework
+
 .generated/
 
 *.pbxuser

@@ -2,6 +2,8 @@ import Flutter
 import UIKit
 
 public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+    
+    
     private var registrar: FlutterPluginRegistrar?
     private var methodChannel: FlutterMethodChannel?
     private var eventChannel: FlutterEventChannel?
@@ -27,7 +29,7 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
         eventChannel = FlutterEventChannel(name: "agora_rtc_engine/events", binaryMessenger: registrar.messenger())
         registrar.addMethodCallDelegate(self, channel: methodChannel!)
         eventChannel?.setStreamHandler(self)
-
+        
         registrar.register(AgoraSurfaceViewFactory(registrar.messenger(), self, rtcChannelPlugin), withId: "AgoraSurfaceView")
     }
 
@@ -36,6 +38,7 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
         methodChannel?.setMethodCallHandler(nil)
         eventChannel?.setStreamHandler(nil)
         manager.Release()
+        print("Banuba Manger Release")
     }
 
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {

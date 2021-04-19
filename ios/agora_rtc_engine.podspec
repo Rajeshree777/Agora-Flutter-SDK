@@ -15,12 +15,18 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Agora' => 'developer@agora.io' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'Classes/**/*', 'Framework/BanubaEffectPlayer.xcframework'
+  s.preserve_paths = 'Framework/BanubaEffectPlayer.xcframework'
+  s.vendored_frameworks = 'Framework/BanubaEffectPlayer.xcframework'
+  
+  s.xcconfig = { 
+    'OTHER_LDFLAGS' => '-framework BanubaEffectPlayer'
+  }
   s.dependency 'Flutter'
   s.dependency 'AgoraRtcEngine_iOS', '3.3.1'
-  s.platform = :ios, '8.0'
+  s.platform = :ios, '10.0'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
-  s.swift_version = '4.0'
+  s.swift_version = '5.0'
 end

@@ -36,7 +36,7 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
     init(_ messager: FlutterBinaryMessenger, _ frame: CGRect, _ viewId: Int64, _ args: Dictionary<String, Any?>?, _ rtcEnginePlugin: SwiftAgoraRtcEnginePlugin, _ rtcChannelPlugin: AgoraRtcChannelPlugin) {
         self.rtcEnginePlugin = rtcEnginePlugin
         self.rtcChannelPlugin = rtcChannelPlugin
-        self._view = RtcSurfaceView(frame: frame)
+        self._view = RtcSurfaceView.init(frame: frame, ((args!["data"] as! NSDictionary)["uid"] as! NSNumber).uintValue)
         self.channel = FlutterMethodChannel(name: "agora_rtc_engine/surface_view_\(viewId)", binaryMessenger: messager)
         super.init()
         if let map = args {

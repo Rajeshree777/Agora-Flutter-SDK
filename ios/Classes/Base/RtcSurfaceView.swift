@@ -75,9 +75,9 @@ class RtcSurfaceView: UIView {
 
     init(frame: CGRect, _ uid: UInt) {                        
         if (uid == 0) {
-            BanubaSdkManager.deinitialize()
-            BanubaSdkManager.initialize(
-                resourcePath: [Bundle.main.bundlePath + "/effects"], clientTokenString: banubaClientToken)
+//            BanubaSdkManager.deinitialize()
+//            BanubaSdkManager.initialize(
+//                resourcePath: [Bundle.main.bundlePath + "/effects"], clientTokenString: banubaClientToken)
             surface = EffectPlayerView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: 300)))
             //surface.layoutIfNeeded()
             banubaSdkManager.setup(configuration: EffectPlayerConfiguration(renderMode: .video))
@@ -150,10 +150,10 @@ class RtcSurfaceView: UIView {
             engine.setupLocalVideo(canvas)
             
             engine.setExternalVideoSource(true, useTexture: false, pushMode: true)
-            engine.enableVideo()
         } else {
             engine.setupRemoteVideo(canvas)
-        }        
+        }
+        engine.enableVideo()
     }
     
     func setRenderMode(_ engine: AgoraRtcEngineKit, _ renderMode: UInt) {

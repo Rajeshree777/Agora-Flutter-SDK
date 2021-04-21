@@ -442,6 +442,8 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func leaveChannel(_ callback: Callback) {
+        print("Leave Channel Banuba")
+        BanubaSdkManager.deinitialize()
         callback.code(engine?.leaveChannel())
     }
 

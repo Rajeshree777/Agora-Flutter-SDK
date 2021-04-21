@@ -81,7 +81,7 @@ class RtcSurfaceView: UIView {
             surface = EffectPlayerView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: 300)))
             //surface.layoutIfNeeded()
             banubaSdkManager.setup(configuration: EffectPlayerConfiguration(renderMode: .video))
-            banubaSdkManager.setRenderTarget(layer: surface.layer as! CAEAGLLayer, playerConfiguration: nil)
+            banubaSdkManager.setRenderTarget(layer: surface.layer as! CAEAGLLayer, contentMode : RenderContentMode.resizeAspect, playerConfiguration: nil)
         }
         else {
             surface = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: 300)))

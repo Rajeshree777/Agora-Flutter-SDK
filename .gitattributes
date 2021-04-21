@@ -1,1 +1,1 @@
-Framework/*.xcframework filter=lfs diff=lfs merge=lfs -text
+ios/Framework/*.xcframework filter=lfs diff=lfs merge=lfs -text

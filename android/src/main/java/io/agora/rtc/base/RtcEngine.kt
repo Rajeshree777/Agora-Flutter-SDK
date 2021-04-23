@@ -115,11 +115,7 @@ class IRtcEngine {
 
     fun disableVideo(callback: Callback)
 
-    fun setExternalVideoSource(params: Map<String, *>, callback: Callback)
-
-    fun openBanubaCamera(callback: Callback)
-
-    fun attachSurface(params: Map<String, *>, callback: Callback)
+    fun onEffectSelected(params: Map<String, *>, callback: Callback)
 
     fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback)
 
@@ -600,16 +596,8 @@ class RtcEngineManager(
     callback.code(engine?.disableVideo())
   }
 
-  override fun setExternalVideoSource(params: Map<String, *>, callback: Callback) {
-    engine?.setExternalVideoSource(params["var1"] as Boolean, params["var2"] as Boolean, params["var3"] as Boolean)
-  }
-
-  override fun openBanubaCamera(callback: Callback) {
-    banubaSdkManager?.openCamera()
-  }
-
-  override fun attachSurface(params: Map<String, *>, callback: Callback) {
-    banubaSdkManager?.attachSurface(params["surface"] as SurfaceView)
+  override fun onEffectSelected(params: Map<String, *>, callback: Callback) {
+    engine?.onEffectSelected(params["selectedEffect"] as String)
   }
 
   override fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback) {

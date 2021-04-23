@@ -1011,20 +1011,8 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  void setExternalVideoSource(bool var1, bool var2, bool var3) {
-    _invokeMethod(
-        'setExternalVideoSource', {'var1': var1, 'var2': var2, 'var3': var3});
-  }
-
-  @override
-  void openBanubaCamera() {
-    _invokeMethod('openBanubaCamera');
-  }
-
-  @override
-  void attachSurface(SurfaceView view) {
-    _invokeMethod(
-        'attachSurface', {'surface': view});
+  void onEffectSelected(String effectName) {
+     _invokeMethod('onEffectSelected', {'selectedEffect': effectName});
   }
 }
 
@@ -1601,11 +1589,7 @@ mixin RtcVideoInterface {
   ///   - [RtcEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
   Future<void> disableVideo();
 
-  void setExternalVideoSource(bool var1, bool var2, bool var3);
-
-  void openBanubaCamera();
-
-  void attachSurface(SurfaceView view);
+  void onEffectSelected(String effectName);
 
 
   /// Sets the video encoder configuration.

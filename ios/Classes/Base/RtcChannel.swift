@@ -28,6 +28,7 @@ protocol RtcChannelInterface:
     func setClientRole(_ params: NSDictionary, _ callback: Callback)
 
     func joinChannel(_ params: NSDictionary, _ callback: Callback)
+    func onEffectSelected(_ params: NSDictionary, _ callback: Callback)
 
     func joinChannelWithUserAccount(_ params: NSDictionary, _ callback: Callback)
 
@@ -183,6 +184,11 @@ class RtcChannelManager: NSObject, RtcChannelInterface {
 
     @objc func joinChannel(_ params: NSDictionary, _ callback: Callback) {
         callback.code(self[params["channelId"] as! String]?.join(byToken: params["token"] as? String, info: params["optionalInfo"] as? String, uid: (params["optionalUid"] as! NSNumber).uintValue, options: mapToChannelMediaOptions(params["options"] as! Dictionary)))
+    }
+    
+    @objc func onEffectSelected(_ params: NSDictionary, _ callback: Callback) {
+        print("On select effect")      
+        //         callback.code(self[params["channelId"] as! String]?.join(byToken: params["token"] as? String, info: params["optionalInfo"] as? String, uid: (params["optionalUid"] as! NSNumber).uintValue, options: mapToChannelMediaOptions(params["options"] as! Dictionary)))
     }
 
     @objc func joinChannelWithUserAccount(_ params: NSDictionary, _ callback: Callback) {

@@ -104,6 +104,11 @@ class RtcChannel with RtcChannelInterface {
   }
 
   @override
+  Future<void> onEffectSelected(String token) {
+    return _invokeMethod('onEffectSelected', {'selectedEffect': token});
+  }
+
+  @override
   Future<void> joinChannelWithUserAccount(
       String token, String userAccount, ChannelMediaOptions options) {
     return _invokeMethod('joinChannelWithUserAccount', {
@@ -392,6 +397,8 @@ mixin RtcChannelInterface
   /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
   Future<void> joinChannel(String token, String optionalInfo, int optionalUid,
       ChannelMediaOptions options);
+
+  Future<void> onEffectSelected(String token);
 
   /// Joins a channel with the user account.
   ///

@@ -78,21 +78,36 @@ class RtcSurfaceView: UIView {
 //            BanubaSdkManager.deinitialize()
 //            BanubaSdkManager.initialize(
 //                resourcePath: [Bundle.main.bundlePath + "/effects"], clientTokenString: banubaClientToken)
-            surface = EffectPlayerView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: 300)))
+            
+            surface = EffectPlayerView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)))
             //surface.layoutIfNeeded()
             banubaSdkManager.setup(configuration: EffectPlayerConfiguration(renderMode: .video))
-            banubaSdkManager.setRenderTarget(layer: surface.layer as! CAEAGLLayer, contentMode : RenderContentMode.resizeAspect, playerConfiguration: nil)
+            banubaSdkManager.setRenderTarget(layer: surface.layer as! CAEAGLLayer, contentMode : RenderContentMode.resize, playerConfiguration: nil)
         }
         else {
-            surface = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: 300)))
+            surface = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)))
         }
         
         canvas = AgoraRtcVideoCanvas()
         canvas.view = surface
-        super.init(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: UIScreen.main.bounds.size.width, height: 300)))
+        super.init(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)))
         addSubview(surface)
         addObserver(self, forKeyPath: observerForKeyPath(), options: .new, context: nil)
+        
+        if (uid == 0) {
+            NotificationCenter.default.addObserver(self, selector: #selector(onEffectChange), name: .effectChangeNotification, object: nil)
+        }
      }
+    
+    @objc func onEffectChange(notification: Notification) {
+//        print("On select effect myFunction \(notification.object) ==== \(banubaSdkManager.currentEffect())" );
+       banubaSdkManager.stopEffectPlayer()
+       
+        if let effectName = notification.object as? String {
+            _ = banubaSdkManager.loadEffect(effectName)
+        }        
+        banubaSdkManager.startEffectPlayer()
+    }
     
     func observerForKeyPath() -> String {
         return "frame"
@@ -103,6 +118,9 @@ class RtcSurfaceView: UIView {
     }
     
     deinit {
+        if (canvas.uid == 0) {
+            NotificationCenter.default.removeObserver(self, name: .effectChangeNotification, object: nil)
+        }
         canvas.view = nil
         removeObserver(self, forKeyPath: observerForKeyPath(), context: nil)
     }
@@ -115,9 +133,9 @@ class RtcSurfaceView: UIView {
         setupVideoCanvas(engine)
         if (uid == 0)
         {
-            banubaSdkManager.output?.startForwardingFrames(handler: { (pixelBuffer) -> Void in
-                self.pushPixelBufferIntoAgoraKit(pixelBuffer: pixelBuffer, engine)
-            })
+           banubaSdkManager.output?.startForwardingFrames(handler: { (pixelBuffer) -> Void in
+               self.pushPixelBufferIntoAgoraKit(pixelBuffer: pixelBuffer, engine)
+           })
         }
     }
     
@@ -125,8 +143,8 @@ class RtcSurfaceView: UIView {
         if (canvas.uid == 0) {
 //            banubaSdkManager.effectPlayer?.setEffectVolume(0)
             banubaSdkManager.input.startCamera()
-            _ = banubaSdkManager.loadEffect("HeadphoneMusic")
-            banubaSdkManager.startEffectPlayer()
+//           _ = banubaSdkManager.loadEffect("HeadphoneMusic")
+           banubaSdkManager.startEffectPlayer()
         }
     }
    
@@ -136,12 +154,12 @@ class RtcSurfaceView: UIView {
             subviews.forEach {
                 $0.removeFromSuperview()
             }
-            surface = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: 300)))
+            surface = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)))
             addSubview(surface)
             canvas.view = surface
         }
         else {
-            surface.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: 300))
+            surface.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
             canvas.view = surface
         }
         print("Setup Video Canvas Banuba \(canvas.uid ) \(self.frame.size) === \(surface.frame)")
@@ -195,5 +213,7 @@ class RtcSurfaceView: UIView {
         videoFrame.rotation = 180
         engine.pushExternalVideoFrame(videoFrame)
     }
-    
+}
+extension Notification.Name {
+    static let effectChangeNotification = Notification.Name("effectChangeNotification")
 }

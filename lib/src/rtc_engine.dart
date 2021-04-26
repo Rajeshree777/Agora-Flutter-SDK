@@ -192,6 +192,13 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
+  Future<void> onEffectSelected(String token) {
+    return _invokeMethod('onEffectSelected', {
+      'selectedEffect': token,
+    });
+  }
+
+  @override
   Future<void> switchChannel(String token, String channelName,
       [ChannelMediaOptions options]) {
     return _invokeMethod('switchChannel', {
@@ -1009,11 +1016,6 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('setVoiceConversionPreset',
         {'preset': VoiceConversionPresetConverter(preset).e});
   }
-
-  @override
-  void onEffectSelected(String effectName) {
-     _invokeMethod('onEffectSelected', {'selectedEffect': effectName});
-  }
 }
 
 /// @nodoc
@@ -1108,6 +1110,8 @@ mixin RtcEngineInterface
   Future<void> joinChannel(
       String token, String channelName, String optionalInfo, int optionalUid,
       [ChannelMediaOptions options]);
+
+  Future<void> onEffectSelected(String token);
 
   /// Switches to a different channel.
   ///
@@ -1588,9 +1592,6 @@ mixin RtcVideoInterface {
   ///   - [RtcEngine.muteRemoteVideoStream]: Whether to subscribe to and play the remote video stream.
   ///   - [RtcEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
   Future<void> disableVideo();
-
-  void onEffectSelected(String effectName);
-
 
   /// Sets the video encoder configuration.
   ///

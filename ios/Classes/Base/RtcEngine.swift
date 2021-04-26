@@ -41,6 +41,8 @@ protocol RtcEngineInterface:
 
     func joinChannel(_ params: NSDictionary, _ callback: Callback)
 
+    func onEffectSelected(_ params: NSDictionary, _ callback: Callback)
+
     func switchChannel(_ params: NSDictionary, _ callback: Callback)
 
     func leaveChannel(_ callback: Callback)
@@ -430,6 +432,12 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         }
         callback.code(engine?.joinChannel(byToken: token, channelId: channelName, info: optionalInfo, uid: optionalUid.uintValue))
     }
+    private var banubaSdkManager = BanubaSdkManager()
+
+    @objc func onEffectSelected(_ params: NSDictionary, _ callback: Callback) {
+        
+        NotificationCenter.default.post(name: .effectChangeNotification, object: params["selectedEffect"] as? String)
+    }
 
     @objc func switchChannel(_ params: NSDictionary, _ callback: Callback) {
         let token = params["token"] as? String
@@ -583,7 +591,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func disableVideo(_ callback: Callback) {
         callback.code(engine?.disableVideo())
     }
-
+    
     @objc func setVideoEncoderConfiguration(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(params["config"] as! Dictionary)))
     }

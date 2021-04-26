@@ -51,7 +51,7 @@ class RtcSurfaceView(
       .appendPath(MASK_NAME)
       .build()
   }
-  RtcEngine
+
   private val agoraRtc: RtcEngine by lazy(LazyThreadSafetyMode.NONE) {
     RtcEngine.create(
       context,

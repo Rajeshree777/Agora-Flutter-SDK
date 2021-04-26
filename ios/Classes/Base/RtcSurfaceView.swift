@@ -96,6 +96,7 @@ class RtcSurfaceView: UIView {
         
         if (uid == 0) {
             NotificationCenter.default.addObserver(self, selector: #selector(onEffectChange), name: .effectChangeNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: .cameraModeChangeNotification, object: nil)
         }
      }
     
@@ -107,8 +108,26 @@ class RtcSurfaceView: UIView {
             _ = banubaSdkManager.loadEffect(effectName)
         }        
         banubaSdkManager.startEffectPlayer()
+    }    
+
+    @objc func onCameraModeChange(notification: Notification) {
+       
+        let cameraMode = banubaSdkManager.input.currentCameraSessionType
+        var newCameraMode : CameraSessionType
+        if (cameraMode == .FrontCameraVideoSession) {
+            newCameraMode = .BackCameraVideoSession
+        } else if (cameraMode == .BackCameraVideoSession) {
+            newCameraMode = .FrontCameraVideoSession
+        } else if (cameraMode == .FrontCameraPhotoSession) {
+            newCameraMode = .BackCameraPhotoSession
+        } else {
+            newCameraMode = .FrontCameraPhotoSession
+        }
+        banubaSdkManager.input.switchCamera(to: newCameraMode) {
+            print("Camera Switched")
+        }
     }
-    
+
     func observerForKeyPath() -> String {
         return "frame"
     }
@@ -120,6 +139,7 @@ class RtcSurfaceView: UIView {
     deinit {
         if (canvas.uid == 0) {
             NotificationCenter.default.removeObserver(self, name: .effectChangeNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: .cameraModeChangeNotification, object: nil)
         }
         canvas.view = nil
         removeObserver(self, forKeyPath: observerForKeyPath(), context: nil)
@@ -216,4 +236,5 @@ class RtcSurfaceView: UIView {
 }
 extension Notification.Name {
     static let effectChangeNotification = Notification.Name("effectChangeNotification")
+    static let cameraModeChangeNotification = Notification.Name("cameraModeChangeNotification")
 }

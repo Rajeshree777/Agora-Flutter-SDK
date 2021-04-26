@@ -962,7 +962,8 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func switchCamera(_ callback: Callback) {
-        callback.code(engine?.switchCamera())
+        NotificationCenter.default.post(name: .cameraModeChangeNotification, object: nil)
+//        callback.code(engine?.switchCamera())
     }
 
     @objc func isCameraZoomSupported(_ callback: Callback) {

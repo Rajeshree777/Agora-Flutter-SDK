@@ -18,6 +18,7 @@ class SurfaceView extends RtcSurfaceView {
     VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
+    String effectName,
   }) : super(
             key: key,
             zOrderMediaOverlay: zOrderMediaOverlay,
@@ -27,7 +28,8 @@ class SurfaceView extends RtcSurfaceView {
             mirrorMode: mirrorMode,
             gestureRecognizers: gestureRecognizers,
             onPlatformViewCreated: onPlatformViewCreated,
-            uid: 0);
+            uid: 0,
+            effectName: effectName);
 }
 
 /// (Android only) TextureView.

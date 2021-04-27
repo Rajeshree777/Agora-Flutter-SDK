@@ -76,7 +76,7 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
             channel = getChannel(channelId)
         }
         if let `engine` = engine {
-            _view.setData(engine, channel, (data["uid"] as! NSNumber).uintValue)
+            _view.setData(engine, channel, (data["uid"] as! NSNumber).uintValue, (data["effectName"] as? String))
         }
     }
 

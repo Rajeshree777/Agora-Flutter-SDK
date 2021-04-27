@@ -62,6 +62,8 @@ class RtcSurfaceView extends StatefulWidget {
   /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
+  final String effectName;
+
   /// Constructs a [RtcSurfaceView]
   RtcSurfaceView({
     Key key,
@@ -73,6 +75,7 @@ class RtcSurfaceView extends StatefulWidget {
     this.zOrderMediaOverlay = false,
     this.onPlatformViewCreated,
     this.gestureRecognizers,
+    this.effectName,
   }) : super(key: key);
 
   @override
@@ -96,7 +99,11 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
           onPlatformViewCreated: onPlatformViewCreated,
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,
           creationParams: {
-            'data': {'uid': widget.uid, 'channelId': widget.channelId},
+            'data': {
+              'uid': widget.uid,
+              'channelId': widget.channelId,
+              "effectName": widget.effectName,
+            },
             'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,
             'zOrderOnTop': widget.zOrderOnTop,
@@ -114,7 +121,11 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
           onPlatformViewCreated: onPlatformViewCreated,
           hitTestBehavior: PlatformViewHitTestBehavior.transparent,
           creationParams: {
-            'data': {'uid': widget.uid, 'channelId': widget.channelId},
+            'data': {
+              'uid': widget.uid,
+              'channelId': widget.channelId,
+              'effectName': widget.effectName,
+            },
             'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,
           },

@@ -55,7 +55,7 @@ class RtcSurfaceView(
   private val agoraRtc: RtcEngine by lazy(LazyThreadSafetyMode.NONE) {
     RtcEngine.create(
       context,
-      "8ed92bbde13744af882fdd8963e824c4",
+      "3a7d00163f6d41d6b533653369d4ce0e",
       null
     )
   }

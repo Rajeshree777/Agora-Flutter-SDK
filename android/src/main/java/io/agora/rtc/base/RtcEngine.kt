@@ -597,7 +597,7 @@ class RtcEngineManager(
   }
 
   override fun onEffectSelected(params: Map<String, *>, callback: Callback) {
-    engine?.onEffectSelected(params["selectedEffect"] as String)
+
   }
 
   override fun setVideoEncoderConfiguration(params: Map<String, *>, callback: Callback) {

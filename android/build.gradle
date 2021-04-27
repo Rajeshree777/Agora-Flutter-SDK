@@ -53,11 +53,10 @@ android {
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  api project(":banuba_sdk")
   implementation 'androidx.annotation:annotation:1.0.0'
+  implementation project(":banuba_sdk-release")
+  implementation project(":banuba_effect_player-release")
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', '1.4.31')}"
   implementation "org.jetbrains.kotlin:kotlin-reflect:${safeExtGet('kotlin_version', '1.4.31')}"
   implementation "io.agora.rtc:full-sdk:3.3.1"
-//  implementation files('.libs/flutter.jar')
-
 }

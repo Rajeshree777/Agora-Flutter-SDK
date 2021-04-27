@@ -79,18 +79,18 @@ class RtcSurfaceView: UIView {
 //            BanubaSdkManager.initialize(
 //                resourcePath: [Bundle.main.bundlePath + "/effects"], clientTokenString: banubaClientToken)
             
-            surface = EffectPlayerView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)))
+            surface = EffectPlayerView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height / 2)))
             //surface.layoutIfNeeded()
             banubaSdkManager.setup(configuration: EffectPlayerConfiguration(renderMode: .video))
             banubaSdkManager.setRenderTarget(layer: surface.layer as! CAEAGLLayer, contentMode : RenderContentMode.resize, playerConfiguration: nil)
         }
         else {
-            surface = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)))
+            surface = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height / 2)))
         }
         
         canvas = AgoraRtcVideoCanvas()
         canvas.view = surface
-        super.init(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)))
+        super.init(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height / 2)))
         addSubview(surface)
         addObserver(self, forKeyPath: observerForKeyPath(), options: .new, context: nil)
         
@@ -174,12 +174,12 @@ class RtcSurfaceView: UIView {
             subviews.forEach {
                 $0.removeFromSuperview()
             }
-            surface = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)))
+            surface = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height / 2)))
             addSubview(surface)
             canvas.view = surface
         }
         else {
-            surface.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+            surface.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height / 2))
             canvas.view = surface
         }
         print("Setup Video Canvas Banuba \(canvas.uid ) \(self.frame.size) === \(surface.frame)")

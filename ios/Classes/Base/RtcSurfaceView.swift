@@ -96,7 +96,7 @@ class RtcSurfaceView: UIView {
         
         if (uid == 0) {
             NotificationCenter.default.addObserver(self, selector: #selector(onEffectChange), name: .effectChangeNotification, object: nil)
-            NotificationCenter.default.removeObserver(self, name: .cameraModeChangeNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(onCameraModeChange), name: .cameraModeChangeNotification, object: nil)
         }
      }
     

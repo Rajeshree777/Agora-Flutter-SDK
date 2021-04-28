@@ -12,7 +12,7 @@ build/
 GeneratedPluginRegistrant.h
 GeneratedPluginRegistrant.m
 
-# Framework/*.xcframework
+Framework/*.xcframework
 
 .generated/
 

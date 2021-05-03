@@ -19,6 +19,7 @@ class SurfaceView extends RtcSurfaceView {
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
     String effectName,
+    int totalJoinedUser,
   }) : super(
             key: key,
             zOrderMediaOverlay: zOrderMediaOverlay,
@@ -29,7 +30,8 @@ class SurfaceView extends RtcSurfaceView {
             gestureRecognizers: gestureRecognizers,
             onPlatformViewCreated: onPlatformViewCreated,
             uid: 0,
-            effectName: effectName);
+            effectName: effectName,
+            totalJoinedUser: totalJoinedUser);
 }
 
 /// (Android only) TextureView.

@@ -36,7 +36,7 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
     init(_ messager: FlutterBinaryMessenger, _ frame: CGRect, _ viewId: Int64, _ args: Dictionary<String, Any?>?, _ rtcEnginePlugin: SwiftAgoraRtcEnginePlugin, _ rtcChannelPlugin: AgoraRtcChannelPlugin) {
         self.rtcEnginePlugin = rtcEnginePlugin
         self.rtcChannelPlugin = rtcChannelPlugin
-        self._view = RtcSurfaceView.init(frame: frame, ((args!["data"] as! NSDictionary)["uid"] as! NSNumber).uintValue)
+        self._view = RtcSurfaceView.init(frame: frame, ((args!["data"] as! NSDictionary)["uid"] as! NSNumber).uintValue, ((args!["data"] as! NSDictionary)["totalJoinedUser"] as! NSNumber).uintValue)
         self.channel = FlutterMethodChannel(name: "agora_rtc_engine/surface_view_\(viewId)", binaryMessenger: messager)
         super.init()
         if let map = args {
@@ -76,7 +76,7 @@ class AgoraSurfaceView: NSObject, FlutterPlatformView {
             channel = getChannel(channelId)
         }
         if let `engine` = engine {
-            _view.setData(engine, channel, (data["uid"] as! NSNumber).uintValue, (data["effectName"] as? String))
+            _view.setData(engine, channel, (data["uid"] as! NSNumber).uintValue, (data["effectName"] as? String), (data["totalJoinedUser"] as! NSNumber).uintValue)
         }
     }
 

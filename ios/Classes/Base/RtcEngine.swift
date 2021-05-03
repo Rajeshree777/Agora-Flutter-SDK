@@ -376,7 +376,9 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     private(set) var engine: AgoraRtcEngineKit?
     private var delegate: RtcEngineEventHandler?
     private var mediaObserver: MediaObserver?
-
+    private var effectName: String?
+    
+    
     init(_ emitter: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
         self.emitter = emitter
     }
@@ -435,6 +437,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     private var banubaSdkManager = BanubaSdkManager()
 
     @objc func onEffectSelected(_ params: NSDictionary, _ callback: Callback) {
+        effectName = params["selectedEffect"] as? String
         
         NotificationCenter.default.post(name: .effectChangeNotification, object: params["selectedEffect"] as? String)
     }

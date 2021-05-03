@@ -18,18 +18,19 @@ class SurfaceView extends RtcSurfaceView {
     VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
+    int totalJoinedUser,
   })  : assert(uid != 0),
         super(
-          key: key,
-          uid: uid,
-          zOrderMediaOverlay: zOrderMediaOverlay,
-          zOrderOnTop: zOrderOnTop,
-          renderMode: renderMode,
-          channelId: channelId,
-          mirrorMode: mirrorMode,
-          gestureRecognizers: gestureRecognizers,
-          onPlatformViewCreated: onPlatformViewCreated,
-        );
+            key: key,
+            uid: uid,
+            zOrderMediaOverlay: zOrderMediaOverlay,
+            zOrderOnTop: zOrderOnTop,
+            renderMode: renderMode,
+            channelId: channelId,
+            mirrorMode: mirrorMode,
+            gestureRecognizers: gestureRecognizers,
+            onPlatformViewCreated: onPlatformViewCreated,
+            totalJoinedUser: totalJoinedUser);
 }
 
 /// (Android only) TextureView.

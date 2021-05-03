@@ -64,6 +64,8 @@ class RtcSurfaceView extends StatefulWidget {
 
   final String effectName;
 
+  final int totalJoinedUser;
+
   /// Constructs a [RtcSurfaceView]
   RtcSurfaceView({
     Key key,
@@ -76,6 +78,7 @@ class RtcSurfaceView extends StatefulWidget {
     this.onPlatformViewCreated,
     this.gestureRecognizers,
     this.effectName,
+    this.totalJoinedUser,
   }) : super(key: key);
 
   @override
@@ -103,6 +106,7 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
               'uid': widget.uid,
               'channelId': widget.channelId,
               "effectName": widget.effectName,
+              "totalJoinedUser": widget.totalJoinedUser,
             },
             'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,
@@ -125,6 +129,7 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
               'uid': widget.uid,
               'channelId': widget.channelId,
               'effectName': widget.effectName,
+              'totalJoinedUser': widget.totalJoinedUser,
             },
             'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,
@@ -148,7 +153,8 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
   void didUpdateWidget(RtcSurfaceView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.uid != widget.uid ||
-        oldWidget.channelId != widget.channelId) {
+        oldWidget.channelId != widget.channelId ||
+        oldWidget.totalJoinedUser != widget.totalJoinedUser) {
       setData();
     }
     if (oldWidget.renderMode != widget.renderMode) {
@@ -176,7 +182,11 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
   void setData() {
     if (widget.uid == null) return;
     _channels[_id]?.invokeMethod('setData', {
-      'data': {'uid': widget.uid, 'channelId': widget.channelId}
+      'data': {
+        'uid': widget.uid,
+        'channelId': widget.channelId,
+        'totalJoinedUser': widget.totalJoinedUser
+      }
     });
   }
 

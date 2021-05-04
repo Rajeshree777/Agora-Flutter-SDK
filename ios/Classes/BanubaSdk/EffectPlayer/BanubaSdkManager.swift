@@ -220,15 +220,19 @@ import ARKit
     }
     
     //MARK: - App State Handling
-    @objc public var shouldAutoStartOnEnterForeground = false
+    @objc public var shouldAutoStartOnEnterForeground = true
     private var appStateHandler: AppStateHandler!
     private func setupAppStateHandler() {
         self.appStateHandler.add(name: UIApplication.didEnterBackgroundNotification) { [weak self] (_) in
+            print("App Background")
             guard let self = self, self.isLoaded else { return }
+            
             self.stopEffectPlayer()
         }
         self.appStateHandler.add(name: UIApplication.willEnterForegroundNotification) { [weak self] (_) in
+            print("App Forground")
             guard let self = self, self.isLoaded, self.shouldAutoStartOnEnterForeground else { return }
+            
             self.startEffectPlayer()
         }
         self.appStateHandler.add(name: UIApplication.willTerminateNotification) { [weak self] (_) in

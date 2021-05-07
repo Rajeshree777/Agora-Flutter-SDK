@@ -107,6 +107,7 @@ class RtcSurfaceView: UIView {
 //            setUpRenderTarget()
             NotificationCenter.default.addObserver(self, selector: #selector(onEffectChange), name: .effectChangeNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(onCameraModeChange), name: .cameraModeChangeNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(destroyBanubaEffect), name: .destroyBanubaEffectNotification, object: nil)
         }
      }
     
@@ -139,6 +140,12 @@ class RtcSurfaceView: UIView {
         }
     }
 
+    @objc func destroyBanubaEffect(notification: Notification) {
+        print("Banuba input camera stop & destory effect")
+        banubaSdkManager.input.stopCamera()
+        banubaSdkManager.destroyEffectPlayer()
+    }
+
     func observerForKeyPath() -> String {
         return "frame"
     }
@@ -151,6 +158,7 @@ class RtcSurfaceView: UIView {
         if (canvas.uid == 0) {
             NotificationCenter.default.removeObserver(self, name: .effectChangeNotification, object: nil)
             NotificationCenter.default.removeObserver(self, name: .cameraModeChangeNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: .destroyBanubaEffectNotification, object: nil)
         }
         canvas.view = nil
         removeObserver(self, forKeyPath: observerForKeyPath(), context: nil)
@@ -300,4 +308,6 @@ class RtcSurfaceView: UIView {
 extension Notification.Name {
     static let effectChangeNotification = Notification.Name("effectChangeNotification")
     static let cameraModeChangeNotification = Notification.Name("cameraModeChangeNotification")
+    static let destroyBanubaEffectNotification = Notification.Name("destroyBanubaEffectNotification")
+    
 }

@@ -1301,3 +1301,31 @@ class RtcEngineConfig {
   /// @nodoc
   Map<String, dynamic> toJson() => _$RtcEngineConfigToJson(this);
 }
+
+///  Configurations for the RtcEngineConfig instance.
+@JsonSerializable(explicitToJson: true)
+class RtcBanubaEngineConfig {
+  /// The region for connection. This advanced feature applies to scenarios that have regional restrictions.
+  ///
+  /// For the regions that Agora supports, see [AreaCode]. After specifying the region, the SDK connects to the Agora servers within that region.
+  @JsonKey(includeIfNull: false)
+  AreaCode areaCode;
+
+  /// The configuration of the log files that the SDK outputs. See [LogConfig].
+  ///
+  /// By default, the SDK outputs five log files, `agorasdk.log`, `agorasdk_1.log`, `agorasdk_2.log`, `agorasdk_3.log`, `agorasdk_4.log`, each with a default size of 1024 KB.
+  /// These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification
+  /// time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
+  @JsonKey(includeIfNull: false)
+  LogConfig logConfig;
+
+  /// Constructs a [RtcBanubaEngineConfig]
+  RtcBanubaEngineConfig({this.areaCode, this.logConfig});
+
+  /// @nodoc
+  factory RtcBanubaEngineConfig.fromJson(Map<String, dynamic> json) =>
+      _$RtcBanubaEngineConfigFromJson(json);
+
+  /// @nodoc
+  Map<String, dynamic> toJson() => _$RtcBanubaEngineConfigToJson(this);
+}

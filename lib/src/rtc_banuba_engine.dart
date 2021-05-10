@@ -9,27 +9,18 @@ import 'enums.dart';
 import 'events.dart';
 import 'rtc_channel.dart';
 
-/// RtcEngine is the main class of the Agora SDK.
-class RtcEngine with RtcEngineInterface {
+/// RtcBanubaEngine is the main class of the Agora SDK.
+class RtcBanubaEngine with RtcBanubaEngineInterface {
   static const MethodChannel _methodChannel = MethodChannel('agora_rtc_engine');
-  static const EventChannel _eventChannel =
-      EventChannel('agora_rtc_engine/events');
 
   /// Exposing methodChannel to other files
   static MethodChannel get methodChannel => _methodChannel;
 
-  static RtcEngine _engine;
+  static RtcBanubaEngine _engine;
 
-  RtcEngineEventHandler _handler;
+  RtcBanubaEngineEventHandler _handler;
 
-  RtcEngine._() {
-    _eventChannel.receiveBroadcastStream().listen((event) {
-      final eventMap = Map<dynamic, dynamic>.from(event);
-      final methodName = eventMap['methodName'] as String;
-      final data = List<dynamic>.from(eventMap['data']);
-      _handler?.process(methodName, data);
-    });
-  }
+  RtcBanubaEngine._() {}
 
   static Future<T> _invokeMethod<T>(String method,
       [Map<String, dynamic> arguments]) {
@@ -66,44 +57,44 @@ class RtcEngine with RtcEngineInterface {
     return _invokeMethod('getErrorDescription', {'error': error});
   }
 
-  /// Creates an [RtcEngine] instance.
+  /// Creates an [RtcBanubaEngine] instance.
   ///
   /// **Deprecated**
   ///
   /// This method is deprecated since v3.3.1.
   ///
-  /// Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
+  /// Unless otherwise specified, all the methods provided by the RtcBanubaEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
   /// **Note**
-  /// - You must create an [RtcEngine] instance before calling any other method.
-  /// - You can create an [RtcEngine] instance either by calling this method or by calling [RtcEngine.createWithAreaCode]. The difference between [RtcEngine.createWithAreaCode] and this method is that [RtcEngine.createWithAreaCode] enables you to specify the connection area.
-  /// - The RTC Flutter SDK supports creating only one [RtcEngine] instance for an app for now.
+  /// - You must create an [RtcBanubaEngine] instance before calling any other method.
+  /// - You can create an [RtcBanubaEngine] instance either by calling this method or by calling [RtcBanubaEngine.createWithAreaCode]. The difference between [RtcBanubaEngine.createWithAreaCode] and this method is that [RtcBanubaEngine.createWithAreaCode] enables you to specify the connection area.
+  /// - The RTC Flutter SDK supports creating only one [RtcBanubaEngine] instance for an app for now.
   ///
-  /// **Parameter** [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcEngine] instance. To change your App ID, call destroy to destroy the current [RtcEngine] instance, and after destroy returns 0, call create to create an [RtcEngine] instance with the new App ID.
+  /// **Parameter** [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcBanubaEngine] instance. To change your App ID, call destroy to destroy the current [RtcBanubaEngine] instance, and after destroy returns 0, call create to create an [RtcBanubaEngine] instance with the new App ID.
   ///
   /// **Returns**
-  /// - An [RtcEngine] instance if the method call succeeds.
+  /// - An [RtcBanubaEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   @deprecated
-  static Future<RtcEngine> create(String appId) {
-    return createWithConfig(RtcEngineConfig(appId));
+  static Future<RtcBanubaEngine> create() {
+    return createWithConfig(RtcBanubaEngineConfig());
   }
 
-  /// Creates an [RtcEngine] instance.
+  /// Creates an [RtcBanubaEngine] instance.
   ///
   /// **Deprecated**
   ///
   /// This method is deprecated since v3.3.1.
   ///
-  /// Unless otherwise specified, all the methods provided by the RtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
+  /// Unless otherwise specified, all the methods provided by the RtcBanubaEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
   /// **Note**
-  /// - You must create an [RtcEngine] instance before calling any other method.
-  /// - You can create an [RtcEngine] instance either by calling this method or by calling [RtcEngine.create]. The difference between [RtcEngine.create] and this method is that this method enables you to specify the connection area.
-  /// - The Agora RTC Native SDK supports creating only one [RtcEngine] instance for an app for now.
+  /// - You must create an [RtcBanubaEngine] instance before calling any other method.
+  /// - You can create an [RtcBanubaEngine] instance either by calling this method or by calling [RtcBanubaEngine.create]. The difference between [RtcBanubaEngine.create] and this method is that this method enables you to specify the connection area.
+  /// - The Agora RTC Native SDK supports creating only one [RtcBanubaEngine] instance for an app for now.
   ///
-  /// **Parameter** [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcEngine] instance. To change your App ID, call destroy to destroy the current [RtcEngine] instance and after destroy returns 0, call create to create an [RtcEngine] instance with the new App ID.
+  /// **Parameter** [appId] The App ID issued to you by Agora. See How to get the App ID. Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one [RtcBanubaEngine] instance. To change your App ID, call destroy to destroy the current [RtcBanubaEngine] instance and after destroy returns 0, call create to create an [RtcBanubaEngine] instance with the new App ID.
   ///
   /// **Parameter** [areaCode] The area of connection. This advanced feature applies to scenarios that have regional restrictions.
   ///
@@ -114,36 +105,38 @@ class RtcEngine with RtcEngineInterface {
   /// - When the app that integrates the Agora SDK is used out of the specified area, it connects to the Agora servers either in the specified area or in the area where the app is located.
   ///
   /// **Returns**
-  /// - An [RtcEngine] instance if the method call succeeds.
+  /// - An [RtcBanubaEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   @deprecated
-  static Future<RtcEngine> createWithAreaCode(
+  static Future<RtcBanubaEngine> createWithAreaCode(
       String appId, AreaCode areaCode) async {
-    return createWithConfig(RtcEngineConfig(appId, areaCode: areaCode));
+    return createWithConfig(RtcBanubaEngineConfig(areaCode: areaCode));
   }
 
-  /// Creates an [RtcEngine] instance.
+  /// Creates an [RtcBanubaEngine] instance.
   ///
   /// Since v3.3.1
   ///
-  /// Unless otherwise specified, all the methods provided by the [RtcEngine] instance are executed asynchronously. Agora recommends calling these methods in the same thread.
+  /// Unless otherwise specified, all the methods provided by the [RtcBanubaEngine] instance are executed asynchronously. Agora recommends calling these methods in the same thread.
   ///
   /// **Note**
-  /// - You must create the [RtcEngine] instance before calling any other method.
-  /// - You can create an [RtcEngine] instance either by calling this method or by calling [create]. The difference between [create] and this method is that this method enables you to specify the region for connection.
-  /// - The Agora RTC Native SDK supports creating only one [RtcEngine] instance for an app for now.
+  /// - You must create the [RtcBanubaEngine] instance before calling any other method.
+  /// - You can create an [RtcBanubaEngine] instance either by calling this method or by calling [create]. The difference between [create] and this method is that this method enables you to specify the region for connection.
+  /// - The Agora RTC Native SDK supports creating only one [RtcBanubaEngine] instance for an app for now.
   ///
-  /// **Parameter**[config] Configurations for the [RtcEngine] instance. For details, see [RtcEngineConfig].
+  /// **Parameter**[config] Configurations for the [RtcBanubaEngine] instance. For details, see [RtcBanubaEngineConfig].
   ///
   /// **Returns**
-  /// - An [RtcEngine] instance if the method call succeeds.
+  /// - An [RtcBanubaEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
-  static Future<RtcEngine> createWithConfig(RtcEngineConfig config) async {
+  static Future<RtcBanubaEngine> createWithConfig(
+      RtcBanubaEngineConfig config) async {
     if (_engine != null) return _engine;
-    await _invokeMethod('create', {'config': config.toJson(), 'appType': 4});
-    _engine = RtcEngine._();
+    await _invokeMethod(
+        'createBanuba', {'config': config.toJson(), 'appType': 4});
+    _engine = RtcBanubaEngine._();
     return _engine;
   }
 
@@ -157,10 +150,10 @@ class RtcEngine with RtcEngineInterface {
 
   /// Sets the engine event handler.
   ///
-  /// After setting the engine event handler, you can listen for engine events and receive the statistics of the corresponding [RtcEngine] instance.
+  /// After setting the engine event handler, you can listen for engine events and receive the statistics of the corresponding [RtcBanubaEngine] instance.
   ///
   /// **Parameter** [handler] The event handler.
-  void setEventHandler(RtcEngineEventHandler handler) {
+  void setEventHandler(RtcBanubaEngineEventHandler handler) {
     _handler = handler;
   }
 
@@ -1034,7 +1027,7 @@ class RtcEngine with RtcEngineInterface {
 }
 
 /// @nodoc
-mixin RtcEngineInterface
+mixin RtcBanubaEngineInterface
     implements
         RtcUserInfoInterface,
         RtcAudioInterface,
@@ -1057,27 +1050,27 @@ mixin RtcEngineInterface
         RtcInjectStreamInterface,
         RtcCameraInterface,
         RtcStreamMessageInterface {
-  /// Destroys the [RtcEngine] instance and releases all resources used by the Agora SDK.
+  /// Destroys the [RtcBanubaEngine] instance and releases all resources used by the Agora SDK.
   ///
   /// This method is useful for apps that occasionally make voice or video calls, to free up resources for other operations when not making calls.
   ///
   /// **Note**
   /// - Call this method in the subthread.
-  /// - Once the app calls [RtcEngine.destroy] to destroy the created [RtcEngine] instance, you cannot use any method or callback in the SDK.
+  /// - Once the app calls [RtcBanubaEngine.destroy] to destroy the created [RtcBanubaEngine] instance, you cannot use any method or callback in the SDK.
   Future<void> destroy();
 
-  /// Sets the channel profile of the Agora RtcEngine.
+  /// Sets the channel profile of the Agora RtcBanubaEngine.
   ///
-  /// The Agora RtcEngine differentiates channel profiles and applies different optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
+  /// The Agora RtcBanubaEngine differentiates channel profiles and applies different optimization algorithms accordingly. For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
   ///
-  /// **Parameter** [profile] The channel profile of the Agora RtcEngine. See [ChannelProfile].
+  /// **Parameter** [profile] The channel profile of the Agora RtcBanubaEngine. See [ChannelProfile].
   Future<void> setChannelProfile(ChannelProfile profile);
 
   /// Sets the role of a user in a live interactive streaming.
   ///
   /// You can call this method either before or after joining the channel to set the user role as audience or host. If you call this method to switch the user role after joining the channel, the SDK triggers the following callbacks:
-  /// - The local client: [RtcEngineEventHandler.clientRoleChanged].
-  /// - The remote client: [RtcEngineEventHandler.userJoined] or [RtcEngineEventHandler.userOffline] ([UserOfflineReason.BecomeAudience]).
+  /// - The local client: [RtcBanubaEngineEventHandler.clientRoleChanged].
+  /// - The remote client: [RtcBanubaEngineEventHandler.userJoined] or [RtcBanubaEngineEventHandler.userOffline] ([UserOfflineReason.BecomeAudience]).
   ///
   /// **Note**
   /// - This method applies to the `LiveBroadcasting` profile only (when the `profile` parameter in `setChannelProfile` is set as `LiveBroadcasting`).
@@ -1093,12 +1086,12 @@ mixin RtcEngineInterface
   /// Allows a user to join a channel.
   ///
   /// Users in the same channel can talk to each other, and multiple users in the same channel can start a group chat. Users with different App IDs cannot call each other.
-  /// You must call the [RtcEngine.leaveChannel] method to exit the current call before joining another channel.
+  /// You must call the [RtcBanubaEngine.leaveChannel] method to exit the current call before joining another channel.
   /// A successful joinChannel method call triggers the following callbacks:
-  /// - The local client: [RtcEngineEventHandler.joinChannelSuccess].
-  /// - The remote client: [RtcEngineEventHandler.userJoined], if the user joining the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
+  /// - The local client: [RtcBanubaEngineEventHandler.joinChannelSuccess].
+  /// - The remote client: [RtcBanubaEngineEventHandler.userJoined], if the user joining the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
   ///
-  /// When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [RtcEngineEventHandler.rejoinChannelSuccess] callback on the local client.
+  /// When the connection between the client and Agora's server is interrupted due to poor network conditions, the SDK tries reconnecting to the server. When the local client successfully rejoins the channel, the SDK triggers the [RtcBanubaEngineEventHandler.rejoinChannelSuccess] callback on the local client.
   ///
   /// Once the user joins the channel (switches to another channel), the user subscribes to the audio and video streams of all the other users in the channel by default, giving rise to usage and billing calculation. If you do not want to subscribe to a specified stream or all remote streams, call the mute methods accordingly.
   ///
@@ -1106,7 +1099,7 @@ mixin RtcEngineInterface
   /// - A channel does not accept duplicate uids, such as two users with the same uid. If you set uid as 0, the system automatically assigns a uid.
   ///
   /// **Warning**
-  /// - Ensure that the App ID used for creating the token is the same App ID used in the create method for creating an [RtcEngine] object. Otherwise, CDN live streaming may fail.
+  /// - Ensure that the App ID used for creating the token is the same App ID used in the create method for creating an [RtcBanubaEngine] object. Otherwise, CDN live streaming may fail.
   ///
   /// **Parameter** [token] The token for authentication. Set it as the token generated at your server. For details, see [Get a token](https://docs.agora.io/en/Agora%20Platform/token?platform=All%20Platforms#generatetoken).
   ///
@@ -1119,7 +1112,7 @@ mixin RtcEngineInterface
   ///
   /// **Parameter** [optionalInfo] Additional information about the channel. This parameter can be set as null or contain channel related information. Other users in the channel do not receive this message.
   ///
-  /// **Parameter** [optionalUid] (Optional) User ID. `optionalUid` must be unique. If `optionalUid` is not assigned (or set to 0), the SDK assigns and returns uid in the [RtcEngineEventHandler.joinChannelSuccess] callback. Your app must record and maintain the returned uid since the SDK does not do so.
+  /// **Parameter** [optionalUid] (Optional) User ID. `optionalUid` must be unique. If `optionalUid` is not assigned (or set to 0), the SDK assigns and returns uid in the [RtcBanubaEngineEventHandler.joinChannelSuccess] callback. Your app must record and maintain the returned uid since the SDK does not do so.
   ///
   /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
   Future<void> joinChannel(
@@ -1131,7 +1124,7 @@ mixin RtcEngineInterface
   /// Switches to a different channel.
   ///
   /// This method allows the audience of a [ChannelProfile.LiveBroadcasting] channel to switch to a different channel.
-  /// After the user successfully switches to another channel, the [RtcEngineEventHandler.leaveChannel] and [RtcEngineEventHandler.joinChannelSuccess] callbacks are triggered to indicate that the user has left the original channel and joined a new one.
+  /// After the user successfully switches to another channel, the [RtcBanubaEngineEventHandler.leaveChannel] and [RtcBanubaEngineEventHandler.joinChannelSuccess] callbacks are triggered to indicate that the user has left the original channel and joined a new one.
   ///
   /// **Note**
   /// - This method applies to the [ClientRole.Audience] role in a [ChannelProfile.LiveBroadcasting] channel only.
@@ -1151,21 +1144,21 @@ mixin RtcEngineInterface
 
   /// Allows a user to leave a channel.
   ///
-  /// After joining a channel, the user must call this method to end the call before joining another channel. This method returns 0 if the user leaves the channel and releases all resources related to the call. This method call is asynchronous, and the user has not exited the channel when the method call returns. Once the user leaves the channel, the SDK triggers the [RtcEngineEventHandler.leaveChannel] callback.
+  /// After joining a channel, the user must call this method to end the call before joining another channel. This method returns 0 if the user leaves the channel and releases all resources related to the call. This method call is asynchronous, and the user has not exited the channel when the method call returns. Once the user leaves the channel, the SDK triggers the [RtcBanubaEngineEventHandler.leaveChannel] callback.
   /// A successful method call triggers the following callbacks:
-  /// - The local client: [RtcEngineEventHandler.leaveChannel].
-  /// - The remote client: [RtcEngineEventHandler.userOffline], if the user leaving the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
+  /// - The local client: [RtcBanubaEngineEventHandler.leaveChannel].
+  /// - The remote client: [RtcBanubaEngineEventHandler.userOffline], if the user leaving the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
   ///
   /// **Note**
-  /// - If you call the [RtcEngine.destroy] method immediately after calling this method, the `leaveChannel` process interrupts, and the SDK does not trigger the [RtcEngineEventHandler.leaveChannel] callback.
-  /// - If you call this method during CDN live streaming, the SDK triggers the [RtcEngine.removePublishStreamUrl] method.
+  /// - If you call the [RtcBanubaEngine.destroy] method immediately after calling this method, the `leaveChannel` process interrupts, and the SDK does not trigger the [RtcBanubaEngineEventHandler.leaveChannel] callback.
+  /// - If you call this method during CDN live streaming, the SDK triggers the [RtcBanubaEngine.removePublishStreamUrl] method.
   Future<void> leaveChannel();
 
   /// Renews the token when the current token expires.
   ///
   /// The token expires after a period of time once the token schema is enabled when:
-  /// - The SDK triggers the [RtcEngineEventHandler.tokenPrivilegeWillExpire] callback
-  /// - The [RtcEngineEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired] error.
+  /// - The SDK triggers the [RtcBanubaEngineEventHandler.tokenPrivilegeWillExpire] callback
+  /// - The [RtcBanubaEngineEventHandler.connectionStateChanged] callback reports the [ConnectionChangedReason.TokenExpired] error.
   /// The app should retrieve a new token from the server and call this method to renew it. Failure to do so results in the SDK disconnecting from the server.
   ///
   /// **Parameter** [token] The new token.
@@ -1192,9 +1185,9 @@ mixin RtcEngineInterface
 
   /// Gets the current call ID.
   ///
-  /// When a user joins a channel on a client, a call ID is generated to identify the call from the client. Feedback methods, such as the [RtcEngine.rate] and [RtcEngine.complain] method, must be called after the call ends to submit feedback to the SDK.
+  /// When a user joins a channel on a client, a call ID is generated to identify the call from the client. Feedback methods, such as the [RtcBanubaEngine.rate] and [RtcBanubaEngine.complain] method, must be called after the call ends to submit feedback to the SDK.
   ///
-  /// The `rate` and `complain` methods require the `callId` parameter retrieved from the [RtcEngine.getCallId] method during a call. `callId` is passed as an argument into the rate and complain methods after the call ends.
+  /// The `rate` and `complain` methods require the `callId` parameter retrieved from the [RtcBanubaEngine.getCallId] method during a call. `callId` is passed as an argument into the rate and complain methods after the call ends.
   ///
   ///  **Returns**
   /// - The current call ID, if the method call succeeds.
@@ -1203,7 +1196,7 @@ mixin RtcEngineInterface
 
   /// Allows the user to rate a call after the call ends.
   ///
-  /// **Parameter** [callId] ID of the call retrieved from the [RtcEngine.getCallId] method.
+  /// **Parameter** [callId] ID of the call retrieved from the [RtcBanubaEngine.getCallId] method.
   ///
   /// **Parameter** [rating] Rating of the call. The value is between 1 (lowest score) and 5 (highest score). If you set a value out of this range, the [ErrorCode.InvalidArgument] error occurs.
   ///
@@ -1212,7 +1205,7 @@ mixin RtcEngineInterface
 
   /// Allows a user to complain about the call quality after a call ends.
   ///
-  /// **Parameter** [callId] ID of the call retrieved from the [RtcEngine.getCallId] method.
+  /// **Parameter** [callId] ID of the call retrieved from the [RtcBanubaEngine.getCallId] method.
   ///
   /// **Parameter** [description] (Optional) The description of the complaint. The string length must be less than 800 bytes.
   Future<void> complain(String callId, String description);
@@ -1226,7 +1219,7 @@ mixin RtcEngineInterface
   /// This method is deprecated from v3.3.1.
   ///
   /// **Note**
-  /// - Ensure that you call this method immediately after calling the [RtcEngine.create] method, otherwise the output log may not be complete.
+  /// - Ensure that you call this method immediately after calling the [RtcBanubaEngine.create] method, otherwise the output log may not be complete.
   ///
   /// **Parameter** [filePath] File path of the log file. The string of the log file is in UTF-8. The default file path is `/storage/emulated/0/Android/data/<package name>="">/files/agorasdk.log` for Android and `App Sandbox/Library/caches/agorasdk.log` for iOS.
   @deprecated
@@ -1322,12 +1315,12 @@ mixin RtcEngineInterface
 mixin RtcUserInfoInterface {
   /// Registers a user account.
   ///
-  /// Once registered, the user account can be used to identify the local user when the user joins the channel. After the user successfully registers a user account, the SDK triggers the [RtcEngineEventHandler.localUserRegistered] callback on the local client, reporting the user ID and user account of the local user.
+  /// Once registered, the user account can be used to identify the local user when the user joins the channel. After the user successfully registers a user account, the SDK triggers the [RtcBanubaEngineEventHandler.localUserRegistered] callback on the local client, reporting the user ID and user account of the local user.
   ///
   /// To join a channel with a user account, you can choose either of the following:
-  /// - Call the [RtcEngine.registerLocalUserAccount] method to create a user account, and then the [RtcEngine.joinChannelWithUserAccount] method to join the channel.
-  /// - Call the [RtcEngine.joinChannelWithUserAccount] method to join the channel.
-  /// The difference between the two is that for the former, the time elapsed between calling the [RtcEngine.joinChannelWithUserAccount] method and joining the channel is shorter than the latter.
+  /// - Call the [RtcBanubaEngine.registerLocalUserAccount] method to create a user account, and then the [RtcBanubaEngine.joinChannelWithUserAccount] method to join the channel.
+  /// - Call the [RtcBanubaEngine.joinChannelWithUserAccount] method to join the channel.
+  /// The difference between the two is that for the former, the time elapsed between calling the [RtcBanubaEngine.joinChannelWithUserAccount] method and joining the channel is shorter than the latter.
   ///
   /// **Note**
   /// - Ensure that you set the [userAccount] parameter. Otherwise, this method does not take effect.
@@ -1347,8 +1340,8 @@ mixin RtcUserInfoInterface {
   /// Joins the channel with a user account.
   ///
   /// After the user successfully joins the channel, the SDK triggers the following callbacks:
-  /// - The local client: [RtcEngineEventHandler.localUserRegistered] and [RtcEngineEventHandler.joinChannelSuccess].
-  /// - The remote client: [RtcEngineEventHandler.userJoined] and [RtcEngineEventHandler.userInfoUpdated], if the user joining the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
+  /// - The local client: [RtcBanubaEngineEventHandler.localUserRegistered] and [RtcBanubaEngineEventHandler.joinChannelSuccess].
+  /// - The remote client: [RtcBanubaEngineEventHandler.userJoined] and [RtcBanubaEngineEventHandler.userInfoUpdated], if the user joining the channel is in the [ChannelProfile.Communication] profile, or is a [ClientRole.Broadcaster] in the [ChannelProfile.LiveBroadcasting] profile.
   ///
   /// **Note**
   /// - To ensure smooth communication, use the same parameter type to identify the user. For example, if a user joins the channel with a user ID, then ensure all the other users use the user ID too. The same applies to the user account. If a user joins the channel with the Agora Web SDK, ensure that the uid of the user is set to the same parameter type.
@@ -1376,9 +1369,9 @@ mixin RtcUserInfoInterface {
 
   /// Gets the user information by passing in the user account.
   ///
-  /// After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object ([UserInfo]), and triggers the [RtcEngineEventHandler.userInfoUpdated] callback on the local client.
+  /// After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object ([UserInfo]), and triggers the [RtcBanubaEngineEventHandler.userInfoUpdated] callback on the local client.
   ///
-  /// After receiving the [RtcEngineEventHandler.userInfoUpdated] callback, you can call this method to get the user ID of the remote user from the [UserInfo] object by passing in the user account.
+  /// After receiving the [RtcBanubaEngineEventHandler.userInfoUpdated] callback, you can call this method to get the user ID of the remote user from the [UserInfo] object by passing in the user account.
   ///
   /// **Parameter** [userAccount] The user account of the user. Ensure that you set this parameter.
   ///
@@ -1392,9 +1385,9 @@ mixin RtcUserInfoInterface {
 
   /// Gets the user information by passing in the user ID.
   ///
-  /// After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object ([UserInfo]), and triggers the [RtcEngineEventHandler.userInfoUpdated] callback on the local client.
+  /// After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object ([UserInfo]), and triggers the [RtcBanubaEngineEventHandler.userInfoUpdated] callback on the local client.
   ///
-  /// After receiving the [RtcEngineEventHandler.userInfoUpdated] callback, you can call this method to get the user ID of the remote user from the [UserInfo] object by passing in the user account.
+  /// After receiving the [RtcBanubaEngineEventHandler.userInfoUpdated] callback, you can call this method to get the user ID of the remote user from the [UserInfo] object by passing in the user account.
   ///
   /// **Parameter** [uid] The user ID of the user. Ensure that you set this parameter.
   ///
@@ -1414,30 +1407,30 @@ mixin RtcAudioInterface {
   /// The audio module is enabled by default.
   ///
   /// **Note**
-  /// - This method affects the audio module and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
+  /// - This method affects the audio module and can be called after calling the [RtcBanubaEngine.leaveChannel] method. You can call this method either before or after joining a channel.
   /// - This method enables the audio module and takes some time to take effect. Agora recommends using the following API methods to control the audio engine modules separately:
-  ///   - [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
-  ///   - [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
-  ///   - [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
-  ///   - [RtcEngine.muteAllRemoteAudioStreams]: Whether to subscribe to and play all remote audio streams.
+  ///   - [RtcBanubaEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
+  ///   - [RtcBanubaEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
+  ///   - [RtcBanubaEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
+  ///   - [RtcBanubaEngine.muteAllRemoteAudioStreams]: Whether to subscribe to and play all remote audio streams.
   Future<void> enableAudio();
 
   /// Disables the audio module.
   ///
   /// **Note**
-  /// - This method affects the audio module and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
+  /// - This method affects the audio module and can be called after calling the [RtcBanubaEngine.leaveChannel] method. You can call this method either before or after joining a channel.
   /// - This method disables the audio module and takes some time to take effect. Agora recommends using the following API methods to control the audio engine module separately:
-  ///   - [RtcEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
-  ///   - [RtcEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
-  ///   - [RtcEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
-  ///   - [RtcEngine.muteAllRemoteAudioStreams]: Whether to subscribe to and play all remote audio streams.
+  ///   - [RtcBanubaEngine.enableLocalAudio]: Whether to enable the microphone to create the local audio stream.
+  ///   - [RtcBanubaEngine.muteLocalAudioStream]: Whether to publish the local audio stream.
+  ///   - [RtcBanubaEngine.muteRemoteAudioStream]: Whether to subscribe to and play the remote audio stream.
+  ///   - [RtcBanubaEngine.muteAllRemoteAudioStreams]: Whether to subscribe to and play all remote audio streams.
   Future<void> disableAudio();
 
   /// Sets the audio parameters and application scenarios.
   ///
   /// **Note**
   /// - You must call this method before calling the joinChannel method.
-  /// See [RtcEngine.joinChannel]
+  /// See [RtcBanubaEngine.joinChannel]
   /// - In the Communication and [ChannelProfile.LiveBroadcasting] profiles, the bitrates may be different from your settings due to network self-adaptation.
   /// - In scenarios requiring high-quality audio, we recommend setting profile as [AudioScenario.ShowRoom] and scenario as [AudioScenario.GameStreaming]. For example, for music education scenarios.
   ///
@@ -1477,7 +1470,7 @@ mixin RtcAudioInterface {
   ///
   /// **Note**
   /// - This method adjusts the playback volume which is mixed volume of all remote users.
-  /// - To mute the local audio playback, call both [RtcEngine.adjustPlaybackSignalVolume] and [RtcEngine.adjustAudioMixingVolume], and set volume as 0.
+  /// - To mute the local audio playback, call both [RtcBanubaEngine.adjustPlaybackSignalVolume] and [RtcBanubaEngine.adjustAudioMixingVolume], and set volume as 0.
   /// - To avoid echoes and improve call quality, Agora recommends setting the value of volume between 0 and 100. If you need to set the value higher than 100, contact support@agora.io first.
   ///
   /// **Parameter** [volume] The playback volume of all remote users. The value ranges from 0 to 400:
@@ -1492,12 +1485,12 @@ mixin RtcAudioInterface {
   ///
   /// This method does not affect receiving or playing the remote audio streams, and `enableLocalAudio(false)` is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
   ///
-  /// The SDK triggers the [RtcEngineEventHandler.microphoneEnabled] callback once the local audio function is disabled or re-enabled.
+  /// The SDK triggers the [RtcBanubaEngineEventHandler.microphoneEnabled] callback once the local audio function is disabled or re-enabled.
   ///
   /// **Note**
-  /// - This method is different from the [RtcEngine.muteLocalAudioStream] method:
-  ///   - [RtcEngine.enableLocalAudio]: Disables/Re-enables the local audio capture and processing. If you disable or re-enable local audio recording using the [RtcEngine.enableLocalAudio] method, the local user may hear a pause in the remote audio playback.
-  ///   - [RtcEngine.muteLocalAudioStream]: Stops/Continues sending the local audio streams.
+  /// - This method is different from the [RtcBanubaEngine.muteLocalAudioStream] method:
+  ///   - [RtcBanubaEngine.enableLocalAudio]: Disables/Re-enables the local audio capture and processing. If you disable or re-enable local audio recording using the [RtcBanubaEngine.enableLocalAudio] method, the local user may hear a pause in the remote audio playback.
+  ///   - [RtcBanubaEngine.muteLocalAudioStream]: Stops/Continues sending the local audio streams.
   ///
   /// **Parameter** [enabled] Sets whether to disable/re-enable the local audio function:
   /// - `true`: (Default) Re-enable the local audio function, that is, to start local audio capture and processing.
@@ -1506,11 +1499,11 @@ mixin RtcAudioInterface {
 
   /// Stops/Resumes sending the local audio stream.
   ///
-  /// A successful [RtcEngine.muteLocalAudioStream] method call triggers the [RtcEngineEventHandler.userMuteAudio] callback on the remote client.
+  /// A successful [RtcBanubaEngine.muteLocalAudioStream] method call triggers the [RtcBanubaEngineEventHandler.userMuteAudio] callback on the remote client.
   ///
   /// **Note**
   /// - When muted is set as true, this method does not disable the microphone and thus does not affect any ongoing recording.
-  /// - If you call [RtcEngine.setChannelProfile] after this method, the SDK resets whether or not to mute the local audio according to the channel profile and user role. Therefore, we recommend calling this method after the [RtcEngine.setChannelProfile] method.
+  /// - If you call [RtcBanubaEngine.setChannelProfile] after this method, the SDK resets whether or not to mute the local audio according to the channel profile and user role. Therefore, we recommend calling this method after the [RtcBanubaEngine.setChannelProfile] method.
   ///
   /// **Parameter** [muted] Sets whether to send/stop sending the local audio stream:
   /// - `true`: Stop sending the local audio stream.
@@ -1520,7 +1513,7 @@ mixin RtcAudioInterface {
   /// Stops/Resumes receiving a specified audio stream.
   ///
   /// **Note**
-  /// - If you called the [RtcEngine.muteAllRemoteAudioStreams] method and set muted as true to stop receiving all remote video streams, ensure that the [RtcEngine.muteAllRemoteAudioStreams] method is called and set muted as false before calling this method. The [RtcEngine.muteAllRemoteAudioStreams] method sets all remote audio streams, while the [RtcEngine.muteRemoteAudioStream] method sets a specified remote user's audio stream.
+  /// - If you called the [RtcBanubaEngine.muteAllRemoteAudioStreams] method and set muted as true to stop receiving all remote video streams, ensure that the [RtcBanubaEngine.muteAllRemoteAudioStreams] method is called and set muted as false before calling this method. The [RtcBanubaEngine.muteAllRemoteAudioStreams] method sets all remote audio streams, while the [RtcBanubaEngine.muteRemoteAudioStream] method sets a specified remote user's audio stream.
   ///
   /// **Parameter** [uid] ID of the specified remote user.
   ///
@@ -1542,14 +1535,14 @@ mixin RtcAudioInterface {
 
   /// Sets whether to receive all remote audio streams by default.
   ///
-  /// You can call this method either before or after joining a channel. If you call [RtcEngine.setDefaultMuteAllRemoteAudioStreams] (true) after joining a channel, you will not receive the audio streams of any subsequent user.
+  /// You can call this method either before or after joining a channel. If you call [RtcBanubaEngine.setDefaultMuteAllRemoteAudioStreams] (true) after joining a channel, you will not receive the audio streams of any subsequent user.
   ///
   /// **Deprecated**
   ///
   /// This method is deprecated from v3.3.1.
   ///
   /// **Note**
-  /// - If you want to resume receiving audio streams, call [RtcEngine.muteRemoteAudioStream] (false), and specify the ID of the remote user that you want to subscribe to. To resume audio streams of multiple users, call [RtcEngine.muteRemoteAudioStream] as many times. Calling [RtcEngine.setDefaultMuteAllRemoteAudioStreams] (false) resumes receiving audio streams of the subsequent users only.
+  /// - If you want to resume receiving audio streams, call [RtcBanubaEngine.muteRemoteAudioStream] (false), and specify the ID of the remote user that you want to subscribe to. To resume audio streams of multiple users, call [RtcBanubaEngine.muteRemoteAudioStream] as many times. Calling [RtcBanubaEngine.setDefaultMuteAllRemoteAudioStreams] (false) resumes receiving audio streams of the subsequent users only.
   ///
   /// **Parameter** [muted] Sets whether or not to receive/stop receiving the remote audio streams by default:
   /// - `true`: Stop receiving any audio stream by default.
@@ -1557,9 +1550,9 @@ mixin RtcAudioInterface {
   @deprecated
   Future<void> setDefaultMuteAllRemoteAudioStreams(bool muted);
 
-  /// Enables the [RtcEngineEventHandler.audioVolumeIndication] callback at a set time interval to report on which users are speaking and the speakers' volume.
+  /// Enables the [RtcBanubaEngineEventHandler.audioVolumeIndication] callback at a set time interval to report on which users are speaking and the speakers' volume.
   ///
-  /// Once this method is enabled, the SDK returns the volume indication in the [RtcEngineEventHandler.audioVolumeIndication] callback at the set time interval, regardless of whether any user is speaking in the channel.
+  /// Once this method is enabled, the SDK returns the volume indication in the [RtcBanubaEngineEventHandler.audioVolumeIndication] callback at the set time interval, regardless of whether any user is speaking in the channel.
   ///
   /// **Parameter** [interval] Sets the time interval between two consecutive volume indications:
   /// - ≤ 0: Disables the volume indication.
@@ -1568,8 +1561,8 @@ mixin RtcAudioInterface {
   /// **Parameter** [smooth] The smoothing factor sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The greater the value, the more sensitive the indicator. The recommended value is 3.
   ///
   /// **Parameter** [report_vad]
-  /// - `true`: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback reports the voice activity status of the local user.
-  /// - `false`: (Default) Disable the voice activity detection of the local user. Once it is disabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
+  /// - `true`: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcBanubaEngineEventHandler.audioVolumeIndication] callback reports the voice activity status of the local user.
+  /// - `false`: (Default) Disable the voice activity detection of the local user. Once it is disabled, the vad parameter of the [RtcBanubaEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
   Future<void> enableAudioVolumeIndication(
       int interval, int smooth, bool report_vad);
 }
@@ -1580,38 +1573,38 @@ mixin RtcVideoInterface {
   ///
   /// You can call this method either before joining a channel or during a call. If you call this method before joining a channel, the service starts in the video mode. If you call this method during an audio call, the audio mode switches to the video mode.
   ///
-  /// A successful enableVideo method call triggers the [RtcEngineEventHandler.userEnableVideo] (true) callback on the remote client.
+  /// A successful enableVideo method call triggers the [RtcBanubaEngineEventHandler.userEnableVideo] (true) callback on the remote client.
   ///
-  /// To disable the video, call the [RtcEngine.disableVideo] method.
+  /// To disable the video, call the [RtcBanubaEngine.disableVideo] method.
   ///
   /// **Note**
-  /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
+  /// - This method affects the internal engine and can be called after calling the [RtcBanubaEngine.leaveChannel] method. You can call this method either before or after joining a channel.
   /// - This method resets the internal engine and takes some time to take effect. We recommend using the following API methods to control the video engine modules separately:
-  ///   - [RtcEngine.enableLocalVideo]: Whether to enable the camera to create the local video stream.
-  ///   - [RtcEngine.muteLocalVideoStream]: Whether to publish the local video stream.
-  ///   - [RtcEngine.muteRemoteVideoStream]: Whether to subscribe to and play the remote video stream.
-  ///   - [RtcEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
+  ///   - [RtcBanubaEngine.enableLocalVideo]: Whether to enable the camera to create the local video stream.
+  ///   - [RtcBanubaEngine.muteLocalVideoStream]: Whether to publish the local video stream.
+  ///   - [RtcBanubaEngine.muteRemoteVideoStream]: Whether to subscribe to and play the remote video stream.
+  ///   - [RtcBanubaEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
   Future<void> enableVideo();
 
   /// Disables the video module.
   ///
   /// You can call this method before joining a channel or during a call. If you call this method before joining a channel, the service starts in audio mode. If you call this method during a video call, the video mode switches to the audio mode.
-  /// - A successful disableVideo method call triggers the [RtcEngineEventHandler.userEnableVideo] (false) callback on the remote client.
-  /// - To enable the video mode, call the [RtcEngine.enableVideo] method.
+  /// - A successful disableVideo method call triggers the [RtcBanubaEngineEventHandler.userEnableVideo] (false) callback on the remote client.
+  /// - To enable the video mode, call the [RtcBanubaEngine.enableVideo] method.
   ///
   /// **Note**
-  /// - This method affects the internal engine and can be called after calling the [RtcEngine.leaveChannel] method. You can call this method either before or after joining a channel.
+  /// - This method affects the internal engine and can be called after calling the [RtcBanubaEngine.leaveChannel] method. You can call this method either before or after joining a channel.
   /// - This method resets the internal engine and takes some time to take effect. We recommend using the following API methods to control the video engine modules separately:
-  ///   - [RtcEngine.enableLocalVideo]: Whether to enable the camera to create the local video stream.
-  ///   - [RtcEngine.muteLocalVideoStream]: Whether to publish the local video stream.
-  ///   - [RtcEngine.muteRemoteVideoStream]: Whether to subscribe to and play the remote video stream.
-  ///   - [RtcEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
+  ///   - [RtcBanubaEngine.enableLocalVideo]: Whether to enable the camera to create the local video stream.
+  ///   - [RtcBanubaEngine.muteLocalVideoStream]: Whether to publish the local video stream.
+  ///   - [RtcBanubaEngine.muteRemoteVideoStream]: Whether to subscribe to and play the remote video stream.
+  ///   - [RtcBanubaEngine.muteAllRemoteVideoStreams]: Whether to subscribe to and play all remote video streams.
   Future<void> disableVideo();
 
   /// Sets the video encoder configuration.
   ///
   /// Each video encoder configuration corresponds to a set of video parameters, including the resolution, frame rate, bitrate, and video orientation. The parameters specified in this method are the maximum values under ideal network conditions. If the video engine cannot render the video using the specified parameters due to poor network conditions, the parameters further down the list are considered until a successful configuration is found.
-  /// If you do not set the video encoder configuration after joining the channel, you can call this method before calling the [RtcEngine.enableVideo] method to reduce the render time of the first video frame.
+  /// If you do not set the video encoder configuration after joining the channel, you can call this method before calling the [RtcBanubaEngine.enableVideo] method to reduce the render time of the first video frame.
   ///
   /// **Parameter** [config] The local video encoder configuration. See [VideoEncoderConfiguration].
   Future<void> setVideoEncoderConfiguration(VideoEncoderConfiguration config);
@@ -1622,11 +1615,11 @@ mixin RtcVideoInterface {
   /// - Create the RtcLocalView.
   ///   - (Android only) See [TextureView] and [SurfaceView].
   ///   - (iOS only) See [UIView](https://developer.apple.com/documentation/uikit/uiview).
-  /// - Call the [RtcEngine.enableVideo] method to enable the video.
+  /// - Call the [RtcBanubaEngine.enableVideo] method to enable the video.
   ///
   /// **Note**
   /// - By default, the local preview enables the mirror mode.
-  /// - Once you call this method to start the local video preview, if you leave the channel by calling the [RtcEngine.leaveChannel] method, the local video preview remains until you call the [RtcEngine.stopPreview] method to disable it.
+  /// - Once you call this method to start the local video preview, if you leave the channel by calling the [RtcBanubaEngine.leaveChannel] method, the local video preview remains until you call the [RtcBanubaEngine.stopPreview] method to disable it.
   Future<void> startPreview();
 
   /// Stops the local video preview and the video.
@@ -1638,12 +1631,12 @@ mixin RtcVideoInterface {
   ///
   /// This method disables or re-enables the local video capturer, and does not affect receiving the remote video stream.
   ///
-  /// After you call the [RtcEngine.enableVideo] method, the local video capturer is enabled by default. You can call [RtcEngine.enableVideo] (false) to disable the local video capturer. If you want to re-enable it, call [RtcEngine.enableVideo] (true).
+  /// After you call the [RtcBanubaEngine.enableVideo] method, the local video capturer is enabled by default. You can call [RtcBanubaEngine.enableVideo] (false) to disable the local video capturer. If you want to re-enable it, call [RtcBanubaEngine.enableVideo] (true).
   ///
-  /// After the local video capturer is successfully disabled or re-enabled, the SDK triggers the [RtcEngineEventHandler.userEnableLocalVideo] callback on the remote client.
+  /// After the local video capturer is successfully disabled or re-enabled, the SDK triggers the [RtcBanubaEngineEventHandler.userEnableLocalVideo] callback on the remote client.
   ///
   /// **Note**
-  /// - This method affects the internal engine and can be called after calling  the [RtcEngine.leaveChannel] method.
+  /// - This method affects the internal engine and can be called after calling  the [RtcBanubaEngine.leaveChannel] method.
   ///
   /// **Parameter** [enabled] Sets whether to disable/re-enable the local video, including the capturer, renderer, and sender:
   /// - `true`: (Default) Re-enable the local video.
@@ -1652,11 +1645,11 @@ mixin RtcVideoInterface {
 
   /// Stops/Resumes sending the local video stream.
   ///
-  /// A successful `muteLocalVideoStream` method call triggers the [RtcEngineEventHandler.userMuteVideo] callback on the remote client.
+  /// A successful `muteLocalVideoStream` method call triggers the [RtcBanubaEngineEventHandler.userMuteVideo] callback on the remote client.
   ///
   /// **Note**
-  /// - When you set muted as true, this method does not disable the camera and thus does not affect the retrieval of the local video streams. This method responds faster than calling the [RtcEngine.enableLocalVideo] method and set muted as false, which controls sending the local video stream.
-  /// - If you call [RtcEngine.setChannelProfile] after this method, the SDK resets whether or not to mute the local video according to the channel profile and user role. Therefore, we recommend calling this method after the [RtcEngine.setChannelProfile] method.
+  /// - When you set muted as true, this method does not disable the camera and thus does not affect the retrieval of the local video streams. This method responds faster than calling the [RtcBanubaEngine.enableLocalVideo] method and set muted as false, which controls sending the local video stream.
+  /// - If you call [RtcBanubaEngine.setChannelProfile] after this method, the SDK resets whether or not to mute the local video according to the channel profile and user role. Therefore, we recommend calling this method after the [RtcBanubaEngine.setChannelProfile] method.
   ///
   /// **Parameter** [muted] Sets whether to send/stop sending the local video stream:
   /// - `true`: Stop sending the local video stream.
@@ -1666,7 +1659,7 @@ mixin RtcVideoInterface {
   /// Stops/Resumes receiving a specified remote user's video stream.
   ///
   /// **Note**
-  /// - If you call the [RtcEngine.muteAllRemoteVideoStreams] method and set set muted as true to stop receiving all remote video streams, ensure that the [RtcEngine.muteAllRemoteVideoStreams] method is called and set muted as false before calling this method. The [RtcEngine.muteAllRemoteVideoStreams] method sets all remote streams, while this method sets a specified remote user's stream.
+  /// - If you call the [RtcBanubaEngine.muteAllRemoteVideoStreams] method and set set muted as true to stop receiving all remote video streams, ensure that the [RtcBanubaEngine.muteAllRemoteVideoStreams] method is called and set muted as false before calling this method. The [RtcBanubaEngine.muteAllRemoteVideoStreams] method sets all remote streams, while this method sets a specified remote user's stream.
   ///
   /// **Parameter** [uid] User ID of the specified remote user.
   ///
@@ -1691,7 +1684,7 @@ mixin RtcVideoInterface {
   /// This method is deprecated from v3.3.1.
   ///
   /// **Note**
-  /// - If you want to resume receiving video streams, call [RtcEngine.muteRemoteVideoStream] (false), and specify the ID of the remote user that you want to subscribe to. To resume receiving video streams of multiple users, call [RtcEngine.muteRemoteVideoStream] as many times. Calling `setDefaultMuteAllRemoteVideoStreams`(false) resumes receiving video streams of the subsequent users only.
+  /// - If you want to resume receiving video streams, call [RtcBanubaEngine.muteRemoteVideoStream] (false), and specify the ID of the remote user that you want to subscribe to. To resume receiving video streams of multiple users, call [RtcBanubaEngine.muteRemoteVideoStream] as many times. Calling `setDefaultMuteAllRemoteVideoStreams`(false) resumes receiving video streams of the subsequent users only.
   ///
   /// **Parameter** [muted] Sets whether to receive/stop receiving all remote video streams by default:
   /// - `true`: Stop receiving any remote video stream by default.
@@ -1702,7 +1695,7 @@ mixin RtcVideoInterface {
   /// Enables/Disables image enhancement and sets the options.
   ///
   /// **Note**
-  /// - Call this method after calling [RtcEngine.enableVideo].
+  /// - Call this method after calling [RtcBanubaEngine.enableVideo].
   /// - This method supports both Android and iOS. For Android, this method applies to Android 4.4 or later.
   ///
   /// **Parameter** [enabled] Sets whether or not to enable image enhancement:
@@ -1720,11 +1713,11 @@ mixin RtcVideoInterface {
 mixin RtcAudioMixingInterface {
   /// Starts playing and mixing the music file.
   ///
-  /// This method mixes the specified local or online audio file with the audio stream from the microphone, or replaces the microphone’s audio stream with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops. When the audio mixing file playback finishes after calling this method, the SDK triggers the [RtcEngineEventHandler.audioMixingFinished] callback.
+  /// This method mixes the specified local or online audio file with the audio stream from the microphone, or replaces the microphone’s audio stream with the specified local or remote audio file. You can choose whether the other user can hear the local audio playback and specify the number of playback loops. When the audio mixing file playback finishes after calling this method, the SDK triggers the [RtcBanubaEngineEventHandler.audioMixingFinished] callback.
   ///
-  /// A successful `startAudioMixing` method call triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Playing]) callback on the local client.
+  /// A successful `startAudioMixing` method call triggers the [RtcBanubaEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Playing]) callback on the local client.
   ///
-  /// When the audio mixing file playback finishes, the SDK triggers the [RtcEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Stopped]) callback on the local client.
+  /// When the audio mixing file playback finishes, the SDK triggers the [RtcBanubaEngineEventHandler.audioMixingStateChanged] ([AudioMixingStateCode.Stopped]) callback on the local client.
   ///
   /// **Note**
   /// - This method supports both Android and iOS. To use this method in Android, ensure that the Android device is v4.2 or later, and the API version is v16 or later.
@@ -1770,7 +1763,7 @@ mixin RtcAudioMixingInterface {
   /// Adjusts the volume of audio mixing.
   ///
   /// **Note**
-  /// - Calling this method does not affect the volume of the audio effect file playback invoked by the [RtcEngine.playEffect] method.
+  /// - Calling this method does not affect the volume of the audio effect file playback invoked by the [RtcBanubaEngine.playEffect] method.
   /// - Call this method after calling [startAudioMixing] and receiving the `audioMixingStateChanged(Playing)` callback.
   ///
   /// **Parameter** [volume] Audio mixing volume. The value ranges between 0 and 100 (default).
@@ -1860,7 +1853,7 @@ mixin RtcAudioMixingInterface {
   /// When a local music file is mixed with a local human voice, call this method to set the pitch of the local music file only.
   ///
   /// **Note**
-  /// - Call this method after calling [RtcEngine.startAudioMixing].
+  /// - Call this method after calling [RtcBanubaEngine.startAudioMixing].
   /// - Call this method after calling [startAudioMixing] and receiving the `audioMixingStateChanged(Playing)` callback.
   ///
   /// **Parameter** [pitch] Sets the pitch of the local music file by chromatic scale. The default value is 0, which means keep the original pitch. The value ranges from -12 to 12, and the pitch value between consecutive values is a chromatic value. The greater the absolute value of this parameter, the higher or lower the pitch of the local music file.
@@ -1892,16 +1885,16 @@ mixin RtcAudioEffectInterface {
   ///
   /// To play multiple audio effect files simultaneously, call this method multiple times with different soundIds and filePaths. We recommend playing no more than three audio effect files at the same time.
   ///
-  /// When the audio effect file playback is finished, the SDK triggers the [RtcEngineEventHandler.audioEffectFinished] callback.
+  /// When the audio effect file playback is finished, the SDK triggers the [RtcBanubaEngineEventHandler.audioEffectFinished] callback.
   ///
-  /// **Parameter** [soundId] ID of the specified audio effect. Each audio effect has a unique ID. If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the soundID value is set to the same value as in the [RtcEngine.preloadEffect] method.
+  /// **Parameter** [soundId] ID of the specified audio effect. Each audio effect has a unique ID. If you preloaded the audio effect into the memory through the [RtcBanubaEngine.preloadEffect] method, ensure that the soundID value is set to the same value as in the [RtcBanubaEngine.preloadEffect] method.
   ///
   /// **Parameter** [filePath] The absolute file path (including the suffixes of the filename) of the audio effect file or the URL of the online audio effect file. For example, `/sdcard/emulated/0/audio.mp4`. Supported audio formats: mp3, mp4, m4a, aac. 3gp, mkv, and wav.
   ///
   /// **Parameter** [loopCount] Sets the number of times the audio effect loops:
   /// - 0: Plays the audio effect once.
   /// - 1: Plays the audio effect twice.
-  /// - -1: Plays the audio effect in a loop indefinitely, until you call the [RtcEngine.stopEffect] or [RtcEngine.stopAllEffects] method.
+  /// - -1: Plays the audio effect in a loop indefinitely, until you call the [RtcBanubaEngine.stopEffect] or [RtcBanubaEngine.stopAllEffects] method.
   ///
   /// **Parameter** [pitch] Sets the pitch of the audio effect. The value ranges between 0.5 and 2. The default value is 1 (no change to the pitch). The lower the value, the lower the pitch.
   ///
@@ -1921,7 +1914,7 @@ mixin RtcAudioEffectInterface {
   /// Stops playing a specified audio effect.
   ///
   /// **Note**
-  /// - If you preloaded the audio effect into the memory through the [RtcEngine.preloadEffect] method, ensure that the `soundID` value is set to the same value as in the [RtcEngine.preloadEffect] method.
+  /// - If you preloaded the audio effect into the memory through the [RtcBanubaEngine.preloadEffect] method, ensure that the `soundID` value is set to the same value as in the [RtcBanubaEngine.preloadEffect] method.
   ///
   /// **Parameter** [soundId] ID of the specified audio effect. Each audio effect has a unique ID.
   Future<void> stopEffect(int soundId);
@@ -1937,7 +1930,7 @@ mixin RtcAudioEffectInterface {
   /// - This method does not support online audio effect files.
   ///
   /// **Note**
-  /// - To ensure smooth communication, limit the size of the audio effect file. We recommend using this method to preload the audio effect before calling the [RtcEngine.joinChannel] method.
+  /// - To ensure smooth communication, limit the size of the audio effect file. We recommend using this method to preload the audio effect before calling the [RtcBanubaEngine.joinChannel] method.
   ///
   /// **Parameter** [soundId] ID of the audio effect. Each audio effect has a unique ID.
   ///
@@ -1986,10 +1979,10 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Deprecated**
   ///
-  /// This method is deprecated since v3.2.1. Use [RtcEngine.setAudioEffectPreset] or [RtcEngine.setVoiceBeautifierPreset] instead.
+  /// This method is deprecated since v3.2.1. Use [RtcBanubaEngine.setAudioEffectPreset] or [RtcBanubaEngine.setVoiceBeautifierPreset] instead.
   ///
   /// **Note**
-  /// - Do not use this method together with [RtcEngine.setLocalVoiceReverbPreset], or the method called earlier does not take effect.
+  /// - Do not use this method together with [RtcBanubaEngine.setLocalVoiceReverbPreset], or the method called earlier does not take effect.
   ///
   /// **Parameter** [voiceChanger] The local voice changer option. See [AudioVoiceChanger].
   @deprecated
@@ -1999,11 +1992,11 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Deprecated**
   ///
-  /// This method is deprecated since v3.2.1. Use [RtcEngine.setAudioEffectPreset] or [RtcEngine.setVoiceBeautifierPreset] instead.
+  /// This method is deprecated since v3.2.1. Use [RtcBanubaEngine.setAudioEffectPreset] or [RtcBanubaEngine.setVoiceBeautifierPreset] instead.
   ///
   /// **Note**
-  /// - Do not use this method together with [RtcEngine.setLocalVoiceReverb].
-  /// - Do not use this method together with [RtcEngine.setLocalVoiceChanger], or the method called eariler does not take effect.
+  /// - Do not use this method together with [RtcBanubaEngine.setLocalVoiceReverb].
+  /// - Do not use this method together with [RtcBanubaEngine.setLocalVoiceChanger], or the method called eariler does not take effect.
   ///
   /// **Parameter** [preset] The local voice reverberation preset. See [AudioReverbPreset].
   @deprecated
@@ -2026,7 +2019,7 @@ mixin RtcVoiceChangerInterface {
   /// Sets the local voice reverberation.
   ///
   /// **Note**
-  /// - Adds the [RtcEngine.setLocalVoiceReverbPreset] method, a more user-friendly method for setting the local voice reverberation. You can use this method to set the local reverberation effect, such as Popular, R&B, Rock, Hip-hop, and more.
+  /// - Adds the [RtcBanubaEngine.setLocalVoiceReverbPreset] method, a more user-friendly method for setting the local voice reverberation. You can use this method to set the local reverberation effect, such as Popular, R&B, Rock, Hip-hop, and more.
   ///
   /// **Parameter** [reverbKey] Sets the reverberation key. This method contains five reverberation keys. For details, see the description of each value in [AudioReverbType].
   ///
@@ -2041,20 +2034,20 @@ mixin RtcVoiceChangerInterface {
   ///
   /// You can set different audio effects for different scenarios. See *Set the Voice Beautifier and Audio Effects*.
   ///
-  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` before calling this method.
+  /// To achieve better audio effect quality, Agora recommends calling [RtcBanubaEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` before calling this method.
   ///
   ///**Note**
   /// - You can call this method either before or after joining a channel.
-  /// - Do not set the profile parameter of [RtcEngine.setAudioProfile] to `SpeechStandard(1)`; otherwise, this method call fails.
+  /// - Do not set the profile parameter of [RtcBanubaEngine.setAudioProfile] to `SpeechStandard(1)`; otherwise, this method call fails.
   /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
-  /// - If you call this method and set the preset parameter to enumerators except `RoomAcoustics3DVoice` or `PitchCorrection`, do not call [RtcEngine.setAudioEffectParameters]; otherwise, [RtcEngine.setAudioEffectParameters] overrides this method.
+  /// - If you call this method and set the preset parameter to enumerators except `RoomAcoustics3DVoice` or `PitchCorrection`, do not call [RtcBanubaEngine.setAudioEffectParameters]; otherwise, [RtcBanubaEngine.setAudioEffectParameters] overrides this method.
   /// - After calling this method, Agora recommends not calling the following methods, because they can override `setAudioEffectPreset`:
-  ///     - [RtcEngine.setVoiceBeautifierPreset]
-  ///     - [RtcEngine.setLocalVoiceReverbPreset]
-  ///     - [RtcEngine.setLocalVoiceChanger]
-  ///     - [RtcEngine.setLocalVoicePitch]
-  ///     - [RtcEngine.setLocalVoiceEqualization]
-  ///     - [RtcEngine.setLocalVoiceReverb]
+  ///     - [RtcBanubaEngine.setVoiceBeautifierPreset]
+  ///     - [RtcBanubaEngine.setLocalVoiceReverbPreset]
+  ///     - [RtcBanubaEngine.setLocalVoiceChanger]
+  ///     - [RtcBanubaEngine.setLocalVoicePitch]
+  ///     - [RtcBanubaEngine.setLocalVoiceEqualization]
+  ///     - [RtcBanubaEngine.setLocalVoiceReverb]
   ///
   /// **Parameter** [preset] The options for SDK preset audio effects. See [AudioEffectPreset].
   Future<void> setAudioEffectPreset(AudioEffectPreset preset);
@@ -2067,20 +2060,20 @@ mixin RtcVoiceChangerInterface {
   ///
   /// You can set different voice beautifier effects for different scenarios. See *Set the Voice Beautifier and Audio Effects*.
   ///
-  /// To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` and the `profile` parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before calling this method.
+  /// To achieve better audio effect quality, Agora recommends calling [RtcBanubaEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` and the `profile` parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` before calling this method.
   ///
   /// **Note**
   /// - You can call this method either before or after joining a channel.
   /// - Do not set the profile parameter of `setAudioProfile` to `SpeechStandard(1)`; otherwise, this method call fails.
   /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
   /// - After calling this method, Agora recommends not calling the following methods, because they can override `setVoiceBeautifierPreset`:
-  ///   - [RtcEngine.setAudioEffectPreset]
-  ///   - [RtcEngine.setAudioEffectParameters]
-  ///   - [RtcEngine.setLocalVoiceReverbPreset]
-  ///   - [RtcEngine.setLocalVoiceChanger]
-  ///   - [RtcEngine.setLocalVoicePitch]
-  ///   - [RtcEngine.setLocalVoiceEqualization]
-  ///   - [RtcEngine.setLocalVoiceReverb]
+  ///   - [RtcBanubaEngine.setAudioEffectPreset]
+  ///   - [RtcBanubaEngine.setAudioEffectParameters]
+  ///   - [RtcBanubaEngine.setLocalVoiceReverbPreset]
+  ///   - [RtcBanubaEngine.setLocalVoiceChanger]
+  ///   - [RtcBanubaEngine.setLocalVoicePitch]
+  ///   - [RtcBanubaEngine.setLocalVoiceEqualization]
+  ///   - [RtcBanubaEngine.setLocalVoiceReverb]
   ///
   /// **Parameter** [preset] The options for SDK preset voice beautifier effects. See [VoiceBeautifierPreset].
   Future<void> setVoiceBeautifierPreset(VoiceBeautifierPreset preset);
@@ -2091,25 +2084,25 @@ mixin RtcVoiceChangerInterface {
   ///
   /// You can set different voice conversion effects for different scenarios. See *Set the Voice Effect*.
   ///
-  /// To achieve better voice effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` and the scenario parameter to `GameStreaming(3)` before calling this method.
+  /// To achieve better voice effect quality, Agora recommends calling [RtcBanubaEngine.setAudioProfile] and setting the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)` and the scenario parameter to `GameStreaming(3)` before calling this method.
   ///
   /// **Parameter** [preset] The options for SDK preset voice conversion effects: [VoiceConversionPreset].
   ///
   /// **Note**
   ///
   /// - You can call this method either before or after joining a channel.
-  /// - Do not set the profile parameter of [RtcEngine.setAudioProfile] to `SpeechStandard(1)`; otherwise, this method call does not take effect.
+  /// - Do not set the profile parameter of [RtcBanubaEngine.setAudioProfile] to `SpeechStandard(1)`; otherwise, this method call does not take effect.
   /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
   /// - After calling this method, Agora recommends not calling the following methods, because they can override `setVoiceConversionPreset`:
-  ///   - [RtcEngine.setAudioEffectPreset]
-  ///   - [RtcEngine.setAudioEffectParameters]
-  ///   - [RtcEngine.setVoiceBeautifierPreset]
-  ///   - [RtcEngine.setVoiceBeautifierParameters]
-  ///   - [RtcEngine.setLocalVoiceReverbPreset]
-  ///   - [RtcEngine.setLocalVoiceChanger]
-  ///   - [RtcEngine.setLocalVoicePitch]
-  ///   - [RtcEngine.setLocalVoiceEqualization]
-  ///   - [RtcEngine.setLocalVoiceReverb]
+  ///   - [RtcBanubaEngine.setAudioEffectPreset]
+  ///   - [RtcBanubaEngine.setAudioEffectParameters]
+  ///   - [RtcBanubaEngine.setVoiceBeautifierPreset]
+  ///   - [RtcBanubaEngine.setVoiceBeautifierParameters]
+  ///   - [RtcBanubaEngine.setLocalVoiceReverbPreset]
+  ///   - [RtcBanubaEngine.setLocalVoiceChanger]
+  ///   - [RtcBanubaEngine.setLocalVoicePitch]
+  ///   - [RtcBanubaEngine.setLocalVoiceEqualization]
+  ///   - [RtcBanubaEngine.setLocalVoiceReverb]
   Future<void> setVoiceConversionPreset(VoiceConversionPreset preset);
 
   /// Sets parameters for SDK preset audio effects.
@@ -2122,17 +2115,17 @@ mixin RtcVoiceChangerInterface {
   ///
   /// **Note**
   /// - You can call this method either before or after joining a channel.
-  /// - To achieve better audio effect quality, Agora recommends calling [RtcEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` before calling this method.
+  /// - To achieve better audio effect quality, Agora recommends calling [RtcBanubaEngine.setAudioProfile] and setting the `scenario` parameter to `GameStreaming(3)` before calling this method.
   /// - Do not set the profile parameter of `setAudioProfile` to `SpeechStandard(1)`; otherwise, this method call fails.
   /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
   /// - After calling this method, Agora recommends not calling the following methods, because they can override `setAudioEffectParameters`:
-  ///   - [RtcEngine.setAudioEffectPreset]
-  ///   - [RtcEngine.setVoiceBeautifierPreset]
-  ///   - [RtcEngine.setLocalVoiceReverbPreset]
-  ///   - [RtcEngine.setLocalVoiceChanger]
-  ///   - [RtcEngine.setLocalVoicePitch]
-  ///   - [RtcEngine.setLocalVoiceEqualization]
-  ///   - [RtcEngine.setLocalVoiceReverb]
+  ///   - [RtcBanubaEngine.setAudioEffectPreset]
+  ///   - [RtcBanubaEngine.setVoiceBeautifierPreset]
+  ///   - [RtcBanubaEngine.setLocalVoiceReverbPreset]
+  ///   - [RtcBanubaEngine.setLocalVoiceChanger]
+  ///   - [RtcBanubaEngine.setLocalVoicePitch]
+  ///   - [RtcBanubaEngine.setLocalVoiceEqualization]
+  ///   - [RtcBanubaEngine.setLocalVoiceReverb]
   ///
   /// **Parameter** [preset] The options for SDK preset audio effects:
   /// - 3D voice effect: `RoomAcoustics3DVoice`
@@ -2173,7 +2166,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// After you call this method successfully, all users in the channel can hear the relevant effect.
   ///
-  /// To achieve better audio effect quality, before you call this method, Agora recommends calling [RtcEngine.setAudioProfile], and setting the scenario parameter to `GameStreaming(3)` and the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)`.
+  /// To achieve better audio effect quality, before you call this method, Agora recommends calling [RtcBanubaEngine.setAudioProfile], and setting the scenario parameter to `GameStreaming(3)` and the profile parameter to `MusicHighQuality(4)` or `MusicHighQualityStereo(5)`.
   ///
   /// **Parameter** [preset] The options for SDK preset voice beautifier effects. You can only set it as [VoiceBeautifierPreset.SingingBeautifier].
   ///
@@ -2189,18 +2182,18 @@ mixin RtcVoiceChangerInterface {
   /// **Note**
   ///
   /// - You can call this method either before or after joining a channel.
-  /// - Do not set the `profile` parameter of [RtcEngine.setAudioProfile] to `SpeechStandard(1)`; otherwise, this method call does not take effect.
+  /// - Do not set the `profile` parameter of [RtcBanubaEngine.setAudioProfile] to `SpeechStandard(1)`; otherwise, this method call does not take effect.
   /// - This method works best with the human voice. Agora does not recommend using this method for audio containing music.
   /// - After calling this method, Agora recommends not calling the following methods, because they can override `setVoiceBeautifierParameters`:
-  ///   - [RtcEngine.setAudioEffectPreset]
-  ///   - [RtcEngine.setAudioEffectParameters]
-  ///   - [RtcEngine.setVoiceBeautifierPreset]
-  ///   - [RtcEngine.setVoiceConversionPreset]
-  ///   - [RtcEngine.setLocalVoiceReverbPreset]
-  ///   - [RtcEngine.setLocalVoiceChanger]
-  ///   - [RtcEngine.setLocalVoicePitch]
-  ///   - [RtcEngine.setLocalVoiceEqualization]
-  ///   - [RtcEngine.setLocalVoiceReverb]
+  ///   - [RtcBanubaEngine.setAudioEffectPreset]
+  ///   - [RtcBanubaEngine.setAudioEffectParameters]
+  ///   - [RtcBanubaEngine.setVoiceBeautifierPreset]
+  ///   - [RtcBanubaEngine.setVoiceConversionPreset]
+  ///   - [RtcBanubaEngine.setLocalVoiceReverbPreset]
+  ///   - [RtcBanubaEngine.setLocalVoiceChanger]
+  ///   - [RtcBanubaEngine.setLocalVoicePitch]
+  ///   - [RtcBanubaEngine.setLocalVoiceEqualization]
+  ///   - [RtcBanubaEngine.setLocalVoiceReverb]
   Future<void> setVoiceBeautifierParameters(
       VoiceBeautifierPreset preset, int param1, int param2);
 }
@@ -2209,7 +2202,7 @@ mixin RtcVoiceChangerInterface {
 mixin RtcVoicePositionInterface {
   /// Enables/Disables stereo panning for remote users.
   ///
-  /// Ensure that you call this method before [RtcEngine.joinChannel] to enable stereo panning for remote users so that the local user can track the position of a remote user by calling [RtcEngine.setRemoteVoicePosition].
+  /// Ensure that you call this method before [RtcBanubaEngine.joinChannel] to enable stereo panning for remote users so that the local user can track the position of a remote user by calling [RtcBanubaEngine.setRemoteVoicePosition].
   ///
   /// **Parameter** [enabled] Sets whether or not to enable stereo panning for remote users:
   /// - `true`: enables stereo panning.
@@ -2220,7 +2213,7 @@ mixin RtcVoicePositionInterface {
   /// When the local user calls this method to set the sound position of a remote user, the sound difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a real sense of space. This method applies to massively multiplayer online games, such as Battle Royale games.
   ///
   /// **Note**
-  /// - For this method to work, enable stereo panning for remote users by calling the [RtcEngine.enableSoundPositionIndication] method before joining a channel.
+  /// - For this method to work, enable stereo panning for remote users by calling the [RtcBanubaEngine.enableSoundPositionIndication] method before joining a channel.
   /// - This method requires hardware support. For the best sound positioning, we recommend using a wired headset.
   ///
   /// **Parameter** [uid] The ID of the remote user.
@@ -2238,14 +2231,14 @@ mixin RtcVoicePositionInterface {
 mixin RtcPublishStreamInterface {
   /// Sets the video layout and audio settings for CDN live.
   ///
-  /// The SDK triggers the [RtcEngineEventHandler.transcodingUpdated] callback when you call this method to update the [LiveTranscoding] class. If you call this method to set the [LiveTranscoding] class for the first time, the SDK does not trigger the [RtcEngineEventHandler.transcodingUpdated] callback.
+  /// The SDK triggers the [RtcBanubaEngineEventHandler.transcodingUpdated] callback when you call this method to update the [LiveTranscoding] class. If you call this method to set the [LiveTranscoding] class for the first time, the SDK does not trigger the [RtcBanubaEngineEventHandler.transcodingUpdated] callback.
   ///
   /// **Note**
   /// - Before calling the methods listed in this section:
   ///   - This method applies to [ChannelProfile.LiveBroadcasting] only.
   ///   - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
-  ///   - Ensure that you call the [RtcEngine.setClientRole] method and set the user role as the host.
-  ///   - Ensure that you call the `setLiveTranscoding` method before calling the [RtcEngine.addPublishStreamUrl] method.
+  ///   - Ensure that you call the [RtcBanubaEngine.setClientRole] method and set the user role as the host.
+  ///   - Ensure that you call the `setLiveTranscoding` method before calling the [RtcBanubaEngine.addPublishStreamUrl] method.
   ///   - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
   ///
   /// **Parameter** [transcoding] Sets the CDN live audio/video transcoding settings. See [LiveTranscoding].
@@ -2253,7 +2246,7 @@ mixin RtcPublishStreamInterface {
 
   /// Publishes the local stream to a specified **CDN streaming URL**.
   ///
-  /// After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN. The `addPublishStreamUrl` method call triggers the [RtcEngineEventHandler.rtmpStreamingStateChanged] callback on the local client to report the state of adding a local stream to the CDN.
+  /// After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN. The `addPublishStreamUrl` method call triggers the [RtcBanubaEngineEventHandler.rtmpStreamingStateChanged] callback on the local client to report the state of adding a local stream to the CDN.
   ///
   /// **Note**
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
@@ -2266,14 +2259,14 @@ mixin RtcPublishStreamInterface {
   ///
   /// **Parameter** [transcodingEnabled] Sets whether transcoding is enabled/disabled. If you set this parameter as true, ensure that you call the setLiveTranscoding method before this method.
   ///
-  /// See [RtcEngine.setLiveTranscoding]
+  /// See [RtcBanubaEngine.setLiveTranscoding]
   /// - `true`: Enable transcoding. To transcode the audio or video streams when publishing them to CDN live, often used for combining the audio and video streams of multiple hosts in CDN live.
   /// - `false`: Disable transcoding.
   Future<void> addPublishStreamUrl(String url, bool transcodingEnabled);
 
   /// Removes an **RTMP or RTMPS** stream from the CDN.
   ///
-  /// This method removes the CDN streaming URL (added by [RtcEngine.addPublishStreamUrl]) from a CDN live stream to report the state of removing an **RTMP or RTMPS** stream from the CDN.
+  /// This method removes the CDN streaming URL (added by [RtcBanubaEngine.addPublishStreamUrl]) from a CDN live stream to report the state of removing an **RTMP or RTMPS** stream from the CDN.
   ///
   /// **Note**
   /// - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in *Push Streams to CDN*.
@@ -2289,16 +2282,16 @@ mixin RtcPublishStreamInterface {
 mixin RtcMediaRelayInterface {
   /// Starts to relay media streams across channels.
   ///
-  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] and [RtcEngineEventHandler.channelMediaRelayEvent] callbacks, and these callbacks return the state and events of the media stream relay.
-  /// - If the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback returns [ChannelMediaRelayState.Running] and [ChannelMediaRelayError.None], and the [RtcEngineEventHandler.channelMediaRelayEvent] callback returns [ChannelMediaRelayEvent.SentToDestinationChannel], the SDK starts relaying media streams between the original and the destination channel.
-  /// - If the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback returns [ChannelMediaRelayState.Failure], an exception occurs during the media stream relay.
+  /// After a successful method call, the SDK triggers the [RtcBanubaEngineEventHandler.channelMediaRelayStateChanged] and [RtcBanubaEngineEventHandler.channelMediaRelayEvent] callbacks, and these callbacks return the state and events of the media stream relay.
+  /// - If the [RtcBanubaEngineEventHandler.channelMediaRelayStateChanged] callback returns [ChannelMediaRelayState.Running] and [ChannelMediaRelayError.None], and the [RtcBanubaEngineEventHandler.channelMediaRelayEvent] callback returns [ChannelMediaRelayEvent.SentToDestinationChannel], the SDK starts relaying media streams between the original and the destination channel.
+  /// - If the [RtcBanubaEngineEventHandler.channelMediaRelayStateChanged] callback returns [ChannelMediaRelayState.Failure], an exception occurs during the media stream relay.
   ///
   /// **Note**
   /// - Contact sales-us@agora.io before implementing this function.
   /// - We do not support string user accounts in this API.
-  /// - Call this method after the [RtcEngine.joinChannel] method.
+  /// - Call this method after the [RtcBanubaEngine.joinChannel] method.
   /// - This method takes effect only when you are a [ClientRole.Broadcaster] in a [ChannelProfile.LiveBroadcasting] channel.
-  /// - After a successful method call, if you want to call this method again, ensure that you call the [RtcEngine.stopChannelMediaRelay] method to quit the current relay.
+  /// - After a successful method call, if you want to call this method again, ensure that you call the [RtcBanubaEngine.stopChannelMediaRelay] method to quit the current relay.
   ///
   /// **Parameter** [channelMediaRelayConfiguration] The configuration of the media stream relay.
   Future<void> startChannelMediaRelay(
@@ -2308,10 +2301,10 @@ mixin RtcMediaRelayInterface {
   ///
   /// After the channel media relay starts, if you want to relay the media stream to more channels, or leave the current relay channel, you can call the `updateChannelMediaRelay` method.
   ///
-  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.UpdateDestinationChannel] state code.
+  /// After a successful method call, the SDK triggers the [RtcBanubaEngineEventHandler.channelMediaRelayEvent] callback with the [ChannelMediaRelayEvent.UpdateDestinationChannel] state code.
   ///
   /// **Note**
-  /// - Call this method after the [RtcEngine.startChannelMediaRelay] method to update the destination channel.
+  /// - Call this method after the [RtcBanubaEngine.startChannelMediaRelay] method to update the destination channel.
   /// - This method supports adding at most four destination channels in the relay. If there are already four destination channels in the relay.
   ///
   /// **Parameter** [channelMediaRelayConfiguration] The media stream relay configuration. See [ChannelMediaRelayConfiguration].
@@ -2322,10 +2315,10 @@ mixin RtcMediaRelayInterface {
   ///
   /// Once the relay stops, the broadcaster quits all the destination channels.
   ///
-  /// After a successful method call, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback. If the callback returns [ChannelMediaRelayState.Idle] and [ChannelMediaRelayError.None], the [ClientRole.Broadcaster] successfully stops the relay.
+  /// After a successful method call, the SDK triggers the [RtcBanubaEngineEventHandler.channelMediaRelayStateChanged] callback. If the callback returns [ChannelMediaRelayState.Idle] and [ChannelMediaRelayError.None], the [ClientRole.Broadcaster] successfully stops the relay.
   ///
   /// **Note**
-  /// - If the method call fails, the SDK triggers the [RtcEngineEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse] or [ChannelMediaRelayError.ServerConnectionLost] error code. You can leave the channel by calling the [RtcEngine.leaveChannel] method, and the media stream relay automatically stops.
+  /// - If the method call fails, the SDK triggers the [RtcBanubaEngineEventHandler.channelMediaRelayStateChanged] callback with the [ChannelMediaRelayError.ServerNoResponse] or [ChannelMediaRelayError.ServerConnectionLost] error code. You can leave the channel by calling the [RtcBanubaEngine.leaveChannel] method, and the media stream relay automatically stops.
   Future<void> stopChannelMediaRelay();
 }
 
@@ -2333,11 +2326,11 @@ mixin RtcMediaRelayInterface {
 mixin RtcAudioRouteInterface {
   /// Sets the default audio playback route.
   ///
-  /// This method sets whether the received audio is routed to the earpiece or speakerphone by default before joining a channel. If a user does not call this method, the audio is routed to the earpiece by default. If you need to change the default audio route after joining a channel, call the [RtcEngine.setEnableSpeakerphone] method.
+  /// This method sets whether the received audio is routed to the earpiece or speakerphone by default before joining a channel. If a user does not call this method, the audio is routed to the earpiece by default. If you need to change the default audio route after joining a channel, call the [RtcBanubaEngine.setEnableSpeakerphone] method.
   /// The default audio route for each scenario:
   /// - In the [ChannelProfile.Communication] profile:
   ///   - For a voice call, the default audio route is the earpiece.
-  ///   - For a video call, the default audio route is the speaker. If the user disables the video using [RtcEngine.disableVideo], or [RtcEngine.muteLocalVideoStream] and [RtcEngine.muteAllRemoteVideoStreams], the default audio route automatically switches back to the earpiece.
+  ///   - For a video call, the default audio route is the speaker. If the user disables the video using [RtcBanubaEngine.disableVideo], or [RtcBanubaEngine.muteLocalVideoStream] and [RtcBanubaEngine.muteAllRemoteVideoStreams], the default audio route automatically switches back to the earpiece.
   /// - In the [ChannelProfile.LiveBroadcasting] profile: The default audio route is the speaker.
   /// See [ChannelProfile.LiveBroadcasting]
   ///
@@ -2352,10 +2345,10 @@ mixin RtcAudioRouteInterface {
 
   /// Enables/Disables the audio playback route to the speakerphone.
   ///
-  /// This method sets whether the audio is routed to the speakerphone or earpiece. After calling this method, the SDK returns the [RtcEngineEventHandler.audioRouteChanged] callback to indicate the changes.
+  /// This method sets whether the audio is routed to the speakerphone or earpiece. After calling this method, the SDK returns the [RtcBanubaEngineEventHandler.audioRouteChanged] callback to indicate the changes.
   ///
   /// **Note**
-  /// - Ensure that you have successfully called the [RtcEngine.joinChannel] method before calling this method.
+  /// - Ensure that you have successfully called the [RtcBanubaEngine.joinChannel] method before calling this method.
   /// - This method is invalid for audience users in the [ChannelProfile.LiveBroadcasting] profile.
   ///
   /// **Parameter** [enabled] Sets whether to route the audio to the speakerphone or earpiece:
@@ -2403,13 +2396,13 @@ mixin RtcDualStreamInterface {
 
   /// Sets the stream type of the remote video.
   ///
-  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using [RtcEngine.enableDualStreamMode] (false), the receiver can choose to receive either the high-video stream (the high resolution, and high bitrate video stream) or the low-video stream (the low resolution, and low bitrate video stream).
+  /// Under limited network conditions, if the publisher has not disabled the dual-stream mode using [RtcBanubaEngine.enableDualStreamMode] (false), the receiver can choose to receive either the high-video stream (the high resolution, and high bitrate video stream) or the low-video stream (the low resolution, and low bitrate video stream).
   ///
   /// By default, users receive the high-video stream. Call this method if you want to switch to the low-video stream. This method allows the app to adjust the corresponding video stream type based on the size of the video window to reduce the bandwidth and resources.
   ///
   /// The aspect ratio of the low-video stream is the same as the high-video stream. Once the resolution of the high-video stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-video stream.
   ///
-  /// The SDK reports the result of calling this method in the [RtcEngineEventHandler.apiCallExecuted] callback.
+  /// The SDK reports the result of calling this method in the [RtcBanubaEngineEventHandler.apiCallExecuted] callback.
   ///
   /// **Parameter** [uid] ID of the remote user sending the video stream.
   ///
@@ -2433,7 +2426,7 @@ mixin RtcFallbackInterface {
   /// - Disable the upstream video but enable audio only when the network conditions deteriorate and cannot support both video and audio.
   /// - Re-enable the video when the network conditions improve.
   ///
-  /// When the locally published video stream falls back to audio only or when the audio-only stream switches back to the video, the SDK triggers the [RtcEngineEventHandler.localPublishFallbackToAudioOnly].
+  /// When the locally published video stream falls back to audio only or when the audio-only stream switches back to the video, the SDK triggers the [RtcBanubaEngineEventHandler.localPublishFallbackToAudioOnly].
   ///
   /// **Note**
   /// - Agora does not recommend using this method for CDN live streaming, because the remote CDN live user will have a noticeable lag when the locally published video stream falls back to audio only.
@@ -2444,14 +2437,14 @@ mixin RtcFallbackInterface {
 
   /// Sets the fallback option for the remotely subscribed video stream based on the network conditions.
   ///
-  /// If option is set as [StreamFallbackOptions.VideoStreamLow] or [StreamFallbackOptions.AudioOnly], the SDK automatically switches the video from a high-stream to a low-stream, or disables the video when the downlink network condition cannot support both audio and video to guarantee the quality of the audio. The SDK monitors the network quality and restores the video stream when the network conditions improve. When the remotely subscribed video stream falls back to audio only, or the audio-only stream switches back to the video, the SDK triggers the [RtcEngineEventHandler.remoteSubscribeFallbackToAudioOnly] callback.
+  /// If option is set as [StreamFallbackOptions.VideoStreamLow] or [StreamFallbackOptions.AudioOnly], the SDK automatically switches the video from a high-stream to a low-stream, or disables the video when the downlink network condition cannot support both audio and video to guarantee the quality of the audio. The SDK monitors the network quality and restores the video stream when the network conditions improve. When the remotely subscribed video stream falls back to audio only, or the audio-only stream switches back to the video, the SDK triggers the [RtcBanubaEngineEventHandler.remoteSubscribeFallbackToAudioOnly] callback.
   ///
   /// **Parameter** [option] Sets the fallback option for the remotely subscribed video stream. See [StreamFallbackOptions].
   Future<void> setRemoteSubscribeFallbackOption(StreamFallbackOptions option);
 
   /// Sets the priority of a remote user's media stream.
   ///
-  /// Use this method with the [RtcEngine.setRemoteSubscribeFallbackOption] method. If the fallback function is enabled for a subscribed stream, the SDK ensures the high-priority user gets the best possible stream quality.
+  /// Use this method with the [RtcBanubaEngine.setRemoteSubscribeFallbackOption] method. If the fallback function is enabled for a subscribed stream, the SDK ensures the high-priority user gets the best possible stream quality.
   ///
   /// **Note**
   /// The Agora SDK supports setting `userPriority` as `High` for one user only.
@@ -2470,7 +2463,7 @@ mixin RtcTestInterface {
   ///
   /// **Note**
   /// - Call this method before joining a channel.
-  /// - After calling this method, call the [RtcEngine.stopEchoTest] method to end the test. Otherwise, the app cannot run the next echo test, or call the [RtcEngine.joinChannel] method.
+  /// - After calling this method, call the [RtcBanubaEngine.stopEchoTest] method to end the test. Otherwise, the app cannot run the next echo test, or call the [RtcBanubaEngine.joinChannel] method.
   /// - In the [ChannelProfile.LiveBroadcasting] profile, only a host can call this method.
   ///
   /// **Parameter** [intervalInSeconds] The time interval (s) between when you speak and when the recording plays back.
@@ -2483,13 +2476,13 @@ mixin RtcTestInterface {
   ///
   /// This method tests the quality of the users' network connections and is disabled by default.
   ///
-  /// Before users join a channel or before an audience switches to a host, call this method to check the uplink network quality. This method consumes additional network traffic, which may affect the communication quality. Call the [RtcEngine.disableLastmileTest] method to disable this test after receiving the [RtcEngineEventHandler.lastmileQuality] callback, and before the user joins a channel or switches the user role.
+  /// Before users join a channel or before an audience switches to a host, call this method to check the uplink network quality. This method consumes additional network traffic, which may affect the communication quality. Call the [RtcBanubaEngine.disableLastmileTest] method to disable this test after receiving the [RtcBanubaEngineEventHandler.lastmileQuality] callback, and before the user joins a channel or switches the user role.
   ///
   /// **Note**
-  /// - Do not use this method with the [RtcEngine.startLastmileProbeTest] method.
-  /// - Do not call any other methods before receiving the [RtcEngineEventHandler.lastmileQuality] callback. Otherwise, the callback may be interrupted by other methods and may not execute.
+  /// - Do not use this method with the [RtcBanubaEngine.startLastmileProbeTest] method.
+  /// - Do not call any other methods before receiving the [RtcBanubaEngineEventHandler.lastmileQuality] callback. Otherwise, the callback may be interrupted by other methods and may not execute.
   /// - In the [ChannelProfile.LiveBroadcasting] profile, a host should not call this method after joining a channel.
-  /// - If you call this method to test the last-mile quality, the SDK consumes the bandwidth of a video stream, whose bitrate corresponds to the bitrate you set in the [RtcEngine.setVideoEncoderConfiguration] method. After you join the channel, whether you have called the [RtcEngine.disableLastmileTest] method or not, the SDK automatically stops consuming the bandwidth.
+  /// - If you call this method to test the last-mile quality, the SDK consumes the bandwidth of a video stream, whose bitrate corresponds to the bitrate you set in the [RtcBanubaEngine.setVideoEncoderConfiguration] method. After you join the channel, whether you have called the [RtcBanubaEngine.disableLastmileTest] method or not, the SDK automatically stops consuming the bandwidth.
   Future<void> enableLastmileTest();
 
   /// Disables the network connection quality test.
@@ -2498,14 +2491,14 @@ mixin RtcTestInterface {
   /// Starts the last-mile network probe test before joining a channel to get the uplink and downlink last-mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT).
   ///
   /// Once this method is enabled, the SDK returns the following callbacks:
-  /// - [RtcEngineEventHandler.lastmileQuality]: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
-  /// - [RtcEngineEventHandler.lastmileProbeResult]: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
+  /// - [RtcBanubaEngineEventHandler.lastmileQuality]: the SDK triggers this callback within two seconds depending on the network conditions. This callback rates the network conditions with a score and is more closely linked to the user experience.
+  /// - [RtcBanubaEngineEventHandler.lastmileProbeResult]: the SDK triggers this callback within 30 seconds depending on the network conditions. This callback returns the real-time statistics of the network conditions and is more objective.
   ///
   /// Call this method to check the uplink network quality before users join a channel or before an audience switches to a host.
   ///
   /// **Note**
-  /// - This method consumes extra network traffic and may affect communication quality. We do not recommend calling this method together with [RtcEngine.enableLastmileTest].
-  /// - Do not call other methods before receiving the [RtcEngineEventHandler.lastmileQuality] and [RtcEngineEventHandler.lastmileProbeResult] callbacks. Otherwise, the callbacks may be interrupted by other methods.
+  /// - This method consumes extra network traffic and may affect communication quality. We do not recommend calling this method together with [RtcBanubaEngine.enableLastmileTest].
+  /// - Do not call other methods before receiving the [RtcBanubaEngineEventHandler.lastmileQuality] and [RtcBanubaEngineEventHandler.lastmileProbeResult] callbacks. Otherwise, the callbacks may be interrupted by other methods.
   /// - In the [ChannelProfile.LiveBroadcasting] profile, a host should not call this method after joining a channel.
   ///
   /// **Parameter** [config] The configurations of the last-mile network probe test. See [LastmileProbeConfig].
@@ -2522,7 +2515,7 @@ mixin RtcMediaMetadataInterface {
   /// This method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes.
   ///
   /// **Note**
-  /// Call this method before the [RtcEngine.joinChannel] method.
+  /// Call this method before the [RtcBanubaEngine.joinChannel] method.
   Future<void> registerMediaMetadataObserver();
 
   /// Unregisters the metadata observer.
@@ -2551,14 +2544,14 @@ mixin RtcWatermarkInterface {
   ///
   /// Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.
   ///
-  /// The watermark position depends on the settings in the [RtcEngine.setVideoEncoderConfiguration] method:
+  /// The watermark position depends on the settings in the [RtcBanubaEngine.setVideoEncoderConfiguration] method:
   /// - If the orientation mode of the encoding video is [VideoOutputOrientationMode.FixedLandscape], or the landscape mode in [VideoOutputOrientationMode.Adaptative], the watermark uses the landscape orientation.
   /// - If the orientation mode of the encoding video is [VideoOutputOrientationMode.FixedPortrait], or the portrait mode in [VideoOutputOrientationMode.Adaptative], the watermark uses the portrait orientation.
   /// - When setting the watermark position, the region must be less than the dimensions set in the setVideoEncoderConfiguration method. Otherwise, the watermark image will be cropped.
   ///
   /// **Note**
-  /// - Ensure that you have called the [RtcEngine.enableVideo] method to enable the video module before calling this method.
-  /// - If you only want to add a watermark image to the local video for the audience in the CDN LiveBroadcasting channel to see and capture, you can call this method or the [RtcEngine.setLiveTranscoding] method.
+  /// - Ensure that you have called the [RtcBanubaEngine.enableVideo] method to enable the video module before calling this method.
+  /// - If you only want to add a watermark image to the local video for the audience in the CDN LiveBroadcasting channel to see and capture, you can call this method or the [RtcBanubaEngine.setLiveTranscoding] method.
   /// - This method supports adding a watermark image in the PNG file format only. Supported pixel formats of the PNG image are RGBA, RGB, Palette, Gray, and Alpha_gray.
   /// - If the dimensions the PNG image differ from your settings in this method, the image will be cropped or zoomed to conform to your settings.
   /// - If you have enabled the local video preview by calling the startPreview method, you can use the visibleInPreview member in the WatermarkOptions class to set whether or not the watermark is visible in preview.
@@ -2569,7 +2562,7 @@ mixin RtcWatermarkInterface {
   /// **Parameter** [options] The options of the watermark image to be added. See [WatermarkOptions].
   Future<void> addVideoWatermark(String watermarkUrl, WatermarkOptions options);
 
-  /// Removes the watermark image from the video stream added by [RtcEngine.addVideoWatermark].
+  /// Removes the watermark image from the video stream added by [RtcBanubaEngine.addVideoWatermark].
   Future<void> clearVideoWatermarks();
 }
 
@@ -2579,7 +2572,7 @@ mixin RtcEncryptionInterface {
   ///
   /// **Deprecated**
   ///
-  /// This method is deprecated. Use [RtcEngine.enableEncryption] instead.
+  /// This method is deprecated. Use [RtcBanubaEngine.enableEncryption] instead.
   ///
   /// All users in a channel must set the same encryption password. The encryption password is automatically cleared once a user leaves the channel. If the encryption password is not specified or set to empty, the encryption functionality is disabled.
   ///
@@ -2595,14 +2588,14 @@ mixin RtcEncryptionInterface {
   ///
   /// **Deprecated**
   ///
-  /// This method is deprecated since v3.1.2. Use [RtcEngine.enableEncryption] instead.
+  /// This method is deprecated since v3.1.2. Use [RtcBanubaEngine.enableEncryption] instead.
   ///
   /// The Agora SDK supports built-in encryption, which is set to aes-128-xts mode by default. Call this method to set the encryption mode to use other encryption modes. All users in the same channel must use the same encryption mode and password.
   ///
   /// Refer to the information related to the AES encryption algorithm on the differences between the encryption modes.
   ///
   /// **Note**
-  /// - Call the [RtcEngine.setEncryptionSecret] method before calling this method.
+  /// - Call the [RtcBanubaEngine.setEncryptionSecret] method before calling this method.
   ///
   /// **Parameter** [encryptionMode] Sets the encryption mode. See [EncryptionMode].
   @deprecated
@@ -2640,7 +2633,7 @@ mixin RtcAudioRecorderInterface {
   ///
   /// **Note**
   /// - Ensure that the directory to save the recording file exists and is writable.
-  /// - This method is usually called after calling the [RtcEngine.joinChannel] method. The recording automatically stops when you call the [RtcEngine.leaveChannel] method.
+  /// - This method is usually called after calling the [RtcBanubaEngine.joinChannel] method. The recording automatically stops when you call the [RtcBanubaEngine.leaveChannel] method.
   /// - For better recording effects, set quality as [AudioRecordingQuality.Medium] or [AudioRecordingQuality.High] when sampleRate is 44.1 kHz or 48 kHz.
   ///
   /// **Parameter** [filePath] Absolute file path (including the suffixes of the filename) of the recording file. The string of the file name is in UTF-8. For example, `/sdcard/emulated/0/audio/aac`.
@@ -2654,7 +2647,7 @@ mixin RtcAudioRecorderInterface {
   /// Stops the audio recording on the client.
   ///
   /// **Note**
-  /// You can call this method before calling the [RtcEngine.leaveChannel] method; else, the recording automatically stops when you call the [RtcEngine.leaveChannel] method.
+  /// You can call this method before calling the [RtcBanubaEngine.leaveChannel] method; else, the recording automatically stops when you call the [RtcBanubaEngine.leaveChannel] method.
   Future<void> stopAudioRecording();
 }
 
@@ -2675,10 +2668,10 @@ mixin RtcInjectStreamInterface {
   ///
   /// This method call triggers the following callbacks:
   /// - The local client:
-  ///   - [RtcEngineEventHandler.streamInjectedStatus], with the state of the injecting the online stream.
-  ///   - [RtcEngineEventHandler.userJoined](uid: 666), if the method call is successful and the online media stream is injected into the channel.
+  ///   - [RtcBanubaEngineEventHandler.streamInjectedStatus], with the state of the injecting the online stream.
+  ///   - [RtcBanubaEngineEventHandler.userJoined](uid: 666), if the method call is successful and the online media stream is injected into the channel.
   /// - The remote client:
-  ///   - [RtcEngineEventHandler.userJoined](uid: 666), if the method call is successful and the online media stream is injected into the channel.
+  ///   - [RtcBanubaEngineEventHandler.userJoined](uid: 666), if the method call is successful and the online media stream is injected into the channel.
   ///
   /// **Parameter** [url] The URL address to be added to the ongoing live broadcast. Valid protocols are RTMP, HLS, and HTTP-FLV.
   /// - Supported audio codec type: AAC.
@@ -2689,9 +2682,9 @@ mixin RtcInjectStreamInterface {
 
   /// Removes the injected online media stream from a live broadcast.
   ///
-  /// This method removes the URL address (added by [RtcEngine.addInjectStreamUrl]) from a live broadcast.
+  /// This method removes the URL address (added by [RtcBanubaEngine.addInjectStreamUrl]) from a live broadcast.
   ///
-  /// If this method call is successful, the SDK triggers the [RtcEngineEventHandler.userOffline] callback and returns a stream uid of 666.
+  /// If this method call is successful, the SDK triggers the [RtcBanubaEngineEventHandler.userOffline] callback and returns a stream uid of 666.
   ///
   /// **Parameter** [url] HTTP/HTTPS URL address of the added stream to be removed.
   Future<void> removeInjectStreamUrl(String url);
@@ -2708,6 +2701,10 @@ mixin RtcCameraInterface {
   /// - `true`: Success.
   /// - `false`: Failure.
   Future<void> switchCamera();
+
+  Future<void> startVideoRecording(String filePath);
+
+  Future<void> stopVideoRecording();
 
   /// Checks whether the camera zoom function is supported.
   ///
@@ -2782,7 +2779,7 @@ mixin RtcCameraInterface {
   Future<double> getCameraMaxZoomFactor();
 
   /// Sets the camera manual focus position.
-  /// A successful method call triggers the [RtcEngineEventHandler.cameraFocusAreaChanged] callback on the local client.
+  /// A successful method call triggers the [RtcBanubaEngineEventHandler.cameraFocusAreaChanged] callback on the local client.
   ///
   /// **Parameter** [positionX] The horizontal coordinate of the touch point in the view.
   ///
@@ -2792,8 +2789,8 @@ mixin RtcCameraInterface {
 
   /// Sets the camera exposure position.
   ///
-  /// A successful method call triggers the [RtcEngineEventHandler.cameraExposureAreaChanged] callback on the local client.
-  /// See [RtcEngineEventHandler.cameraExposureAreaChanged]
+  /// A successful method call triggers the [RtcBanubaEngineEventHandler.cameraExposureAreaChanged] callback on the local client.
+  /// See [RtcBanubaEngineEventHandler.cameraExposureAreaChanged]
   ///
   /// **Parameter** [positionXinView] The horizontal coordinate of the touch point in the view.
   ///
@@ -2803,7 +2800,7 @@ mixin RtcCameraInterface {
 
   /// Enables/Disables face detection for the local user.
   ///
-  /// Once face detection is enabled, the SDK triggers the [RtcEngineEventHandler.facePositionChanged] callback to report the face information of the local user, which includes the following aspects:
+  /// Once face detection is enabled, the SDK triggers the [RtcBanubaEngineEventHandler.facePositionChanged] callback to report the face information of the local user, which includes the following aspects:
   /// - The width and height of the local video.
   /// - The position of the human face in the local video.
   /// - The distance between the human face and the device screen.
@@ -2830,12 +2827,12 @@ mixin RtcCameraInterface {
   /// Sets The camera capture configuration.
   ///
   /// For a video call or live broadcast, generally the SDK controls the camera output parameters. When the default camera capture settings do not meet special requirements or cause performance problems, we recommend using this method to set the camera capturer configuration:
-  /// - If the resolution or frame rate of the captured raw video data are higher than those set by [RtcEngine.setVideoEncoderConfiguration], processing video frames requires extra CPU and RAM usage and degrades performance. We recommend setting config as [CameraCaptureOutputPreference.Performance] to avoid such problems.
+  /// - If the resolution or frame rate of the captured raw video data are higher than those set by [RtcBanubaEngine.setVideoEncoderConfiguration], processing video frames requires extra CPU and RAM usage and degrades performance. We recommend setting config as [CameraCaptureOutputPreference.Performance] to avoid such problems.
   /// - If you do not need local video preview or are willing to sacrifice preview quality, we recommend setting config as [CameraCaptureOutputPreference.Performance] to optimize CPU and RAM usage.
   /// - If you want better quality for the local video preview, we recommend setting config as [CameraCaptureOutputPreference.Preview].
   ///
   /// **Note**
-  /// - Call this method before enabling the local camera. That said, you can call this method before calling [RtcEngine.joinChannel], [RtcEngine.enableVideo], or [RtcEngine.enableLocalVideo], depending on which method you use to turn on your local camera.
+  /// - Call this method before enabling the local camera. That said, you can call this method before calling [RtcBanubaEngine.joinChannel], [RtcBanubaEngine.enableVideo], or [RtcBanubaEngine.enableLocalVideo], depending on which method you use to turn on your local camera.
   ///
   /// **Parameter** [config] The camera capture configuration. See [CameraCapturerConfiguration].
   Future<void> setCameraCapturerConfiguration(
@@ -2846,7 +2843,7 @@ mixin RtcCameraInterface {
 mixin RtcStreamMessageInterface {
   /// Creates a data stream.
   ///
-  /// Each user can create up to five data streams during the lifecycle of the [RtcEngine].
+  /// Each user can create up to five data streams during the lifecycle of the [RtcBanubaEngine].
   ///
   /// **Deprecated**
   ///
@@ -2856,7 +2853,7 @@ mixin RtcStreamMessageInterface {
   /// - Set both the reliable and ordered parameters to true or false. Do not set one as true and the other as false.
   ///
   /// **Parameter** [reliable] Sets whether or not the recipients are guaranteed to receive the data stream from the sender within five seconds:
-  /// - `true`: The recipients receive the data from the sender within five seconds. If the recipient does not receive the data within five seconds, the SDK triggers the [RtcEngineEventHandler.streamMessageError] callback and returns an error code.
+  /// - `true`: The recipients receive the data from the sender within five seconds. If the recipient does not receive the data within five seconds, the SDK triggers the [RtcBanubaEngineEventHandler.streamMessageError] callback and returns an error code.
   /// - `false`: There is no guarantee that the recipients receive the data stream within five seconds and no error message is reported for any delay or missing data stream.
   ///
   /// **Parameter** [ordered] Sets whether or not the recipients receive the data stream in the sent order:
@@ -2891,15 +2888,15 @@ mixin RtcStreamMessageInterface {
   /// - Each client can send up to 6 kB of data per second.
   /// - Each user can have up to five data channels simultaneously.
   ///
-  /// A successful method call triggers the [RtcEngineEventHandler.streamMessage] callback on the remote client, from which the remote user gets the stream message.
+  /// A successful method call triggers the [RtcBanubaEngineEventHandler.streamMessage] callback on the remote client, from which the remote user gets the stream message.
   ///
-  /// A failed method call triggers the [RtcEngineEventHandler.streamMessageError] callback on the remote client.
+  /// A failed method call triggers the [RtcBanubaEngineEventHandler.streamMessageError] callback on the remote client.
   ///
   /// **Note**
-  /// - Ensure that you have created the data stream using [RtcEngine.createDataStream] before calling this method.
+  /// - Ensure that you have created the data stream using [RtcBanubaEngine.createDataStream] before calling this method.
   /// - This method applies only to the [ChannelProfile.Communication] profile or to hosts in the [ChannelProfile.LiveBroadcasting] profile.
   ///
-  /// **Parameter** [streamId] ID of the sent data stream returned by the [RtcEngine.createDataStream] method.
+  /// **Parameter** [streamId] ID of the sent data stream returned by the [RtcBanubaEngine.createDataStream] method.
   ///
   /// **Parameter** [message] Sent data.
   Future<void> sendStreamMessage(int streamId, String message);

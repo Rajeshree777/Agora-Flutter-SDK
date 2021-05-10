@@ -309,5 +309,7 @@ extension Notification.Name {
     static let effectChangeNotification = Notification.Name("effectChangeNotification")
     static let cameraModeChangeNotification = Notification.Name("cameraModeChangeNotification")
     static let destroyBanubaEffectNotification = Notification.Name("destroyBanubaEffectNotification")
-    
+    static let flashModeChangeNotification = Notification.Name("flashModeChangeNotification")
+    static let videoRecodingChangeNotification = Notification.Name("videoRecodingChangeNotification")
+    static let audioChangeNotification = Notification.Name("audioChangeNotification")
 }

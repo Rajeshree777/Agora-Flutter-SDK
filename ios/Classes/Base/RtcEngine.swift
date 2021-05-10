@@ -32,6 +32,8 @@ protocol RtcEngineInterface:
         RtcEngineCameraInterface,
         RtcEngineStreamMessageInterface {
     func create(_ params: NSDictionary, _ callback: Callback)
+    
+    func createBanuba(_ params: NSDictionary, _ callback: Callback)
 
     func destroy(_ callback: Callback)
 
@@ -336,6 +338,10 @@ protocol RtcEngineInjectStreamInterface {
 
 protocol RtcEngineCameraInterface {
     func switchCamera(_ callback: Callback)
+    
+    func startVideoRecording(_ params: NSDictionary, _ callback: Callback)
+    
+    func stopVideoRecording(_ callback: Callback)
 
     func isCameraZoomSupported(_ callback: Callback)
 
@@ -404,6 +410,14 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.code(engine?.setAppType(AgoraRtcAppType(rawValue: (params["appType"] as! NSNumber).uintValue)!))
     }
 
+    @objc func createBanuba(_ params: NSDictionary, _ callback: Callback) {
+        BanubaSdkManager.deinitialize()
+        BanubaSdkManager.initialize(
+            resourcePath: [Bundle.main.bundlePath + "/effects"], clientTokenString: banubaClientToken)
+        callback.code(4)
+    }
+    
+    
     @objc func destroy(_ callback: Callback) {
         callback.resolve(engine) { [weak self] _ in
             self?.Release()
@@ -969,6 +983,24 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         NotificationCenter.default.post(name: .cameraModeChangeNotification, object: nil)
 //        callback.code(engine?.switchCamera())
     }
+    var outputURL: URL!
+
+    @objc func startVideoRecording(_ params: NSDictionary, _ callback: Callback) {
+//        outputURL = URL(fileURLWithPath: )
+        
+        NotificationCenter.default.post(name: .videoRecodingChangeNotification, object: params["filePath"] as! String)
+//        callback.code(engine?.switchCamera())
+    }
+        
+    @objc func stopVideoRecording(_ callback: Callback) {
+        NotificationCenter.default.post(name: .videoRecodingChangeNotification, object: "")
+//        callback.code(engine?.switchCamera())
+                    print("Stop Video Callback")
+//        callback.resolve(outputURL.path) {
+//            $0.append("")
+//            print("Stop Video Callback")
+//        }
+    }
 
     @objc func isCameraZoomSupported(_ callback: Callback) {
         callback.resolve(engine) {
@@ -1028,10 +1060,11 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setCameraTorchOn(_ params: NSDictionary, _ callback: Callback) {
-        callback.resolve(engine) {
-            $0.setCameraTorchOn(params["isOn"] as! Bool)
-            return nil
-        }
+        NotificationCenter.default.post(name: .flashModeChangeNotification, object: params["isOn"] as! Bool)
+//        callback.resolve(engine) {
+//            $0.setCameraTorchOn(params["isOn"] as! Bool)
+//            return nil
+//        }
     }
 
     @objc func setCameraAutoFocusFaceModeEnabled(_ params: NSDictionary, _ callback: Callback) {

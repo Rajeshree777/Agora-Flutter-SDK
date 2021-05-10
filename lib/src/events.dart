@@ -1374,6 +1374,64 @@ class RtcEngineEventHandler {
   }
 }
 
+class RtcBanubaEngineEventHandler {
+  /// Reports a warning during SDK runtime.
+  ///
+  /// In most cases, the app can ignore the warning reported by the SDK because the SDK can usually fix the issue and resume running.
+  ///
+  /// For instance, the SDK may report a [WarningCode.LookupChannelTimeout] warning upon disconnection with the server and tries to reconnect. For detailed warning codes, see [WarningCode].
+  ///
+  /// The `WarningCallback` typedef includes the following parameter:
+  /// - [WarningCode] `warn`: Warning code.
+  WarningCallback warning;
+
+  /// Reports an error during SDK runtime.
+  ///
+  /// In most cases, the SDK cannot fix the issue and resume running. The SDK requires the app to take action or informs the user about the issue.
+  ///
+  /// For example, the SDK reports an [ErrorCode.StartCall] error when failing to initialize a call. The app informs the user that the call initialization failed and invokes the [RtcEngine.leaveChannel] method to leave the channel. For detailed error codes, see [ErrorCode].
+  ///
+  /// The `ErrorCallback` typedef includes the following parameter:
+  /// - [ErrorCode] `err`: Error code.
+  ErrorCallback error;
+
+  /// Occurs when an API method is executed.
+  ///
+  /// The `ApiCallCallback` typedef includes the following parameters:
+  /// - [ErrorCode] `error`: Error code.
+  /// - [String] `api`: The method executed by the SDK.
+  /// - [String] `result`: The result of the method call.
+  ApiCallCallback apiCallExecuted;
+
+  RtcBanubaEngineEventHandler({
+    this.warning,
+    this.error,
+    this.apiCallExecuted,
+  });
+
+  // ignore: public_member_api_docs
+  void process(String methodName, List<dynamic> data) {
+    switch (methodName) {
+      case 'Warning':
+        warning?.call(WarningCodeConverter.fromValue(data[0]).e);
+        break;
+      case 'Error':
+        error?.call(ErrorCodeConverter.fromValue(data[0]).e);
+        break;
+      case 'ApiCallExecuted':
+        apiCallExecuted?.call(
+            ErrorCodeConverter.fromValue(data[0]).e, data[1], data[2]);
+      //   break;
+      // case 'UserEnableVideo':
+      //   userEnableVideo?.call(data[0], data[1]);
+      //   break;
+      // case 'UserEnableLocalVideo':
+      //   userEnableLocalVideo?.call(data[0], data[1]);
+      //   break;
+    }
+  }
+}
+
 /// The RtcChannelEvents interface.
 class RtcChannelEventHandler {
   /// Reports the warning code of the [RtcChannel] instance.

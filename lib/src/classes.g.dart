@@ -954,10 +954,35 @@ RtcEngineConfig _$RtcEngineConfigFromJson(Map<String, dynamic> json) {
   );
 }
 
+RtcBanubaEngineConfig _$RtcBanubaEngineConfigFromJson(
+    Map<String, dynamic> json) {
+  return RtcBanubaEngineConfig(
+    areaCode: _$enumDecodeNullable(_$AreaCodeEnumMap, json['areaCode']),
+    logConfig: json['logConfig'] == null
+        ? null
+        : LogConfig.fromJson(json['logConfig'] as Map<String, dynamic>),
+  );
+}
+
 Map<String, dynamic> _$RtcEngineConfigToJson(RtcEngineConfig instance) {
   final val = <String, dynamic>{
     'appId': instance.appId,
   };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('areaCode', _$AreaCodeEnumMap[instance.areaCode]);
+  writeNotNull('logConfig', instance.logConfig?.toJson());
+  return val;
+}
+
+Map<String, dynamic> _$RtcBanubaEngineConfigToJson(
+    RtcBanubaEngineConfig instance) {
+  final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {

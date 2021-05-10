@@ -348,6 +348,11 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
+  Future<void> cameraPauseStop(bool pause) {
+    return _invokeMethod('cameraPauseStop', {'pause': pause});
+  }
+
+  @override
   Future<void> muteRemoteAudioStream(int uid, bool muted) {
     return _invokeMethod('muteRemoteAudioStream', {'uid': uid, 'muted': muted});
   }
@@ -1509,6 +1514,8 @@ mixin RtcAudioInterface {
   /// - `true`: Stop sending the local audio stream.
   /// - `false`: (Default) Send the local audio stream.
   Future<void> muteLocalAudioStream(bool muted);
+
+  Future<void> cameraPauseStop(bool pause);
 
   /// Stops/Resumes receiving a specified audio stream.
   ///

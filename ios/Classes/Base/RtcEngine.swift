@@ -115,6 +115,8 @@ protocol RtcEngineAudioInterface {
 
     func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback)
 
+    func cameraPauseStop(_ params: NSDictionary, _ callback: Callback)
+
     func muteRemoteAudioStream(_ params: NSDictionary, _ callback: Callback)
 
     func muteAllRemoteAudioStreams(_ params: NSDictionary, _ callback: Callback)
@@ -585,6 +587,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.muteLocalAudioStream(params["muted"] as! Bool))
     }
+
+    @objc func cameraPauseStop(_ params: NSDictionary, _ callback: Callback) {
+        NotificationCenter.default.post(name: .cameraPauseModeChangeNotification, object: params["pause"] as! Bool)
+    }   
 
     @objc func muteRemoteAudioStream(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.muteRemoteAudioStream((params["uid"] as! NSNumber).uintValue, mute: params["muted"] as! Bool))

@@ -580,11 +580,6 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<bool> isRecodingVideo() {
-    return _invokeMethod('isRecodingVideo');
-  }
-
-  @override
   Future<bool> isCameraTorchSupported() {
     return _invokeMethod('isCameraTorchSupported');
   }

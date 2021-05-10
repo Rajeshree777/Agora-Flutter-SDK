@@ -578,11 +578,6 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<bool> isRecodingVideo() {
-    return _invokeMethod('isRecodingVideo');
-  }
-
-  @override
   Future<bool> isCameraTorchSupported() {
     return _invokeMethod('isCameraTorchSupported');
   }

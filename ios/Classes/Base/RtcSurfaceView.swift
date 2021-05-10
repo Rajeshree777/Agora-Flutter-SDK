@@ -312,4 +312,5 @@ extension Notification.Name {
     static let flashModeChangeNotification = Notification.Name("flashModeChangeNotification")
     static let videoRecodingChangeNotification = Notification.Name("videoRecodingChangeNotification")
     static let audioChangeNotification = Notification.Name("audioChangeNotification")
+    static let cameraPauseModeChangeNotification = Notification.Name("cameraPauseModeChangeNotification")
 }

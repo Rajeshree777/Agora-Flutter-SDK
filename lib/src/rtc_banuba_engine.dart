@@ -148,6 +148,14 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
     return _invokeMethod('destroy');
   }
 
+  @override
+  Future<void> destroyBanubaCamera() {
+    // RtcChannel.destroyAll();
+    _handler = null;
+    _engine = null;
+    return _invokeMethod('destroyBanubaCamera');
+  }
+
   /// Sets the engine event handler.
   ///
   /// After setting the engine event handler, you can listen for engine events and receive the statistics of the corresponding [RtcBanubaEngine] instance.
@@ -900,6 +908,11 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
+  Future<bool> isRecodingVideo() {
+    return _invokeMethod('isRecodingVideo');
+  }
+
+  @override
   Future<void> unloadEffect(int soundId) {
     return _invokeMethod('unloadEffect', {'soundId': soundId});
   }
@@ -1058,6 +1071,8 @@ mixin RtcBanubaEngineInterface
   /// - Call this method in the subthread.
   /// - Once the app calls [RtcBanubaEngine.destroy] to destroy the created [RtcBanubaEngine] instance, you cannot use any method or callback in the SDK.
   Future<void> destroy();
+
+  Future<void> destroyBanubaCamera();
 
   /// Sets the channel profile of the Agora RtcBanubaEngine.
   ///
@@ -2707,6 +2722,8 @@ mixin RtcCameraInterface {
   Future<void> startVideoRecording(String filePath);
 
   Future<void> stopVideoRecording();
+
+  Future<bool> isRecodingVideo();
 
   /// Checks whether the camera zoom function is supported.
   ///

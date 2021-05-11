@@ -14,7 +14,7 @@ class BanubaSurfaceView: UIView {
     
     private let config = EffectPlayerConfiguration(renderMode: .video)
     
-    var torceMode: AVCaptureDevice.TorchMode = AVCaptureDevice.TorchMode.on
+    var torceMode: AVCaptureDevice.TorchMode = AVCaptureDevice.TorchMode.off
     
     init(frame: CGRect, _ uid: UInt) {
         //            BanubaSdkManager.deinitialize()
@@ -149,8 +149,8 @@ class BanubaSurfaceView: UIView {
                 banubaSdkManager.destroyEffectPlayer()
             }
             else {
-                banubaSdkManager.input.startCamera()
-                banubaSdkManager.startEffectPlayer()
+                // banubaSdkManager.input.startCamera()
+                // banubaSdkManager.startEffectPlayer()
             }
         }
     }

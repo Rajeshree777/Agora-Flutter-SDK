@@ -64,6 +64,9 @@ class BanubaSurfaceView extends StatefulWidget {
 
   final String effectName;
 
+  final int surfaceHeight;
+  final int surfaceWidth;
+
   /// Constructs a [BanubaSurfaceView]
   BanubaSurfaceView({
     Key key,
@@ -76,6 +79,8 @@ class BanubaSurfaceView extends StatefulWidget {
     this.onPlatformViewCreated,
     this.gestureRecognizers,
     this.effectName,
+    this.surfaceHeight,
+    this.surfaceWidth,
   }) : super(key: key);
 
   @override
@@ -125,6 +130,8 @@ class _BanubaSurfaceViewState extends State<BanubaSurfaceView> {
               'uid': widget.uid,
               'channelId': widget.channelId,
               'effectName': widget.effectName,
+              'surfaceHeight': widget.surfaceHeight,
+              'surfaceWidth': widget.surfaceWidth,
             },
             'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,
@@ -149,7 +156,9 @@ class _BanubaSurfaceViewState extends State<BanubaSurfaceView> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.uid != widget.uid ||
         oldWidget.channelId != widget.channelId ||
-        oldWidget.effectName != widget.effectName) {
+        oldWidget.effectName != widget.effectName ||
+        oldWidget.surfaceHeight != widget.surfaceHeight ||
+        oldWidget.surfaceWidth != widget.surfaceWidth) {
       setData();
     }
     if (oldWidget.renderMode != widget.renderMode) {
@@ -180,7 +189,9 @@ class _BanubaSurfaceViewState extends State<BanubaSurfaceView> {
       'data': {
         'uid': widget.uid,
         'channelId': widget.channelId,
-        'effectName': widget.effectName
+        'effectName': widget.effectName,
+        'surfaceHeight': widget.surfaceHeight,
+        'surfaceWidth': widget.surfaceWidth
       }
     });
   }

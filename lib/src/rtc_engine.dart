@@ -887,8 +887,8 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> switchCamera() {
-    return _invokeMethod('switchCamera');
+  Future<void> switchCamera({bool isFrontCamera}) {
+    return _invokeMethod('switchCamera', {'isFrontCamera': isFrontCamera});
   }
 
   @override
@@ -2702,7 +2702,7 @@ mixin RtcCameraInterface {
   ///
   /// - `true`: Success.
   /// - `false`: Failure.
-  Future<void> switchCamera();
+  Future<void> switchCamera({bool isFrontCamera});
 
   /// Checks whether the camera zoom function is supported.
   ///

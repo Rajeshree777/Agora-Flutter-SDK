@@ -341,7 +341,7 @@ protocol RtcEngineInjectStreamInterface {
 }
 
 protocol RtcEngineCameraInterface {
-    func switchCamera(_ callback: Callback)
+    func switchCamera(_ params: NSDictionary, _ callback: Callback)
     
     func startVideoRecording(_ params: NSDictionary, _ callback: Callback)
     
@@ -1001,7 +1001,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.code(engine?.removeInjectStreamUrl(params["url"] as! String))
     }
 
-    @objc func switchCamera(_ callback: Callback) {
+    @objc func switchCamera(_ params: NSDictionary, _ callback: Callback) {
         NotificationCenter.default.post(name: .cameraModeChangeNotification, object: nil)
 //        callback.code(engine?.switchCamera())
     }

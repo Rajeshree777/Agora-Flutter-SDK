@@ -21,11 +21,11 @@ class BanubaSurfaceView: UIView {
         //            BanubaSdkManager.initialize(
         //                resourcePath: [Bundle.main.bundlePath + "/effects"], clientTokenString: banubaClientToken)
         
-        surface = EffectPlayerView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)))
+        surface = EffectPlayerView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: frame.size.width > 0 ? frame.size : CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
+        ))
         //surface.layoutIfNeeded()
         banubaSdkManager.setup(configuration: config)
         //            banubaSdkManager.setRenderTarget(layer: surface.layer as! CAEAGLLayer, contentMode : RenderContentMode.resizeAspectFill, playerConfiguration: nil)
-        
         
         surface.contentMode = UIView.ContentMode.scaleAspectFit
         super.init(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)))
@@ -149,8 +149,8 @@ class BanubaSurfaceView: UIView {
                 banubaSdkManager.destroyEffectPlayer()
             }
             else {
-                // banubaSdkManager.input.startCamera()
-                // banubaSdkManager.startEffectPlayer()
+//                banubaSdkManager.input.startCamera()
+//                banubaSdkManager.startEffectPlayer()
             }
         }
     }
@@ -188,16 +188,18 @@ class BanubaSurfaceView: UIView {
         if (self.effectName != nil) {
             _ = banubaSdkManager.loadEffect(self.effectName ?? "")
         }
-        banubaSdkManager.startEffectPlayer()
-        
+        banubaSdkManager.startEffectPlayer()        
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == observerForKeyPath() {
             if let rect = change?[.newKey] as? CGRect {
+                print("Frame Change")
                 surface.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: rect.size)
+                
+//                config.renderSize = CGSize(width: 660, height: 841)
+                
             }
         }
     }
-    
 }

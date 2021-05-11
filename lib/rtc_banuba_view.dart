@@ -19,6 +19,8 @@ class SurfaceView extends BanubaSurfaceView {
     Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
     PlatformViewCreatedCallback onPlatformViewCreated,
     String effectName,
+    int surfaceHeight = 0,
+    int surfaceWidth = 0,
   }) : super(
             key: key,
             zOrderMediaOverlay: zOrderMediaOverlay,
@@ -29,7 +31,9 @@ class SurfaceView extends BanubaSurfaceView {
             gestureRecognizers: gestureRecognizers,
             onPlatformViewCreated: onPlatformViewCreated,
             uid: 0,
-            effectName: effectName);
+            effectName: effectName,
+            surfaceHeight: surfaceHeight,
+            surfaceWidth: surfaceWidth);
 }
 
 /// (Android only) TextureView.

@@ -20,6 +20,7 @@ class SurfaceView extends RtcSurfaceView {
     PlatformViewCreatedCallback onPlatformViewCreated,
     String effectName,
     int totalJoinedUser,
+    bool isFrontCamera = true,
   }) : super(
             key: key,
             zOrderMediaOverlay: zOrderMediaOverlay,
@@ -31,7 +32,8 @@ class SurfaceView extends RtcSurfaceView {
             onPlatformViewCreated: onPlatformViewCreated,
             uid: 0,
             effectName: effectName,
-            totalJoinedUser: totalJoinedUser);
+            totalJoinedUser: totalJoinedUser,
+            isFrontCamera: isFrontCamera);
 }
 
 /// (Android only) TextureView.

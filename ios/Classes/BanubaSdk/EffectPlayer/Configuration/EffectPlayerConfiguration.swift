@@ -44,11 +44,12 @@ import AVKit
         useARKitWhenAvailable: Bool = false,
         fpsLimit: Double = 60,
         delayedCameraInitialization: Bool = false,
-        notificationCenter: NotificationCenter = NotificationCenter.default
+        notificationCenter: NotificationCenter = NotificationCenter.default,
+        isFrontCam : Bool = true
     ) {
         let isVideo = renderMode == .video
         let renderSize = isVideo ? Defaults.videoRenderSize : Defaults.photoRenderSize
-        let cameraMode: CameraSessionType = isVideo ? .FrontCameraVideoSession : .FrontCameraPhotoSession
+        let cameraMode: CameraSessionType = isVideo ? (isFrontCam  ? .FrontCameraVideoSession : .BackCameraVideoSession) : (isFrontCam  ? .FrontCameraPhotoSession : .BackCameraPhotoSession)
         let sessionPreset: AVCaptureSession.Preset = isVideo ? Defaults.videoSessionPreset : Defaults.photoSessionPreset
         self.init(
             cameraMode: cameraMode,

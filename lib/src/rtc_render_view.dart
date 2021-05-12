@@ -66,6 +66,8 @@ class RtcSurfaceView extends StatefulWidget {
 
   final int totalJoinedUser;
 
+  final bool isFrontCamera;
+
   /// Constructs a [RtcSurfaceView]
   RtcSurfaceView({
     Key key,
@@ -79,6 +81,7 @@ class RtcSurfaceView extends StatefulWidget {
     this.gestureRecognizers,
     this.effectName,
     this.totalJoinedUser,
+    this.isFrontCamera = true,
   }) : super(key: key);
 
   @override
@@ -130,6 +133,7 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
               'channelId': widget.channelId,
               'effectName': widget.effectName,
               'totalJoinedUser': widget.totalJoinedUser,
+              'isFrontCamera': widget.isFrontCamera,
             },
             'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,
@@ -154,7 +158,8 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.uid != widget.uid ||
         oldWidget.channelId != widget.channelId ||
-        oldWidget.totalJoinedUser != widget.totalJoinedUser) {
+        oldWidget.totalJoinedUser != widget.totalJoinedUser ||
+        oldWidget.isFrontCamera != widget.isFrontCamera) {
       setData();
     }
     if (oldWidget.renderMode != widget.renderMode) {
@@ -185,7 +190,8 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
       'data': {
         'uid': widget.uid,
         'channelId': widget.channelId,
-        'totalJoinedUser': widget.totalJoinedUser
+        'totalJoinedUser': widget.totalJoinedUser,
+        // 'isFrontCamera': widget.isFrontCamera,
       }
     });
   }

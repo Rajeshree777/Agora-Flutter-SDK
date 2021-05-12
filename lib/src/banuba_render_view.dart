@@ -67,6 +67,8 @@ class BanubaSurfaceView extends StatefulWidget {
   final int surfaceHeight;
   final int surfaceWidth;
 
+  final bool isFrontCamera;
+
   /// Constructs a [BanubaSurfaceView]
   BanubaSurfaceView({
     Key key,
@@ -81,6 +83,7 @@ class BanubaSurfaceView extends StatefulWidget {
     this.effectName,
     this.surfaceHeight,
     this.surfaceWidth,
+    this.isFrontCamera = true,
   }) : super(key: key);
 
   @override
@@ -132,6 +135,7 @@ class _BanubaSurfaceViewState extends State<BanubaSurfaceView> {
               'effectName': widget.effectName,
               'surfaceHeight': widget.surfaceHeight,
               'surfaceWidth': widget.surfaceWidth,
+              'isFrontCamera': widget.isFrontCamera,
             },
             'renderMode': _renderMode,
             'mirrorMode': _mirrorMode,

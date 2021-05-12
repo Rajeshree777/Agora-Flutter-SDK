@@ -21,6 +21,7 @@ class SurfaceView extends BanubaSurfaceView {
     String effectName,
     int surfaceHeight = 0,
     int surfaceWidth = 0,
+    bool isFrontCamera = true,
   }) : super(
             key: key,
             zOrderMediaOverlay: zOrderMediaOverlay,
@@ -33,7 +34,8 @@ class SurfaceView extends BanubaSurfaceView {
             uid: 0,
             effectName: effectName,
             surfaceHeight: surfaceHeight,
-            surfaceWidth: surfaceWidth);
+            surfaceWidth: surfaceWidth,
+            isFrontCamera: isFrontCamera);
 }
 
 /// (Android only) TextureView.

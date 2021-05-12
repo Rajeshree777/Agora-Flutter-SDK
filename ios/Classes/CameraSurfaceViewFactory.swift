@@ -40,7 +40,7 @@ class CameraSurfaceView: NSObject, FlutterPlatformView {
         let surfaceHeight : Int = Int(((args!["data"] as! NSDictionary)["surfaceHeight"] as! NSNumber).uintValue)
         let surfaceWidth : Int = Int(((args!["data"] as! NSDictionary)["surfaceWidth"] as! NSNumber).uintValue)
                 
-        self._view = BanubaSurfaceView.init(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: surfaceWidth, height: surfaceHeight)), ((args!["data"] as! NSDictionary)["uid"] as! NSNumber).uintValue)
+        self._view = BanubaSurfaceView.init(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: surfaceWidth, height: surfaceHeight)), ((args!["data"] as! NSDictionary)["uid"] as! NSNumber).uintValue, ((args!["data"] as! NSDictionary)["isFrontCamera"] as! Bool))
         self.channel = FlutterMethodChannel(name: "agora_rtc_engine/banuba_surface_view_\(viewId)", binaryMessenger: messager)
         super.init()
         if let map = args {

@@ -151,10 +151,10 @@ class BanubaSurfaceView: UIView {
         if let isPause = notification.object as? Bool {
             if (isPause) {
                 banubaSdkManager.input.stopCamera()
-                banubaSdkManager.destroyEffectPlayer()
+                // banubaSdkManager.destroyEffectPlayer()
             }
             else {
-//                banubaSdkManager.input.startCamera()
+               banubaSdkManager.input.startCamera()
 //                banubaSdkManager.startEffectPlayer()
             }
         }

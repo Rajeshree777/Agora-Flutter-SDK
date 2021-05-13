@@ -400,6 +400,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         mediaObserver = nil
     }
     func ReleaseBanubaCamera() {
+        BanubaSdkManager.deinitialize()
         engine = nil
         delegate = nil
         mediaObserver = nil
@@ -605,7 +606,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func cameraPauseStop(_ params: NSDictionary, _ callback: Callback) {
         NotificationCenter.default.post(name: .cameraPauseModeChangeNotification, object: params["pause"] as! Bool)
-        BanubaSdkManager.deinitialize()
+        // BanubaSdkManager.deinitialize()
     }   
 
     @objc func muteRemoteAudioStream(_ params: NSDictionary, _ callback: Callback) {

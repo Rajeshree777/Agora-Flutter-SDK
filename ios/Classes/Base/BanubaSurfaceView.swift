@@ -129,7 +129,7 @@ class BanubaSurfaceView: UIView {
             else {
                 banubaSdkManager.input.startAudioCapturing()
                 
-                banubaSdkManager.output?.startVideoCapturing(fileURL: URL(fileURLWithPath: fileUrl), completion: { (status, error) in
+                banubaSdkManager.output?.startVideoCapturing(fileURL: URL(fileURLWithPath: fileUrl), configuration: OutputConfiguration(applyWatermark: false, adjustDeviceOrientation: true, mirrorFrontCamera: false) ,completion: { (status, error) in
                     print("Start Video \(fileUrl) === \(status) === \(String(describing: error))")
                 })
             }

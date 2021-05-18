@@ -476,7 +476,6 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func leaveChannel(_ callback: Callback) {
         print("Leave Channel Banuba")
-        NotificationCenter.default.post(name: .destroyBanubaEffectNotification, object: nil)
         callback.code(engine?.leaveChannel())
     }
 

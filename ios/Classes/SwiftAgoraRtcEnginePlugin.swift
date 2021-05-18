@@ -31,7 +31,6 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
         eventChannel?.setStreamHandler(self)
         
         registrar.register(AgoraSurfaceViewFactory(registrar.messenger(), self, rtcChannelPlugin), withId: "AgoraSurfaceView")
-        registrar.register(CameraSurfaceViewFactory(registrar.messenger(), self, rtcChannelPlugin), withId: "BanubaSurfaceView")
     }
 
     public func detachFromEngine(for registrar: FlutterPluginRegistrar) {

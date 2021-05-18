@@ -15,13 +15,8 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Agora' => 'developer@agora.io' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*', 'Framework/BanubaEffectPlayer.xcframework'
-  s.preserve_paths = 'Framework/BanubaEffectPlayer.xcframework'
-  s.vendored_frameworks = 'Framework/BanubaEffectPlayer.xcframework'
+  s.source_files = 'Classes/**/*'
   
-  s.xcconfig = { 
-    'OTHER_LDFLAGS' => '-framework BanubaEffectPlayer'
-  }
   s.dependency 'Flutter'
   s.dependency 'AgoraRtcEngine_iOS', '3.3.1'
   s.platform = :ios, '10.0'

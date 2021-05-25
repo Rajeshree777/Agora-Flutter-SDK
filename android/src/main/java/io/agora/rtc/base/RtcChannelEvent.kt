@@ -42,7 +42,6 @@ class RtcChannelEvents {
     const val AudioSubscribeStateChanged = "AudioSubscribeStateChanged"
     const val VideoSubscribeStateChanged = "VideoSubscribeStateChanged"
     const val RtmpStreamingEvent = "RtmpStreamingEvent"
-    const val UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -80,8 +79,7 @@ class RtcChannelEvents {
         "VideoPublishStateChanged" to VideoPublishStateChanged,
         "AudioSubscribeStateChanged" to AudioSubscribeStateChanged,
         "VideoSubscribeStateChanged" to VideoSubscribeStateChanged,
-        "RtmpStreamingEvent" to RtmpStreamingEvent,
-        "UserSuperResolutionEnabled" to UserSuperResolutionEnabled
+        "RtmpStreamingEvent" to RtmpStreamingEvent
       )
     }
   }
@@ -237,9 +235,5 @@ class RtcChannelEventHandler(
 
   override fun onRtmpStreamingEvent(rtcChannel: RtcChannel?, url: String?, @Annotations.AgoraRtmpStreamingEvent errCode: Int) {
     callback(RtcChannelEvents.RtmpStreamingEvent, rtcChannel, url, errCode)
-  }
-
-  override fun onUserSuperResolutionEnabled(rtcChannel: RtcChannel?, uid: Int, enabled: Boolean, @Annotations.AgoraSuperResolutionStateReason reason: Int) {
-    callback(RtcChannelEvents.UserSuperResolutionEnabled, rtcChannel, uid, enabled, reason)
   }
 }

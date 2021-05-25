@@ -84,8 +84,6 @@ class RtcEngineEvents {
     const val AudioSubscribeStateChanged = "AudioSubscribeStateChanged"
     const val VideoSubscribeStateChanged = "VideoSubscribeStateChanged"
     const val RtmpStreamingEvent = "RtmpStreamingEvent"
-    const val UserSuperResolutionEnabled = "UserSuperResolutionEnabled"
-    const val UploadLogResult = "UploadLogResult"
 
     fun toMap(): Map<String, String> {
       return hashMapOf(
@@ -165,9 +163,7 @@ class RtcEngineEvents {
         "VideoPublishStateChanged" to VideoPublishStateChanged,
         "AudioSubscribeStateChanged" to AudioSubscribeStateChanged,
         "VideoSubscribeStateChanged" to VideoSubscribeStateChanged,
-        "RtmpStreamingEvent" to RtmpStreamingEvent,
-        "UserSuperResolutionEnabled" to UserSuperResolutionEnabled,
-        "UploadLogResult" to UploadLogResult
+        "RtmpStreamingEvent" to RtmpStreamingEvent
       )
     }
   }
@@ -515,13 +511,5 @@ class RtcEngineEventHandler(
 
   override fun onRtmpStreamingEvent(url: String?, @Annotations.AgoraRtmpStreamingEvent error: Int) {
     callback(RtcEngineEvents.RtmpStreamingEvent, url, error)
-  }
-
-  override fun onUserSuperResolutionEnabled(uid: Int, enabled: Boolean, @Annotations.AgoraSuperResolutionStateReason reason: Int) {
-    callback(RtcEngineEvents.UserSuperResolutionEnabled, uid, enabled, reason)
-  }
-
-  override fun onUploadLogResult(requestId: String?, success: Boolean, @Annotations.AgoraUploadErrorReason reason: Int) {
-    callback(RtcEngineEvents.UploadLogResult, requestId, success, reason)
   }
 }

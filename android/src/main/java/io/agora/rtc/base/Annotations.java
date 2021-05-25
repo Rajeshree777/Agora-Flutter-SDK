@@ -1,4 +1,4 @@
-package io.agora.rtc.base;
+package android.src.main.java.io.agora.rtc.base;
 
 import androidx.annotation.IntDef;
 
@@ -6,7 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import io.agora.rtc.Constants;
-import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngineConfig;
 import io.agora.rtc.video.BeautyOptions;
 import io.agora.rtc.video.VideoCanvas;
@@ -266,14 +265,12 @@ public class Annotations {
     AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_AUTO,
     AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE,
     AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_PREVIEW,
-    AgoraCameraCaptureOutputPreference.CAPTURER_OUTPUT_PREFERENCE_MANUAL,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraCameraCaptureOutputPreference {
     int CAPTURER_OUTPUT_PREFERENCE_AUTO = 0;
     int CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE = 1;
     int CAPTURER_OUTPUT_PREFERENCE_PREVIEW = 2;
-    int CAPTURER_OUTPUT_PREFERENCE_MANUAL = 3;
   }
 
   @IntDef({
@@ -365,7 +362,6 @@ public class Annotations {
     Constants.CONNECTION_CHANGED_RENEW_TOKEN,
     Constants.CONNECTION_CHANGED_CLIENT_IP_ADDRESS_CHANGED,
     Constants.CONNECTION_CHANGED_KEEP_ALIVE_TIMEOUT,
-    Constants.CONNECTION_CHANGED_PROXY_SERVER_INTERRUPTED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraConnectionChangedReason {
@@ -400,8 +396,6 @@ public class Annotations {
     AgoraEncryptionMode.AES128ECB,
     AgoraEncryptionMode.AES256XTS,
     AgoraEncryptionMode.SM4128ECB,
-    AgoraEncryptionMode.AES128GCM,
-    AgoraEncryptionMode.AES256GCM,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraEncryptionMode {
@@ -410,8 +404,6 @@ public class Annotations {
     int AES128ECB = 2;
     int AES256XTS = 3;
     int SM4128ECB = 4;
-    int AES128GCM = 5;
-    int AES256GCM = 6;
   }
 
   @IntDef({
@@ -460,7 +452,6 @@ public class Annotations {
     Constants.ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR,
     Constants.ERR_PUBLISH_STREAM_NOT_FOUND,
     Constants.ERR_PUBLISH_STREAM_FORMAT_NOT_SUPPORTED,
-    Constants.ERR_MODULE_NOT_FOUND,
     Constants.ERR_LOAD_MEDIA_ENGINE,
     Constants.ERR_START_CALL,
     Constants.ERR_START_CAMERA,
@@ -774,7 +765,8 @@ public class Annotations {
     Constants.WARN_ADM_RECORD_IS_OCCUPIED,
     Constants.WARN_APM_HOWLING,
     Constants.WARN_ADM_GLITCH_STATE,
-    Constants.WARN_APM_RESIDUAL_ECHO,
+    // TODO(3.3.0) WARN_APM_RESIDUAL_ECHO
+    Constants.WARN_ADM_IMPROPER_SETTINGS,
     Constants.WARN_SUPER_RESOLUTION_STREAM_OVER_LIMITATION,
     Constants.WARN_SUPER_RESOLUTION_USER_COUNT_OVER_LIMITATION,
     Constants.WARN_SUPER_RESOLUTION_DEVICE_NOT_SUPPORTED,
@@ -853,7 +845,6 @@ public class Annotations {
     Constants.CHAT_BEAUTIFIER_MAGNETIC,
     Constants.CHAT_BEAUTIFIER_FRESH,
     Constants.CHAT_BEAUTIFIER_VITALITY,
-    Constants.SINGING_BEAUTIFIER,
     Constants.TIMBRE_TRANSFORMATION_VIGOROUS,
     Constants.TIMBRE_TRANSFORMATION_DEEP,
     Constants.TIMBRE_TRANSFORMATION_MELLOW,
@@ -873,78 +864,5 @@ public class Annotations {
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraAudienceLatencyLevelType {
-  }
-
-  @IntDef({
-    Constants.TRANSPORT_TYPE_NONE_PROXY,
-    Constants.TRANSPORT_TYPE_UDP_PROXY,
-    Constants.TRANSPORT_TYPE_TCP_PROXY,
-  })
-  @Retention(RetentionPolicy.SOURCE)
-  public @interface AgoraCloudProxyType {
-  }
-
-  @IntDef({
-    AgoraLogLevel.LOG_LEVEL_NONE,
-    AgoraLogLevel.LOG_LEVEL_INFO,
-    AgoraLogLevel.LOG_LEVEL_WARN,
-    AgoraLogLevel.LOG_LEVEL_ERROR,
-    AgoraLogLevel.LOG_LEVEL_FATAL,
-  })
-  @Retention(RetentionPolicy.SOURCE)
-  public @interface AgoraLogLevel {
-    int LOG_LEVEL_NONE = 0;
-    int LOG_LEVEL_INFO = 1;
-    int LOG_LEVEL_WARN = 2;
-    int LOG_LEVEL_ERROR = 4;
-    int LOG_LEVEL_FATAL = 8;
-  }
-
-  @IntDef({
-    Constants.CAPTURE_BRIGHTNESS_LEVEL_INVALID,
-    Constants.CAPTURE_BRIGHTNESS_LEVEL_NORMAL,
-    Constants.CAPTURE_BRIGHTNESS_LEVEL_BRIGHT,
-    Constants.CAPTURE_BRIGHTNESS_LEVEL_DARK,
-  })
-  @Retention(RetentionPolicy.SOURCE)
-  public @interface AgoraCaptureBrightnessLevelType {
-  }
-
-  @IntDef({
-    IRtcEngineEventHandler.UploadErrorReason.UPLOAD_SUCCESS,
-    IRtcEngineEventHandler.UploadErrorReason.UPLOAD_NET_ERROR,
-    IRtcEngineEventHandler.UploadErrorReason.UPLOAD_SERVER_ERROR,
-  })
-  @Retention(RetentionPolicy.SOURCE)
-  public @interface AgoraUploadErrorReason {
-  }
-
-  @IntDef({
-    IRtcEngineEventHandler.ExperienceQuality.EXPERIENCE_GOOD,
-    IRtcEngineEventHandler.ExperienceQuality.EXPERIENCE_BAD,
-  })
-  @Retention(RetentionPolicy.SOURCE)
-  public @interface AgoraExperienceQualityType {
-  }
-
-  @IntDef({
-    IRtcEngineEventHandler.ExperiencePoorReason.EXPERIENCE_REASON_NONE,
-    IRtcEngineEventHandler.ExperiencePoorReason.REMOTE_NETWORK_QUALITY_POOR,
-    IRtcEngineEventHandler.ExperiencePoorReason.LOCAL_NETWORK_QUALITY_POOR,
-    IRtcEngineEventHandler.ExperiencePoorReason.WIRELESS_SIGNAL_POOR,
-    IRtcEngineEventHandler.ExperiencePoorReason.WIFI_BLUETOOTH_COEXIST,
-  })
-  @Retention(RetentionPolicy.SOURCE)
-  public @interface AgoraExperiencePoorReason {
-  }
-
-  @IntDef({
-    Constants.SR_STATE_REASON_SUCCESS,
-    Constants.SR_STATE_REASON_STREAM_OVER_LIMITATION,
-    Constants.SR_STATE_REASON_USER_COUNT_OVER_LIMITATION,
-    Constants.SR_STATE_REASON_DEVICE_NOT_SUPPORTED,
-  })
-  @Retention(RetentionPolicy.SOURCE)
-  public @interface AgoraSuperResolutionStateReason {
   }
 }

@@ -75,7 +75,7 @@ class AgoraTextureView(
 
   private fun setData(data: Map<*, *>) {
     val channel = (data["channelId"] as? String)?.let { getChannel(it) }
-    getEngine()?.let { view.setData(it, channel, (data["uid"] as Number).toInt()) }
+    getEngine()?.let { view.setData(it, channel, data["uid"] as Int) }
   }
 
   private fun setRenderMode(renderMode: Int) {

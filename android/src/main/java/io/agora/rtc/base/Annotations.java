@@ -1,4 +1,4 @@
-package android.src.main.java.io.agora.rtc.base;
+package io.agora.rtc.base;
 
 import androidx.annotation.IntDef;
 

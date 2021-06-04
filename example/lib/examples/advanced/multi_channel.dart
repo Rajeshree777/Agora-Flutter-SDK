@@ -241,6 +241,7 @@ class _State extends State<MultiChannel> {
         children: [
           RtcLocalView.SurfaceView(
             channelId: renderChannelId,
+            totalJoinedUser: 1,
           ),
           if (remoteUid != null)
             Align(
@@ -255,6 +256,7 @@ class _State extends State<MultiChannel> {
                       child: RtcRemoteView.SurfaceView(
                         uid: e,
                         channelId: renderChannelId,
+                        totalJoinedUser: 1,
                       ),
                     ),
                   )),

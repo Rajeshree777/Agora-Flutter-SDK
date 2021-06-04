@@ -41,12 +41,14 @@ class _State extends State<JoinChannelVideo> {
         await RtcEngine.createWithConfig(RtcEngineConfig(config.appId));
     this._addListeners();
     await widget._engine.enableVideo();
-    await widget._engine.setBeautyEffectOptions(true, BeautyOptions.fromJson({
-      'lighteningContrastLevel': 1,
-      'lighteningLevel': 0.7,
-      'smoothnessLevel': 0.5,
-      'rednessLevel': 0.1
-    }));
+    await widget._engine.setBeautyEffectOptions(
+        true,
+        BeautyOptions.fromJson({
+          'lighteningContrastLevel': 1,
+          'lighteningLevel': 0.7,
+          'smoothnessLevel': 0.5,
+          'rednessLevel': 0.1
+        }));
     await widget._engine.startPreview();
     await widget._engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await widget._engine.setClientRole(ClientRole.Broadcaster);
@@ -161,7 +163,9 @@ class _State extends State<JoinChannelVideo> {
     return Expanded(
       child: Stack(
         children: [
-          RtcLocalView.SurfaceView(),
+          RtcLocalView.SurfaceView(
+            totalJoinedUser: 1,
+          ),
           if (remoteUid != null)
             Align(
               alignment: Alignment.topLeft,
@@ -176,6 +180,7 @@ class _State extends State<JoinChannelVideo> {
                         height: 120,
                         child: RtcRemoteView.SurfaceView(
                           uid: e,
+                          totalJoinedUser: 1,
                         ),
                       ),
                     ),

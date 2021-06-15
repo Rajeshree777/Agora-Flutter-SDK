@@ -1,0 +1,64 @@
+[
+  {
+    "shortDescription" : "",
+    "metadataOutputVersion" : "3.0",
+    "outputSchema" : [
+      {
+        "hasShapeFlexibility" : "0",
+        "isOptional" : "0",
+        "dataType" : "Float32",
+        "formattedType" : "MultiArray (Float32 1 × 512 × 288)",
+        "shortDescription" : "",
+        "shape" : "[1, 512, 288]",
+        "name" : "output1",
+        "type" : "MultiArray"
+      }
+    ],
+    "version" : "",
+    "modelParameters" : [
+
+    ],
+    "author" : "",
+    "specificationVersion" : 2,
+    "license" : "",
+    "isUpdatable" : "0",
+    "availability" : {
+      "macOS" : "10.13.2",
+      "tvOS" : "11.2",
+      "watchOS" : "4.2",
+      "iOS" : "11.2",
+      "macCatalyst" : "11.2"
+    },
+    "modelType" : {
+      "name" : "MLModelType_neuralNetwork"
+    },
+    "inputSchema" : [
+      {
+        "hasShapeFlexibility" : "0",
+        "isOptional" : "0",
+        "dataType" : "Float32",
+        "formattedType" : "MultiArray (Float32 3 × 512 × 288)",
+        "shortDescription" : "",
+        "shape" : "[3, 512, 288]",
+        "name" : "input1",
+        "type" : "MultiArray"
+      }
+    ],
+    "userDefinedMetadata" : {
+      "com.github.apple.coremltools.version" : "4.0",
+      "com.github.apple.coremltools.source" : "keras==2.3.1"
+    },
+    "generatedClassName" : "coreMLNails",
+    "neuralNetworkLayerTypeHistogram" : {
+      "Concat" : 4,
+      "Multiply" : 4,
+      "ActivationReLU" : 47,
+      "Add" : 13,
+      "BatchNorm" : 57,
+      "Convolution" : 71,
+      "ActivationSigmoid" : 5,
+      "UpsampleNearestNeighbor" : 5
+    },
+    "method" : "predict"
+  }
+]

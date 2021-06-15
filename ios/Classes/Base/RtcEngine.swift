@@ -32,11 +32,11 @@ protocol RtcEngineInterface:
         RtcEngineCameraInterface,
         RtcEngineStreamMessageInterface {
     func create(_ params: NSDictionary, _ callback: Callback)
-    
+
     func createBanuba(_ params: NSDictionary, _ callback: Callback)
 
     func destroy(_ callback: Callback)
-    
+
     func destroyBanubaCamera(_ callback: Callback)
 
     func setChannelProfile(_ params: NSDictionary, _ callback: Callback)
@@ -342,9 +342,9 @@ protocol RtcEngineInjectStreamInterface {
 
 protocol RtcEngineCameraInterface {
     func switchCamera(_ params: NSDictionary, _ callback: Callback)
-    
+
     func startVideoRecording(_ params: NSDictionary, _ callback: Callback)
-    
+
     func stopVideoRecording(_ callback: Callback)
 
     func isCameraZoomSupported(_ callback: Callback)
@@ -387,8 +387,8 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     private var delegate: RtcEngineEventHandler?
     private var mediaObserver: MediaObserver?
     private var effectName: String?
-    
-    
+
+
     init(_ emitter: @escaping (_ methodName: String, _ data: Dictionary<String, Any?>?) -> Void) {
         self.emitter = emitter
     }
@@ -405,9 +405,8 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         delegate = nil
         mediaObserver = nil
     }
-    
-    internal let banubaClientToken = "CJOTaz7ChzHGe97okh0KcDRKfEC8pkAjGbiOTzWJyEaMqlrVtV87NGPBUPLRGelwp9IcJVPjeeYVAiDzShXDW7UsioCXOLTGR4VoKK+Ljg4e1qwndj3t2WaiwEeT6eOwCU3tZMQA5cZRzlvNSl5EDEj4gVIVGa4Wwcb+w/KF/RY1IztsFnz7JiDCIkCdTOF6FPkuaL9vq5bOcZ+rkS/Pd0M4IBykArCuBg7S02qSr1HVH/w635y4YZYetsYeoHL93ms+6Ktkw52/rsxMyfnSmZtQyCoFzgNg0NHbnuttoTA7Wki3seNJaqJE9CymwqojJxzYXL/8/1kg8uaQY13fJPlbjInQyFZzeG5dpV2jkDBMclsZ0HS5nVdJuJcfRAhiNsAZtSe0kVjVgpvaMSEaIaoU+La/DsK/BAZwta56fN8/o3sAiUaxzr7GbHplFNCOfBqN+7FAGv3sLpIJpxUoxbPgtl5y/f+vyGkDWr5+pzTZ5gIscm7GazIVibJb9wAGWXhuDJBc71GuI7HZzxKkJruCSwJnXBoEedBaGjqjAljwL8TDpAfvpxP12AG7r2FfGJR8t3mR+B/WbN3nIxlFx2xqAf88MoDiWzhMTeJuy577UmRUiolqS+dj/SukJUoMaXeB2IcnDCLEp84m/FkP06GAub5Y9l16TZRXxqIqmP8AD3EBXG0MfiF0XUvCaiqUdebKH4mz7vViBq8IFsI8cP1DPqWwLNYzpQBmY+h5OUUa/Mn7f/2dJX9qiVF/4F9jUKJhWLEnpVbQQWPIn+6fcCwplNdngg3B5/KSC7UZ04FcyIyBiyuYr83TV2K6mMgWJNmSNcZFfeqmPw6/CJQ9owmL7iFA/QotN2B9Fq1amWtsZU1FJah2jz6Cytgi9HFiAFf2OB17qfBBE4OG4EtTSkN/67VCqGb0FgL3BV0Cnixed8gNDr9uDi1H5KDMfFS+s05ZpsKt9K8SqOLqsjdrD2QJ+XQDIMyF7OuOy18upOhWhqeG4LRXZEfhityK2aUNVQErGheLbBkNRG2laJhmK/841dsO+JAjshEMpIZzkscN34+MgRk+R9R9VXtrBOybMr1Z6+b3vWGA05LMbF15MaU9uGxPwWXP6DNFYXpe8PoHEkvDp342xxoa92UhcSG0IdNVRkt6f5u8yPO/tm+QZSULKeWp2kp6ugOk1cosyRdgmgUOrkoDufKPujAITNee7vzkJfhb4TMhn5mwjcb9tMFZdcGdvQLF/MOiWI8wpOC+ICNXPwRzewQKAtqwlT0iHbZvqL0+0ssgc40fGliUOfEPxrjkD6DhD0RrA8bVHVdUtuRuMayhv0HgYz3FgSnPszTwIcSxvKGEb4JdgT64ZuROPvRDE/eGUKD2P+7tBU7Y8D37Oo3zXZH6Qq/Q4NFqtP0liHED1anjtmT9/to+fsskDeLOKsExcEwhFy3QSp29kTvX3tzdYqZ3VLDXkwQnMZNVKsP2L5zlUXH0tbPIJJSHKV+F5U6hoNhNVThQjPuUAwBFxy/IPUHp/5l7mSswRf6kfZG85Kblcd8G2YHq8xZd1Yvx6coHpIe+Mm3OyxMu0R4Tw2WT3ypwCZmST6e0svZfuYUJwgoQHkwLGjSXnzV2pfhK7ZtVC1a+nfZfOrgG66zT9L+Cvds/2NmXlF2tnOybuj0xA1810pQYTLxW9y+YeC+MbVbh3hTcpyWb4w8nydYeGcwoG+9tBV3ej/U+HsiYSMqfv1ltY9aqbLBWpKPz2kJ3fFHK2bDE9QXGZxg8/RrC4kjTeh5OmdnykJPSg9vXhOIUMLs5KKke6IlcKkgNnVvBPq3Ya2YFXCygJtSYOyBoZ32/NWflCe5Q78tsAkMdJeeQaMJyjx7G5fZj0Bd7K4VbnuqcZwthhb4q1bBj1i3yvYk2cgUmndi6UEG7yQ0d9Dbe2xxOM8gMW63zLUdLv4CRAyXw4PAyuIb0zWtbNDE7ekayAHIQOjQm+MScXyJUTif1bP+F"
-    
+
+    internal let banubaClientToken = "3mYrybVMi4b4ZSmZzqiUezRKfEC8pkAjGbiOTzWJ6EaMqlrVtX87NGPBUPLRHex8tusROFPyeeY1Ahj4TxXzULRpz8zcTdXUKJhmfquJhQ4e3KYsOiWszzPlxVS11OSyB0qhfMwB5NtflVPDVl5DB0uz1UIfHrMYh8ro8s+F9Bt5OzVyDTS4JhrGPnvaGLdhU+c8Kfoi/YiDJbS8ii7BbwBmaxmpWdW/Gh+VxXrMswWoCuk4zpy4YdZA4cVX42vp1FErq/Jakv7G0aUx7tDvubZw2BBIkVVP8vL745h4rF1Qcnn06bR5brINqQXr9aUkDRXOQaX7/18ew7bTKHv5F8ce0sTnx1FbcG5XnX/l/318dnU+lSr0qlhOh7YhCVEuEPs7gEf3y0nqq8q1fwwGILcT77i1DMm5R147n7lcYO41nEVHxhCa07/ycFtlPvHJPkyp9r1cN9HxLpInn15riaTUnxkupuqQ+SdKO5demibFlmteZEj3WhgFt4pop00GMwhzKqVMy2aPL53u+Qy3XbWMLDdjYRsOdcdfKj6jDlTqAdjkuRrjjhiHoQHb5FRVPqhronGX4gLYdvfnPz9n+SsLb+RvY8ezLAJZS+Juy5TyUnlaiZNtRtdF5iWkJ11cZ3nx/7wMS2qkk/MJ0F0v/5a1k48/iSx2cKsTnuUIiNUwKFAQflYkWgFVLDi5G2vfX+L9CKG35/VTS/FPD+tmKItgJ7KgDNZi/U11Yeh5OUUs/dLqQZOTKzxeg1tu7EZvWYNhTK8tuQCdF2zGksqucDsymNBUvSq8pb6XFqYR+48MjcmPniaYg9qUDyWeickAHsW9BuUrc+TMOBW1BJw/ug3HtmJS5h0cBnxwC7Bsk0J/Xx0MSqw1ym633ccQ4W1/DlHAOR1sgM4Gcu3IrQd/Rkt/04FPo1H+GRnqBCBA0jB5UpgDBw=="
 
     @objc func create(_ params: NSDictionary, _ callback: Callback) {
         delegate = RtcEngineEventHandler() { [weak self] in
@@ -416,7 +415,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         BanubaSdkManager.deinitialize()
         BanubaSdkManager.initialize(
             resourcePath: [Bundle.main.bundlePath + "/effects"], clientTokenString: banubaClientToken)
-        
+
         engine = AgoraRtcEngineKit.sharedEngine(with: mapToRtcEngineConfig(params["config"] as! Dictionary), delegate: delegate)
         callback.code(engine?.setAppType(AgoraRtcAppType(rawValue: (params["appType"] as! NSNumber).uintValue)!))
     }
@@ -427,20 +426,20 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
             resourcePath: [Bundle.main.bundlePath + "/effects"], clientTokenString: banubaClientToken)
         callback.code(4)
     }
-    
-    
+
+
     @objc func destroy(_ callback: Callback) {
         callback.resolve(engine) { [weak self] _ in
             self?.Release()
         }
     }
-        
+
     @objc func destroyBanubaCamera(_ callback: Callback) {
         print("Destroy Banuba Camera")
         print("ReleaseBanubaCamera iOS")
-        BanubaSdkManager.deinitialize()
+        BanubaSdkManager.destroy()
         self.ReleaseBanubaCamera()
-        callback.resolve(engine) { [weak self] _ in            
+        callback.resolve(engine) { [weak self] _ in
             // self?.ReleaseBanubaCamera()
         }
     }
@@ -473,7 +472,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func onEffectSelected(_ params: NSDictionary, _ callback: Callback) {
         effectName = params["selectedEffect"] as? String
-        
+
         NotificationCenter.default.post(name: .effectChangeNotification, object: params["selectedEffect"] as? String)
     }
 
@@ -610,7 +609,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func cameraPauseStop(_ params: NSDictionary, _ callback: Callback) {
         NotificationCenter.default.post(name: .cameraPauseModeChangeNotification, object: params["pause"] as! Bool)
         // BanubaSdkManager.deinitialize()
-    }   
+    }
 
     @objc func muteRemoteAudioStream(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.muteRemoteAudioStream((params["uid"] as! NSNumber).uintValue, mute: params["muted"] as! Bool))
@@ -635,7 +634,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func disableVideo(_ callback: Callback) {
         callback.code(engine?.disableVideo())
     }
-    
+
     @objc func setVideoEncoderConfiguration(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.setVideoEncoderConfiguration(mapToVideoEncoderConfiguration(params["config"] as! Dictionary)))
     }
@@ -1013,11 +1012,11 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
 
     @objc func startVideoRecording(_ params: NSDictionary, _ callback: Callback) {
 //        outputURL = URL(fileURLWithPath: )
-        
+
         NotificationCenter.default.post(name: .videoRecodingChangeNotification, object: params["filePath"] as! String)
 //        callback.code(engine?.switchCamera())
     }
-        
+
     @objc func stopVideoRecording(_ callback: Callback) {
         NotificationCenter.default.post(name: .videoRecodingChangeNotification, object: "")
 //        callback.code(engine?.switchCamera())

@@ -51,7 +51,7 @@ namespace bnb
 
         using free_slots_t = std::array<size_t, MAX_ELEMENTS>;
 
-        static struct static_data_t
+        inline static struct static_data_t
         {
             static_data_t();
 
@@ -158,10 +158,6 @@ namespace bnb
             return false;
         return true;
     }
-
-
-    template<typename T, size_t MAX_ELEMENTS>
-    typename static_pool_allocator<T, MAX_ELEMENTS>::static_data_t static_pool_allocator<T, MAX_ELEMENTS>::static_data{};
 
     /** @} */ // endgroup utils
 

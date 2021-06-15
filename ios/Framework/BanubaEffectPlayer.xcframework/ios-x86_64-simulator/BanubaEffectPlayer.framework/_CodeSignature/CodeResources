@@ -322,7 +322,7 @@
 		</data>
 		<key>Headers/BNBOffscreenEffectPlayer.h</key>
 		<data>
-		hp502FgVZXgcqJ0wS3gA7yEJYsc=
+		dxYJrz7DFnMEn9KSR7KQGKQSxiM=
 		</data>
 		<key>Headers/BNBParameter.h</key>
 		<data>
@@ -490,11 +490,15 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		2WkEi+V1ugLoEQkI0KlC0VyvCOA=
+		r1ldeC2JKXCVUc9hfu93r2aNp18=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
 		sPhlEAXJICkWiwhCQx8SR7lCrKM=
+		</data>
+		<key>PrivateHeaders/bnb/effect_player/helpers.hpp</key>
+		<data>
+		9lP0ESrpet6lUYEVYkPAcjmtWMg=
 		</data>
 		<key>PrivateHeaders/bnb/effect_player/interfaces/all.hpp</key>
 		<data>
@@ -615,6 +619,10 @@
 		<key>PrivateHeaders/bnb/effect_player/interfaces/types.hpp</key>
 		<data>
 		fhi6K+rUAOPnOvlNb2K+8afQues=
+		</data>
+		<key>PrivateHeaders/bnb/effect_player/utility.hpp</key>
+		<data>
+		2rIqPie5B8L1fRlNho2CfxqwquE=
 		</data>
 		<key>PrivateHeaders/bnb/postprocess/interfaces/all.hpp</key>
 		<data>
@@ -836,6 +844,30 @@
 		<data>
 		sO099FAOoUFFYIj3fbnQ54pmxkw=
 		</data>
+		<key>PrivateHeaders/bnb/spal/camera/base.hpp</key>
+		<data>
+		iqP3BoSxZmr+iMNXgrTLHiNxbdQ=
+		</data>
+		<key>PrivateHeaders/bnb/spal/camera/base_mocker.hpp</key>
+		<data>
+		VBymGIP6Rp9FTnpkZrn/CrC6+CE=
+		</data>
+		<key>PrivateHeaders/bnb/spal/camera/bin_mocker.hpp</key>
+		<data>
+		sOPdAUWaShop/x2pekzx3/wFIms=
+		</data>
+		<key>PrivateHeaders/bnb/spal/camera/cbor_mocker.hpp</key>
+		<data>
+		Ii4vjPMJagKGsWLgUBtYxOPoM/w=
+		</data>
+		<key>PrivateHeaders/bnb/spal/camera/ocv_based.hpp</key>
+		<data>
+		H+cyB/jaRNvRryhWKw9Towcnk5o=
+		</data>
+		<key>PrivateHeaders/bnb/spal/camera/video_mocker.hpp</key>
+		<data>
+		BGAdJnA1D/93F7qZlPo9bT9UVSU=
+		</data>
 		<key>PrivateHeaders/bnb/spal/interfaces/all.hpp</key>
 		<data>
 		0522RQOo4nInvjd598dgMPyP+iA=
@@ -851,6 +883,10 @@
 		<key>PrivateHeaders/bnb/types/base_types.hpp</key>
 		<data>
 		o6yA89X48eFAuDN8sijaSENU02w=
+		</data>
+		<key>PrivateHeaders/bnb/types/constants.hpp</key>
+		<data>
+		1+DI7KJDfSe1BqNy2Vkl9OjjGBg=
 		</data>
 		<key>PrivateHeaders/bnb/types/full_image.hpp</key>
 		<data>
@@ -968,6 +1004,10 @@
 		<data>
 		FJYjkCA9EBaY8IQe9HbNvDscmAo=
 		</data>
+		<key>PrivateHeaders/bnb/utils/assert.hpp</key>
+		<data>
+		D1h57jOAdEdO47jLHn6XBH5As1Y=
+		</data>
 		<key>PrivateHeaders/bnb/utils/class_unique_id.hpp</key>
 		<data>
 		Bt2gloinFWtu+iVfTLTwOPoMOCo=
@@ -983,6 +1023,10 @@
 		<key>PrivateHeaders/bnb/utils/event.hpp</key>
 		<data>
 		gU39XBGTtUv+M23R49jnKgI4c2U=
+		</data>
+		<key>PrivateHeaders/bnb/utils/exceptions.hpp</key>
+		<data>
+		VPFFm96e0/LcAAR9YAbH6HC0BHY=
 		</data>
 		<key>PrivateHeaders/bnb/utils/interfaces/all.hpp</key>
 		<data>
@@ -1016,13 +1060,21 @@
 		<data>
 		hLBlS+fHbun3WGXWGjaO3dBIuRY=
 		</data>
+		<key>PrivateHeaders/bnb/utils/singleton.hpp</key>
+		<data>
+		1syyVnS4BkieS9rH1UZdrQ+Ca5c=
+		</data>
 		<key>PrivateHeaders/bnb/utils/stack_pimpl.hpp</key>
 		<data>
 		/ea2+XBBR9pP5uNvSi28YCyvUHc=
 		</data>
 		<key>PrivateHeaders/bnb/utils/static_pool_allocator.hpp</key>
 		<data>
-		Myf5zcFLho1NAWg69AgarelNHjw=
+		nYuCK8iD4iDPLXS9ovigyo0TUSk=
+		</data>
+		<key>PrivateHeaders/bnb/utils/std/filesystem.hpp</key>
+		<data>
+		f+ovhUIXykOFXlJBH0JKTs6DeUg=
 		</data>
 		<key>bnb-resources/MoMoFRX/edgetopology1.ef</key>
 		<data>
@@ -1403,6 +1455,38 @@
 		<key>bnb-resources/cml/coreMLLips.mlmodelc/neural_network_optionals/coremldata.bin</key>
 		<data>
 		4SnyfFEDvFzES83woV4WDURQZv8=
+		</data>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/analytics/coremldata.bin</key>
+		<data>
+		MRAQs0ZNEQza/AYTY7ivMC/XzN4=
+		</data>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/coremldata.bin</key>
+		<data>
+		KWW7ku2SFbFeQbcpGb58kx6avVo=
+		</data>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/metadata.json</key>
+		<data>
+		0KejG15MzI5N2DA4ELzaXdaYujo=
+		</data>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/model.espresso.net</key>
+		<data>
+		xX0Vck19u2/T2t4LgiTt3asvrmM=
+		</data>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/model.espresso.shape</key>
+		<data>
+		shcYAl52oiL+bM8WZWTGZx5BvCQ=
+		</data>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/model.espresso.weights</key>
+		<data>
+		3VNhMDtrcBPiVBHIom4RxFkkPSQ=
+		</data>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/model/coremldata.bin</key>
+		<data>
+		yNfQ7w7t+oLS6hqlkoRbmm1LArc=
+		</data>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/neural_network_optionals/coremldata.bin</key>
+		<data>
+		uA3l0Th1hUHF8FJlrRRKufqG0ds=
 		</data>
 		<key>bnb-resources/cml/coreMLNeck.mlmodelc/coremldata.bin</key>
 		<data>
@@ -2500,11 +2584,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hp502FgVZXgcqJ0wS3gA7yEJYsc=
+			dxYJrz7DFnMEn9KSR7KQGKQSxiM=
 			</data>
 			<key>hash2</key>
 			<data>
-			SbWvJN/whaDdtjgrv3HS1DZLFStrOS4dkNnBXLBm0w4=
+			nvWsEt0fqmn9W6K6zou0flBziNn9xGOV8F5Q6MLL/gg=
 			</data>
 		</dict>
 		<key>Headers/BNBParameter.h</key>
@@ -2969,6 +3053,17 @@
 			XN0GUT0SeyyL6brNEnVSstHB85qSwfgcUgyf0Za+kqs=
 			</data>
 		</dict>
+		<key>PrivateHeaders/bnb/effect_player/helpers.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			9lP0ESrpet6lUYEVYkPAcjmtWMg=
+			</data>
+			<key>hash2</key>
+			<data>
+			MtZKLBQArMTOcJa5VeGwrlFv1NSu5PLD5g6drShF+nU=
+			</data>
+		</dict>
 		<key>PrivateHeaders/bnb/effect_player/interfaces/all.hpp</key>
 		<dict>
 			<key>hash</key>
@@ -3297,6 +3392,17 @@
 			<key>hash2</key>
 			<data>
 			C9NWbMEss3NKx2uIoFwEbidmvprBfCLNl838oPizYY4=
+			</data>
+		</dict>
+		<key>PrivateHeaders/bnb/effect_player/utility.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			2rIqPie5B8L1fRlNho2CfxqwquE=
+			</data>
+			<key>hash2</key>
+			<data>
+			/bGeNbqfpHFmBEwPpzs3tNOWhhNnd32VU2pT9fvpemY=
 			</data>
 		</dict>
 		<key>PrivateHeaders/bnb/postprocess/interfaces/all.hpp</key>
@@ -3904,6 +4010,72 @@
 			fhuvbZP2jkZuWNtVttpX1vvfQ9gFs5w/R9zMOvSeQ+I=
 			</data>
 		</dict>
+		<key>PrivateHeaders/bnb/spal/camera/base.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			iqP3BoSxZmr+iMNXgrTLHiNxbdQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			35ne4MOXMgbk9R98qtZib/f/A695BeoXT0g0Udd8Zes=
+			</data>
+		</dict>
+		<key>PrivateHeaders/bnb/spal/camera/base_mocker.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			VBymGIP6Rp9FTnpkZrn/CrC6+CE=
+			</data>
+			<key>hash2</key>
+			<data>
+			hjeBjTKrj8/bzYmYB0Gyt85RY6M1UCwfqjTN5ewurSs=
+			</data>
+		</dict>
+		<key>PrivateHeaders/bnb/spal/camera/bin_mocker.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			sOPdAUWaShop/x2pekzx3/wFIms=
+			</data>
+			<key>hash2</key>
+			<data>
+			WhD4pYKG03x7yjkMOhgZCCbbSrKVFD4QCpwz3wRR9ww=
+			</data>
+		</dict>
+		<key>PrivateHeaders/bnb/spal/camera/cbor_mocker.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Ii4vjPMJagKGsWLgUBtYxOPoM/w=
+			</data>
+			<key>hash2</key>
+			<data>
+			9lMPhP9QbFyXMF31ArfwhmbIZSPgEpQ0oKV+J6VfLNU=
+			</data>
+		</dict>
+		<key>PrivateHeaders/bnb/spal/camera/ocv_based.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			H+cyB/jaRNvRryhWKw9Towcnk5o=
+			</data>
+			<key>hash2</key>
+			<data>
+			h+D6+0I82W3fhxOmwWbtpqrXYlinKzRt5OsqqMziST8=
+			</data>
+		</dict>
+		<key>PrivateHeaders/bnb/spal/camera/video_mocker.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			BGAdJnA1D/93F7qZlPo9bT9UVSU=
+			</data>
+			<key>hash2</key>
+			<data>
+			5Wo+bXo7/cQWbY2W/25moZQQBLkzbZpqEMaElRnmMOo=
+			</data>
+		</dict>
 		<key>PrivateHeaders/bnb/spal/interfaces/all.hpp</key>
 		<dict>
 			<key>hash</key>
@@ -3946,6 +4118,17 @@
 			<key>hash2</key>
 			<data>
 			x2DoUqbmMV00T3jwt0BCOYF3ap2TdKpmy7UOp0rs0wE=
+			</data>
+		</dict>
+		<key>PrivateHeaders/bnb/types/constants.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			1+DI7KJDfSe1BqNy2Vkl9OjjGBg=
+			</data>
+			<key>hash2</key>
+			<data>
+			eJeelzGTiDWSaVlLz+4vG8fUt91oKQM5f1qsnet486U=
 			</data>
 		</dict>
 		<key>PrivateHeaders/bnb/types/full_image.hpp</key>
@@ -4267,6 +4450,17 @@
 			oD9eOSmNfxRuKRo0t+EfvB1lME59RmUxQQSsdb6N8Bs=
 			</data>
 		</dict>
+		<key>PrivateHeaders/bnb/utils/assert.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			D1h57jOAdEdO47jLHn6XBH5As1Y=
+			</data>
+			<key>hash2</key>
+			<data>
+			elOWBIwkYwtoYPRICXVFbO4Wg2ksXeHpKqY+FLGu8/c=
+			</data>
+		</dict>
 		<key>PrivateHeaders/bnb/utils/class_unique_id.hpp</key>
 		<dict>
 			<key>hash</key>
@@ -4309,6 +4503,17 @@
 			<key>hash2</key>
 			<data>
 			p9s/4rd4rJxonpGkkPzOYIsK3C8yKaGX/BBovDohIBM=
+			</data>
+		</dict>
+		<key>PrivateHeaders/bnb/utils/exceptions.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			VPFFm96e0/LcAAR9YAbH6HC0BHY=
+			</data>
+			<key>hash2</key>
+			<data>
+			+Gz6o9/n4X71RJ/7GjlL4xAgbWsAEDvT5NKq/0eqpi8=
 			</data>
 		</dict>
 		<key>PrivateHeaders/bnb/utils/interfaces/all.hpp</key>
@@ -4399,6 +4604,17 @@
 			VO0OQD4m8ysJ7k5E/vNbNN+c6a5In6hs5qrQ+R8IDhQ=
 			</data>
 		</dict>
+		<key>PrivateHeaders/bnb/utils/singleton.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			1syyVnS4BkieS9rH1UZdrQ+Ca5c=
+			</data>
+			<key>hash2</key>
+			<data>
+			VzqiWs7S450rrEZaPUA4zCY1/loqXjbHUcFdqE5lGLQ=
+			</data>
+		</dict>
 		<key>PrivateHeaders/bnb/utils/stack_pimpl.hpp</key>
 		<dict>
 			<key>hash</key>
@@ -4414,11 +4630,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Myf5zcFLho1NAWg69AgarelNHjw=
+			nYuCK8iD4iDPLXS9ovigyo0TUSk=
 			</data>
 			<key>hash2</key>
 			<data>
-			fLJJ9jE7dWk6Jp+m53POtIq2GOPx61HKigYgF4tteqM=
+			oVkW2TYIiCkDFQjNWyHPnzQcxZ1jS2Mpe3UB7go3KWk=
+			</data>
+		</dict>
+		<key>PrivateHeaders/bnb/utils/std/filesystem.hpp</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			f+ovhUIXykOFXlJBH0JKTs6DeUg=
+			</data>
+			<key>hash2</key>
+			<data>
+			0w9RcDn9qy7lI04aFnSZ/zICVfVT3iJWaSqp2psTPBw=
 			</data>
 		</dict>
 		<key>bnb-resources/MoMoFRX/edgetopology1.ef</key>
@@ -5464,6 +5691,94 @@
 			<key>hash2</key>
 			<data>
 			N0cI//dxndWXnsh11WzSKG9tPPfsMXo7JWMqqyjsN7s=
+			</data>
+		</dict>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/analytics/coremldata.bin</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			MRAQs0ZNEQza/AYTY7ivMC/XzN4=
+			</data>
+			<key>hash2</key>
+			<data>
+			adeDLtAUHIlD1In9Dc5No1Hv6xuZlxNcFOttJeADkvw=
+			</data>
+		</dict>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/coremldata.bin</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			KWW7ku2SFbFeQbcpGb58kx6avVo=
+			</data>
+			<key>hash2</key>
+			<data>
+			PWY4KqFzJYXUCC2EgnRaei41148pdy6gGTg1Wk54ONo=
+			</data>
+		</dict>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/metadata.json</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			0KejG15MzI5N2DA4ELzaXdaYujo=
+			</data>
+			<key>hash2</key>
+			<data>
+			Yz6e5s5gnbGdELrwzvddIrHqMM0FuLdL1GbDu1P8Q5E=
+			</data>
+		</dict>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/model.espresso.net</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			xX0Vck19u2/T2t4LgiTt3asvrmM=
+			</data>
+			<key>hash2</key>
+			<data>
+			CmN69H/jT/3MZ29FuJcBMLLEQgLUHA+kdPnT/ang2k4=
+			</data>
+		</dict>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/model.espresso.shape</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			shcYAl52oiL+bM8WZWTGZx5BvCQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			D3f8S4uU1dTe/iyqgtkjR59CSs+mjaZIyO4FUE6VMdM=
+			</data>
+		</dict>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/model.espresso.weights</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			3VNhMDtrcBPiVBHIom4RxFkkPSQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			Xf1LdzLHAJubhldnwtDdEwvWdEAJ/gamBtjbaA/5jxk=
+			</data>
+		</dict>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/model/coremldata.bin</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			yNfQ7w7t+oLS6hqlkoRbmm1LArc=
+			</data>
+			<key>hash2</key>
+			<data>
+			9aX9QtFqIDAnmO9u0wmXm0MAPSMg2fDo6pgxqSdZ+0s=
+			</data>
+		</dict>
+		<key>bnb-resources/cml/coreMLNails.mlmodelc/neural_network_optionals/coremldata.bin</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			uA3l0Th1hUHF8FJlrRRKufqG0ds=
+			</data>
+			<key>hash2</key>
+			<data>
+			LDTOHfI7g4xavyp/ZDfMo9MGftUJ/yXxHfaxG1grUes=
 			</data>
 		</dict>
 		<key>bnb-resources/cml/coreMLNeck.mlmodelc/coremldata.bin</key>

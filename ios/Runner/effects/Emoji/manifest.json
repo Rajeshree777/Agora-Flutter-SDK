@@ -1,0 +1,19 @@
+{
+    "name": "Emoji",
+    "effectVersionInfo": {
+        "commit": "0b207ddf13b89ff3b176b7da394ad4c9b19d100f",
+        "date": "2018-11-12",
+        "time": "13:15:04",
+        "author": "Ryhor Spivak"
+    },
+    "buildToolsVersionInfo": {
+        "commit": "6c4f87b75f214de1559d54e5d957aef08adb08ac",
+        "date": "2020-03-12",
+        "time": "18:06:58",
+        "author": "Aleksey Cherkes"
+    },
+    "capabilities": {
+        "effectPlayerMajorVersion": 5,
+        "effectPlayerMinorVersion": 1
+    }
+}

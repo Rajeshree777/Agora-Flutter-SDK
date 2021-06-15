@@ -1,0 +1,19 @@
+{
+    "name": "HeartsLut",
+    "effectVersionInfo": {
+        "commit": "2792c0fc4e484af37204bc66877bab1309470c6c",
+        "date": "2020-11-26",
+        "time": "12:27:24",
+        "author": "Anton Korshunov"
+    },
+    "buildToolsVersionInfo": {
+        "commit": "6c4f87b75f214de1559d54e5d957aef08adb08ac",
+        "date": "2020-03-12",
+        "time": "18:06:58",
+        "author": "Aleksey Cherkes"
+    },
+    "capabilities": {
+        "effectPlayerMajorVersion": 5,
+        "effectPlayerMinorVersion": 1
+    }
+}

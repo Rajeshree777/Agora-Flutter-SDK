@@ -1,0 +1,14 @@
+msaa = 1
+shadowmap_size = 512
+adjust_znear = 150
+draw_order = ["TriMat"]
+
+[materials.TriMat]
+vs = "bg.vert"
+fs = "bg_video.frag"
+blend = "off"
+backfaces = false
+colorwrite = true
+zwrite = false
+shadow = false
+samplers = {}

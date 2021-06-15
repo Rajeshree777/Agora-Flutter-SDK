@@ -1,0 +1,25 @@
+{
+  "name": "BeautyEffectsGrayscale",
+  "frx": {
+    "type": "3d_anim",
+    "3d_anim": {
+      "type": "vfx"
+    }
+  },
+  "final": {
+    "type": "FILTER",
+    "filter": {
+      "fragmentCode": "finalColorFilter.fsh",
+      "textures": [{
+        "file": "bwcontrast.png",
+        "sampler": "lookupTexture",
+        "magFilter": "LINEAR",
+        "minFilter": "LINEAR"
+      }]
+    }
+  },
+  "recordDuration": 15,
+  "recognizer" : [
+    "background"
+  ]
+}

@@ -437,7 +437,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     @objc func destroyBanubaCamera(_ callback: Callback) {
         print("Destroy Banuba Camera")
         print("ReleaseBanubaCamera iOS")
-        BanubaSdkManager.destroy()
+        //BanubaSdkManager.destroy()
         self.ReleaseBanubaCamera()
         callback.resolve(engine) { [weak self] _ in
             // self?.ReleaseBanubaCamera()

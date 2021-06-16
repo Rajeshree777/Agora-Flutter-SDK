@@ -1,0 +1,40 @@
+{
+  "name": "PrideParade2",
+  "recordDuration": 15,
+  "sounds": [
+    {
+      "trackName": "music.ogg",
+      "volume": 1.0,
+      "type": "background"
+    }
+  ],
+  "frx": {
+    "type": "3d_anim",
+    "3d_anim": {
+      "type": "vfx"
+    }
+  },
+  "foreground" : {
+    "type" : "MEDIA",
+    "media" : {
+      "type" : "VIDEO",
+      "file" : "rainbowleaks_2.mp4",
+      "videoSpeed" : 1.0,
+      "blend" : "SCREEN",
+      "mode" : "RGB"
+    }
+  },
+  "final" : {
+      "type" : "FILTER",
+
+      "filter" : {
+        "fragmentCode" : "finalColorFilter.fsh",
+        "textures" : [{
+          "file" : "LUT_sunny.png",
+          "sampler" : "lookupTexture",
+          "magFilter" : "LINEAR",
+          "minFilter" : "LINEAR"
+      }] 
+    }
+  }
+}

@@ -1,0 +1,111 @@
+warp_mesh = "morph.bsm2"
+msaa = 1
+shadowmap_size = 512
+adjust_znear = 600
+adjust_zfar = 600
+draw_order = ['retouch', '!glfx_WARP_IMAGE', 'morph_mat', 'matte_mat', 'heart_simple_mat', 'emoji_mat', 'heart_sparcles_mat', 'rose_mat']
+
+# Retouch
+[materials.retouch]
+vs = "retouch.vert"
+fs = "retouch.frag"
+blend = "off" # "alpha", "premul_alpha", "screen", "add", "multiply", "coverage", "off"
+backfaces = false
+colorwrite = true
+zwrite = true
+shadow = false
+onface = true
+mouth = true
+[materials.retouch.samplers]
+selection_tex="REDMASK_v3_256.png"
+lookupTexTeeth="teeth_middle.png"
+lookupTexEyes="eyes_middle.png"
+tex_softLight="soft_low_256.png"
+tex_normalMakeup="unisex_minimal_512.png"
+tex_highlight="eye_highlight.png"
+
+# PBR
+[materials.morph_mat]
+vs = "morph_mat.vert"
+fs = "morph_mat.frag"
+blend = "off" # "alpha", "premul_alpha", "screen", "add", "multiply", "coverage", "off"
+backfaces = false
+colorwrite = false
+zwrite = true
+shadow = true
+samplers = {}
+
+# PBR
+[materials.matte_mat]
+vs = "vertex_no_rot.vert"
+fs = "matte_mat.frag"
+blend = "off" # "alpha", "premul_alpha", "screen", "add", "multiply", "coverage", "off"
+backfaces = false
+colorwrite = false
+zwrite = true
+shadow = true
+samplers = {}
+
+# PBR
+[materials.heart_simple_mat]
+vs = "vertex_no_rot.vert"
+fs = "heart_simple_mat.frag"
+blend = "off" # "alpha", "premul_alpha", "screen", "add", "multiply", "coverage", "off"
+backfaces = false
+colorwrite = true
+zwrite = true
+shadow = true
+[materials.heart_simple_mat.samplers]
+tex_diffuse="heart_simple_Base_Color.png"
+tex_normal="no_Normal.png"
+tex_metallic="no_Metallic.png"
+tex_roughness="heart_simple_Roughness.png"
+tex_emi="heart_simple_Base_Color.png"
+
+# PBR
+[materials.emoji_mat]
+vs = "vertex_no_rot.vert"
+fs = "emoji_mat.frag"
+blend = "off" # "alpha", "premul_alpha", "screen", "add", "multiply", "coverage", "off"
+backfaces = false
+colorwrite = true
+zwrite = true
+shadow = true
+[materials.emoji_mat.samplers]
+tex_diffuse="emoji_BaseColor.png"
+tex_normal="no_Normal.png"
+tex_metallic="no_Metallic.png"
+tex_roughness="emoji_Roughness.png"
+tex_emi="emoji_BaseColor.png"
+
+# PBR
+[materials.heart_sparcles_mat]
+vs = "vertex_no_rot.vert"
+fs = "heart_sparcles_mat.frag"
+blend = "off" # "alpha", "premul_alpha", "screen", "add", "multiply", "coverage", "off"
+backfaces = false
+colorwrite = true
+zwrite = true
+shadow = true
+[materials.heart_sparcles_mat.samplers]
+tex_diffuse="heart_sparkles_Base_Color.png"
+tex_normal="no_Normal.png"
+tex_metallic="no_Metallic.png"
+tex_roughness="heart_sparkles_Roughness.png"
+tex_emi="heart_sparkles_Base_Color.png"
+
+# PBR
+[materials.rose_mat]
+vs = "vertex_no_rot.vert"
+fs = "rose_mat.frag"
+blend = "off" # "alpha", "premul_alpha", "screen", "add", "multiply", "coverage", "off"
+backfaces = false
+colorwrite = true
+zwrite = true
+shadow = true
+[materials.rose_mat.samplers]
+tex_diffuse="rose_Base_Color.png"
+tex_normal="no_Normal.png"
+tex_metallic="no_Metallic.png"
+tex_roughness="rose_Roughness.png"
+tex_emi="rose_Base_Color.png"

@@ -1,0 +1,58 @@
+warp_mesh = "Beauty06.bsm2"
+
+draw_order = ["retouch",'!glfx_WARP_IMAGE', "Texture1",'!glfx_UPDATE_BG',"LutSwp","plane_2",'Quad_R3']
+
+[materials.Quad_R3]
+vs = "gui_quad_R3.vert"
+fs = "gui_quad.frag"
+blend = "alpha" # "alpha", "premul_alpha", "screen", "add", "multiply"
+backfaces = true
+colorwrite = true
+zwrite = true
+shadow = false
+[materials.Quad_R3.samplers]
+tex=0
+
+[materials.retouch]
+vs = "retouch.vert"
+fs = "retouch.frag"
+blend = "off"
+backfaces = false
+colorwrite = true
+zwrite = true
+shadow = false
+onface = true
+mouth = true
+samplers = { selection_tex="redmask_new_2.png", lookupTexEyes="lut_80_percent.png", tex_makeup="soft.png", tex_highlight="flare66.png" }
+
+[materials.Texture1]
+vs = "vertex_no_rot.vert"
+fs = "video_a.frag"
+blend = "alpha" # "alpha", "premul_alpha", "screen", "add", "multiply"
+backfaces = true
+colorwrite = true
+zwrite = false
+shadow = false
+samplers = {}
+
+[materials.LutSwp]
+vs = "lut_swipe.vert"
+fs = "lut_swipe.frag"
+blend = "off" # "alpha", "premul_alpha", "screen", "add", "multiply"
+backfaces = false
+colorwrite = true
+zwrite = false
+ztest = false
+shadow = false
+samplers = {luttex1=0, luttex2=1}
+
+[materials.plane_2]
+vs = "plane2.vert"
+fs = "video2.frag"
+blend = "alpha" # "alpha", "premul_alpha", "screen", "add", "multiply", "coverage", "off"
+backfaces = true
+colorwrite = true
+zwrite = false
+ztest = false
+shadow = false
+samplers = {}

@@ -1,0 +1,17 @@
+{
+  "name": "BG_Video_Beach",
+  "recordDuration": 15,
+  "frx": {
+    "type": "3d_anim",
+    "3d_anim": {
+      "type": "vfx"
+    },
+    "media": {
+    "type": "VIDEO",
+    "file": "Beach.mp4"
+    }
+  },
+  "recognizer" : [
+    "background"
+  ]
+}

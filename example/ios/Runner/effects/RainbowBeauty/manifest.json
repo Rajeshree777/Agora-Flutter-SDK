@@ -1,0 +1,19 @@
+{
+    "name": "RainbowBeauty",
+    "effectVersionInfo": {
+        "commit": "d64cbbe5e348b19d18d9cd19ec11d2b2723e819a",
+        "date": "2019-04-12",
+        "time": "09:47:10",
+        "author": "Andrey Afanasiev"
+    },
+    "buildToolsVersionInfo": {
+        "commit": "6c4f87b75f214de1559d54e5d957aef08adb08ac",
+        "date": "2020-03-12",
+        "time": "18:06:58",
+        "author": "Aleksey Cherkes"
+    },
+    "capabilities": {
+        "effectPlayerMajorVersion": 5,
+        "effectPlayerMinorVersion": 1
+    }
+}

@@ -1,0 +1,52 @@
+warp_mesh = "BeautyFaceSP.bsm2"
+msaa = 1
+shadowmap_size = 512
+adjust_znear = 150
+draw_order = ['retouch', 'facemat', '!glfx_WARP_IMAGE', 'bokeh']
+
+# Retouch
+[materials.retouch]
+vs = "retouch.vert"
+fs = "retouch.frag"
+blend = "off" # "alpha", "premul_alpha", "screen", "add", "multiply", "coverage", "off"
+backfaces = false
+colorwrite = true
+zwrite = true
+shadow = false
+onface = true
+mouth = true
+[materials.retouch.samplers]
+selection_tex="REDMASK_v3_256.png"
+lookupTexTeeth="TEETH_medium.png"
+lookupTexEyes="EYES_medium.png"
+tex_softLight="SOFT_princess_256.png"
+tex_normalMakeup="lashes7.png"
+tex_highlight="FLARE_41_768.png"
+
+# Cut
+[materials.facemat]
+vs = "facemat.vert"
+fs = "facemat.frag"
+blend = "off"
+backfaces = false
+colorwrite = false
+zwrite = true
+shadow = false
+samplers = {}
+
+# PBR
+[materials.bokeh]
+vs = "bokeh.vert"
+fs = "bokeh.frag"
+blend = "alpha" # "alpha", "premul_alpha", "screen", "add", "multiply", "coverage", "off"
+backfaces = false
+colorwrite = true
+zwrite = true
+shadow = false
+[materials.bokeh.samplers]
+tex_diffuse="bokeh_Base_Color.ktx"
+tex_normal="bokeh_Normal.ktx"
+tex_brdf="brdf.ktx"
+tex_ibl_diff="ibl_diff.ktx"
+tex_ibl_spec="ibl_spec.ktx"
+tex_mrao="bokeh_MRAO.ktx"

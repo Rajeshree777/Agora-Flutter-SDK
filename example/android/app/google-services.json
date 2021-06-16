@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "539778290013",
+    "project_id": "dayo-308723",
+    "storage_bucket": "dayo-308723.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539778290013:android:534342804a0902af4dd8b4",
+        "android_client_info": {
+          "package_name": "com.toppointellc.dayo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539778290013-34pgsqacdbsjmhccvchjvhr6gdrsu86s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlJrV7svFkg_nbBgZB4AUz37a5U1W8YEE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539778290013-34pgsqacdbsjmhccvchjvhr6gdrsu86s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

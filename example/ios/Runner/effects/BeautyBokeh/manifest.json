@@ -1,0 +1,19 @@
+{
+    "name": "BeautyBokeh",
+    "effectVersionInfo": {
+        "commit": "604b2bd180ef4c906ad3f1c1ff642cce5310e5bf",
+        "date": "2018-12-05",
+        "time": "13:34:40",
+        "author": "v.makarevich"
+    },
+    "buildToolsVersionInfo": {
+        "commit": "6c4f87b75f214de1559d54e5d957aef08adb08ac",
+        "date": "2020-03-12",
+        "time": "18:06:58",
+        "author": "Aleksey Cherkes"
+    },
+    "capabilities": {
+        "effectPlayerMajorVersion": 5,
+        "effectPlayerMinorVersion": 1
+    }
+}

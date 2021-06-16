@@ -1,0 +1,35 @@
+{
+  "name": "HeartsLut",
+  "frx": {
+    "type" : "3d_anim",
+    "3d_anim" : {
+      "type" : "vfx" 
+    },
+    "media": {
+      "type": "VIDEO",
+      "file": "uv.mp4"
+    }
+  },
+  "recordDuration" : 14,
+  "sounds": [
+    {
+      "trackName": "music1.ogg",
+      "volume": 1.0,
+      "type": "background"
+    }
+  ],
+  "final" : {
+      "type" : "FILTER",
+
+      "filter" : {
+        "fragmentCode" : "finalColorFilter.fsh",
+        "textures" : [{
+          "file" : "lilac.png",
+          "sampler" : "lookupTexture",
+          "magFilter" : "LINEAR",
+          "minFilter" : "LINEAR"
+        }]
+      }
+
+  }
+}

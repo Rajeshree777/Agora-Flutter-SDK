@@ -1,0 +1,27 @@
+{
+  "name": "2_5D_WhiteCat",
+  "frx": {
+    "type" : "3d_anim",
+    "3d_anim" : {
+      "type" : "vfx"
+    },
+    "media": {
+      "type": "VIDEO",
+      "file": "cat_C.mp4"
+    }
+  },
+  "final": {
+    "type": "FILTER",
+    "filter": {
+      "fragmentCode": "finalColorFilter.fsh",
+      "textures": [{
+        "file": "heart.png",
+        "sampler": "lookupTexture",
+        "magFilter": "LINEAR",
+        "minFilter": "LINEAR"
+      }]
+    }
+  },
+  "sounds" : [ { "trackName" : "caaat_sndfnt_v2_L_Channel.ogg" } ],
+  "recordDuration" : 15
+}

@@ -612,10 +612,9 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.code(engine?.adjustPlaybackSignalVolume((params["volume"] as! NSNumber).intValue))
     }
 
-    @objc func enableLocalVideo(_ params: NSDictionary, _ callback: Callback) {
-              NotificationCenter.default.post(name: .cameraPauseModeChangeNotification, object: params["enabled"] as! Bool)
-             callback.code(engine?.enableLocalVideo(params["enabled"] as! Bool))
-          }
+    @objc func enableLocalAudio(_ params: NSDictionary, _ callback: Callback) {
+        callback.code(engine?.enableLocalAudio(params["enabled"] as! Bool))
+    }
 
     @objc func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.muteLocalAudioStream(params["muted"] as! Bool))
@@ -675,8 +674,9 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func enableLocalVideo(_ params: NSDictionary, _ callback: Callback) {
+        NotificationCenter.default.post(name: .cameraPauseModeChangeNotification, object: params["enabled"] as! Bool)
         callback.code(engine?.enableLocalVideo(params["enabled"] as! Bool))
-    }
+     }
 
     @objc func muteLocalVideoStream(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.muteLocalVideoStream(params["muted"] as! Bool))

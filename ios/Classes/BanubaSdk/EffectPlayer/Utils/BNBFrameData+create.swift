@@ -1,4 +1,5 @@
 import BanubaEffectPlayer
+#if BNB_ENABLE_ARKIT
 import ARKit
 
 @available(iOS 11.0, *)
@@ -57,8 +58,10 @@ fileprivate let auMapping: [BNBActionUnitsIndices: ARFaceAnchor.BlendShapeLocati
     .eyeLookOutRight: .eyeLookOutLeft,
     .eyeLookUpRight: .eyeLookUpLeft,
 ]
+#endif
 
 public extension BNBFrameData {
+#if BNB_ENABLE_ARKIT
     @available(iOS 11.0, *)
     class func create(
         arFrame: ARFrame,
@@ -175,6 +178,7 @@ public extension BNBFrameData {
         }
         return result
     }
+#endif
     
     class func create(
         cvBuffer: CVPixelBuffer,

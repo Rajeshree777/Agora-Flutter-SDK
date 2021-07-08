@@ -1,13 +1,17 @@
 import Foundation
 import BanubaEffectPlayer
 import UIKit
+#if BNB_ENABLE_ARKIT
 import ARKit
+#endif
 
 @objc public protocol BanubaSdkManagerDelegate: AnyObject {
     func willPresentFramebuffer(renderSize: CGSize)
     func willOutput(pixelBuffer: CVPixelBuffer)
+#if BNB_ENABLE_ARKIT
     @available(iOS 11.0, *)
     func willOutput(arFrame: ARFrame)
+#endif
 }
 
 @objc public class BanubaSdkManager: NSObject {
@@ -379,12 +383,14 @@ private extension BanubaSdkManager {
         pushFrame(frameBuffer: cvBuffer)
     }
     
+#if BNB_ENABLE_ARKIT
     @available(iOS 11.0, *)
     public func push(frame: ARFrame, useBackCamera: Bool) {
         guard isLoaded else { return }
         updateOrientation()
         pushFrame(frame: frame, useBackCamera: useBackCamera)
     }
+#endif
 }
 
 //MARK: Frame data capture
@@ -973,6 +979,7 @@ private extension BanubaSdkManager {
         }
     }
     
+#if BNB_ENABLE_ARKIT
     @available(iOS 11.0, *)
     func pushFrame(frame: ARFrame, useBackCamera: Bool) {
         delegate?.willOutput(arFrame: frame)
@@ -989,6 +996,7 @@ private extension BanubaSdkManager {
             effectPlayer?.push(fd)
         }
     }
+#endif
     
     func surfaceCreated(width: Int32, height: Int32) {
         surfaceSize = CGSize(width: Int(width), height: Int(height))

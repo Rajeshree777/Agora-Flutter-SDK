@@ -46,7 +46,7 @@ class BanubaSurfaceView: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(flashModeChange), name: .flashModeChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(videoRecordChange), name: .videoRecodingChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(audioRecordChange), name: .audioChangeNotification, object: nil)
-
+        NotificationCenter.default.addObserver(self, selector: #selector(destroyBanubaEffectPlayer), name: .destroyBanubaEffectNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(cameraPauseModeChange), name: .cameraPauseModeChangeNotification, object: nil)
 
 //        banubaSdkManager.input.switchCamera(to: .BackCameraVideoSession) {
@@ -151,7 +151,7 @@ class BanubaSurfaceView: UIView {
            if let isPause = notification.object as? Bool {
                if (isPause) {
                    banubaSdkManager.input.stopCamera()
-                   banubaSdkManager.destroyEffectPlayer()
+//                   banubaSdkManager.destroyEffectPlayer()
                    banubaSdkManager.stopEffectPlayer()
                }
                else {
@@ -160,6 +160,11 @@ class BanubaSurfaceView: UIView {
                }
            }
        }
+
+        @objc func destroyBanubaEffectPlayer(notification: Notification) {
+          print("destroyBanubaEffectPlayer from surfaceview")
+             banubaSdkManager.destroyEffectPlayer()
+         }
 
 
     func observerForKeyPath() -> String {
@@ -177,6 +182,7 @@ class BanubaSurfaceView: UIView {
         NotificationCenter.default.removeObserver(self, name: .flashModeChangeNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .videoRecodingChangeNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .audioChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .destroyBanubaEffectNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .cameraPauseModeChangeNotification, object: nil)
 
         removeObserver(self, forKeyPath: observerForKeyPath(), context: nil)
@@ -191,6 +197,7 @@ class BanubaSurfaceView: UIView {
     override func layoutSubviews() {
 
         banubaSdkManager.input.startCamera()
+        banubaSdkManager.effectPlayer?.setEffectVolume(0)
         if (self.effectName != nil) {
             _ = banubaSdkManager.loadEffect(self.effectName ?? "")
         }

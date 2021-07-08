@@ -413,6 +413,7 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         mediaObserver = nil
     }
     func ReleaseBanubaCamera() {
+    NotificationCenter.default.post(name: .destroyBanubaEffectNotification, object: nil)
         BanubaSdkManager.deinitialize()
         engine = nil
         delegate = nil
@@ -611,9 +612,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.code(engine?.adjustPlaybackSignalVolume((params["volume"] as! NSNumber).intValue))
     }
 
-    @objc func enableLocalAudio(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.enableLocalAudio(params["enabled"] as! Bool))
-    }
+    @objc func enableLocalVideo(_ params: NSDictionary, _ callback: Callback) {
+              NotificationCenter.default.post(name: .cameraPauseModeChangeNotification, object: params["enabled"] as! Bool)
+             callback.code(engine?.enableLocalVideo(params["enabled"] as! Bool))
+          }
 
     @objc func muteLocalAudioStream(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.muteLocalAudioStream(params["muted"] as! Bool))

@@ -1595,7 +1595,7 @@ class RtcBanubaEngineConfig {
   ///
   /// For the regions that Agora supports, see [AreaCode]. After specifying the region, the SDK connects to the Agora servers within that region.
   @JsonKey(includeIfNull: false)
-  AreaCode areaCode;
+  AreaCode? areaCode;
 
   /// The configuration of the log files that the SDK outputs. See [LogConfig].
   ///
@@ -1603,7 +1603,7 @@ class RtcBanubaEngineConfig {
   /// These log files are encoded in UTF-8. The SDK writes the latest logs in `agorasdk.log`. When `agorasdk.log` is full, the SDK deletes the log file with the earliest modification
   /// time among the other four, renames `agorasdk.log` to the name of the deleted log file, and creates a new `agorasdk.log` to record latest logs.
   @JsonKey(includeIfNull: false)
-  LogConfig logConfig;
+  LogConfig? logConfig;
 
   /// Constructs a [RtcBanubaEngineConfig]
   RtcBanubaEngineConfig({this.areaCode, this.logConfig});

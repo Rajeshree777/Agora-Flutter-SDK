@@ -1098,7 +1098,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> switchCamera({bool isFrontCamera}) {
+  Future<void> switchCamera({bool? isFrontCamera}) {
     return _invokeMethod('switchCamera', {'isFrontCamera': isFrontCamera});
   }
 

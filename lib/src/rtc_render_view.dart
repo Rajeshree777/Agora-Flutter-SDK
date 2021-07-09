@@ -59,9 +59,9 @@ class RtcSurfaceView extends StatefulWidget {
   /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
-  final String effectName;
+  final String? effectName;
 
-  final int totalJoinedUser;
+  final int? totalJoinedUser;
 
   final bool isFrontCamera;
 

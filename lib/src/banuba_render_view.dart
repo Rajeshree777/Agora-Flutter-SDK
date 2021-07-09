@@ -16,7 +16,7 @@ final Map<int, MethodChannel> _channels = {};
 /// Use [UIView](https://developer.apple.com/documentation/uikit/uiview) in iOS.
 class BanubaSurfaceView extends StatefulWidget {
   /// User ID.
-  final int uid;
+  final int? uid;
 
   /// The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
   /// - All lowercase English letters: a to z.
@@ -39,17 +39,17 @@ class BanubaSurfaceView extends StatefulWidget {
   /// Control whether the surface view's surface is placed on top of its window.
   ///
   /// See [TargetPlatform.android].
-  final bool zOrderOnTop;
+  final bool? zOrderOnTop;
 
   /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
   ///
   /// See [TargetPlatform.android].
-  final bool zOrderMediaOverlay;
+  final bool? zOrderMediaOverlay;
 
   /// Callback signature for when a platform view was created.
   ///
   /// `id` is the platform view's unique identifier.
-  final PlatformViewCreatedCallback onPlatformViewCreated;
+  final PlatformViewCreatedCallback? onPlatformViewCreated;
 
   /// Which gestures should be consumed by the web view.
   ///
@@ -73,7 +73,7 @@ class BanubaSurfaceView extends StatefulWidget {
   BanubaSurfaceView({
     Key key,
     @required this.uid,
-    this.channelId,
+    required this.channelId,
     this.renderMode = VideoRenderMode.Hidden,
     this.mirrorMode = VideoMirrorMode.Auto,
     this.zOrderOnTop = false,

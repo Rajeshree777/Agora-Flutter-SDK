@@ -35,7 +35,7 @@ Open the `AndroidManifest.xml` file and add the required device permissions to t
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
     <!-- The Agora SDK requires Bluetooth permissions in case users are using Bluetooth devices.-->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     ...
@@ -53,13 +53,15 @@ Your application can still run the voice call when it is switched to the backgro
 
 ## Error handling
 
-### iOS video can't show (Android works fine)
+### Android build error
 
-Our SDK use `PlatformView`, you should set `io.flutter.embedded_views_preview` to `YES` in your *Info.plist*
+The error log like `Could not find com.github.agorabuilder:native-full-sdk:3.4.2.`
+
+pls refer to https://github.com/AgoraIO/Agora-Flutter-SDK/issues/321#issuecomment-843913064
 
 ## API
 
-* [Flutter API](https://agoraio.github.io/Flutter-SDK/index.html)
+* [Flutter API](https://docs.agora.io/en/All/api-ref?platform=Flutter)
 * [Android API](https://docs.agora.io/en/Video/API%20Reference/java/index.html)
 * [iOS API](https://docs.agora.io/en/Video/API%20Reference/oc/docs/headers/Agora-Objective-C-API-Overview.html)
 

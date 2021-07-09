@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('agora_rtc_engine');
+  const channel = MethodChannel('agora_rtc_engine');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -15,7 +15,7 @@ void main() {
   });
 
   test('LiveTranscoding', () {
-    var transcoding = LiveTranscoding(null, backgroundColor: Colors.red);
+    var transcoding = LiveTranscoding([], backgroundColor: Colors.red);
     print(transcoding.backgroundColor);
     print(transcoding.toJson());
   });

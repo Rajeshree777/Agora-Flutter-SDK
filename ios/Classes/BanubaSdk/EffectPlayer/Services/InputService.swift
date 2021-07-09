@@ -1,7 +1,9 @@
 import Accelerate
 import MediaPlayer
-import ARKit
 import BanubaEffectPlayer
+#if BNB_ENABLE_ARKIT
+import ARKit
+#endif
 
 @objc public protocol InputServicing: CameraServicing, AudioCapturing, CameraZoomable {
 }
@@ -55,8 +57,10 @@ public typealias RotateCameraCallBack = () -> ()
 @objc public protocol InputServiceDelegate: AnyObject {
     func push(cvBuffer: CVPixelBuffer)
     func push(cmBuffer: CMSampleBuffer)
+#if BNB_ENABLE_ARKIT
     @available(iOS 11.0, *)
     func push(frame: ARFrame, useBackCamera: Bool)
+#endif
 }
 
 @objc public enum CameraSessionType: Int {
@@ -69,7 +73,7 @@ public typealias RotateCameraCallBack = () -> ()
 @objc public class CameraPhotoSettings: NSObject {
     @objc public let useStabilization: Bool
     @objc public let flashMode: AVCaptureDevice.FlashMode
-    
+
     @objc public init(
         useStabilization: Bool,
         flashMode: AVCaptureDevice.FlashMode
@@ -86,7 +90,7 @@ internal class InputService: NSObject {
         case AudioDeviceInitializationFailed
         case AudioInputInitializationFailed
     }
-    
+
     struct Defaults {
         static let cameraDeviceInitFailedMessage = "Camera device initialization was failed!"
         static let cameraInputInitFailedMessage = "Camera input initialization was failed!"
@@ -104,17 +108,19 @@ internal class InputService: NSObject {
             kCVPixelFormatType_32ABGR: [3, 2, 1, 0]
         ]
     }
-    
+
+#if BNB_ENABLE_ARKIT
     @available(iOS 11.0, *)
     private var arConfiguration: ARConfiguration? {
         arConfigurationImpl as? ARConfiguration
     }
-    
+
     @available(iOS 11.0, *)
     private var arSession: ARSession? {
         self.arSessionImpl as? ARSession
     }
-    
+#endif
+
     private var arSessionImpl: AnyObject?
     private var arConfigurationImpl: AnyObject?
     private let fpsLimit: Double
@@ -140,7 +146,7 @@ internal class InputService: NSObject {
     private var duplicatesSampleBuffer = false
     private var avSessionErrorToken : Any?
     public weak var delegate: InputServiceDelegate?
-    
+
     public init(
         cameraMode: CameraSessionType,
         captureSessionPreset: AVCaptureSession.Preset,
@@ -150,11 +156,17 @@ internal class InputService: NSObject {
     ) {
         cameraSessionType = cameraMode
         self.captureSessionPreset = captureSessionPreset
+#if BNB_ENABLE_ARKIT
         if #available(iOS 11.0, *), ARFaceTrackingConfiguration.isSupported {
             self.useARKit = useARKitWhenAvailable
-        } else {
+        }
+        else {
             self.useARKit = false
         }
+#else
+        self.useARKit = false
+#endif
+
         self.fpsLimit = fpsLimit
         avSessionErrorToken = NotificationCenter.default.addObserver(
             forName: .AVCaptureSessionRuntimeError,
@@ -164,31 +176,35 @@ internal class InputService: NSObject {
             let error = note.userInfo?[AVCaptureSessionErrorKey]
             print("AVCaptureSessionRuntimeError: \(error ?? "unknown")")
         }
-        
+
         super.init()
-        
+
         if !delayedCameraInitialization {
             setupCamera()
         }
     }
-    
+
     private func setupCamera() {
         let isArkit = useARKit
         let sessionType = cameraSessionType
-        
+
         cameraSessionQueue.async { [weak self] in
+#if BNB_ENABLE_ARKIT
             if #available(iOS 11.0, *), isArkit {
                 self?.setupARKitSession()
             } else {
                 self?.configureCameraSession(type: sessionType)
             }
+#else
+            self?.configureCameraSession(type: sessionType)
+#endif
         }
     }
-    
+
     deinit {
         if let session = cameraCaptureSession {
             session.stopRunning()
-            
+
             session.inputs.forEach { (input) in
                 session.removeInput(input)
             }
@@ -197,13 +213,14 @@ internal class InputService: NSObject {
             }
             cameraCaptureSession = nil
         }
-        
+
         arSessionImpl = nil
         if let avObserver = avSessionErrorToken {
             NotificationCenter.default.removeObserver(avObserver)
         }
     }
-    
+
+#if BNB_ENABLE_ARKIT
     @available(iOS 11.0, * )
     private func setupARKitSession() {
         if arSessionImpl == nil {
@@ -216,20 +233,25 @@ internal class InputService: NSObject {
         arConfigurationImpl = configuration
         cameraSessionType = .FrontCameraPhotoSession
     }
-    
+#endif
+
     public func initializeCameraInput() {
         var isAlreadyInitialized = false
+#if BNB_ENABLE_ARKIT
         if #available(iOS 11.0, *), useARKit {
             isAlreadyInitialized = arSession != nil
         } else {
             isAlreadyInitialized = cameraCaptureSession != nil
         }
-        
+#else
+        isAlreadyInitialized = cameraCaptureSession != nil
+#endif
+
         if !isAlreadyInitialized {
             setupCamera()
         }
     }
-    
+
     public func setupCameraSession(withType type: CameraSessionType, zoomFactor: Float? = nil, completion: @escaping RotateCameraCallBack = {}) {
         cameraSessionQueue.async { [weak self] in
             guard let self = self else { return }
@@ -239,16 +261,17 @@ internal class InputService: NSObject {
             self.switchCamera(to: type, completion: completion)
         }
     }
-    
+
     public func switchCamera(to type: CameraSessionType, completion: @escaping RotateCameraCallBack = {}) {
+#if BNB_ENABLE_ARKIT
         if #available(iOS 11.0, *), useARKit {
             guard let arSession = arSession else {
                 completion()
                 return
             }
-            
+
             useBackCamera = (type == .BackCameraPhotoSession || type == .BackCameraVideoSession)
-            
+
             if useBackCamera {
                 let configuration = ARWorldTrackingConfiguration()
                 configuration.isLightEstimationEnabled = true
@@ -266,13 +289,20 @@ internal class InputService: NSObject {
             completion()
         } else {
             defer { completion() }
-            
+
             guard cameraCaptureSession != nil else { return }
-            
+
             configureCameraSession(type: type)
         }
+#else
+        defer { completion() }
+
+        guard cameraCaptureSession != nil else { return }
+
+        configureCameraSession(type: type)
+#endif
     }
-    
+
     public func restoreCurrentCameraSessionSettings(completion: (() -> Void)? = nil) {
         cameraSessionQueue.async { [weak self] in
             guard let self = self else { return }
@@ -280,9 +310,9 @@ internal class InputService: NSObject {
             completion?()
         }
     }
-    
+
     private func configureCameraSession(type: CameraSessionType) {
-        #if !TARGET_IPHONE_SIMULATOR
+#if !TARGET_IPHONE_SIMULATOR
         if cameraCaptureSession == nil {
             cameraCaptureSession = AVCaptureSession()
         }
@@ -324,12 +354,12 @@ internal class InputService: NSObject {
             session.addOutput(photoOutput)
             cameraPhotoOutput = photoOutput
         }
-        
+
         let videoOutput = defaultVideoSessionOutput()
         if let previousVideoOutput = cameraVideoOutput {
             session.removeOutput(previousVideoOutput)
         }
-        
+
         if session.canAddOutput(videoOutput) {
             session.addOutput(videoOutput)
             if let captureConnection = videoOutput.connection(with: .video) {
@@ -343,7 +373,7 @@ internal class InputService: NSObject {
             cameraVideoOutput = videoOutput
         }
         session.commitConfiguration()
-        
+
         // If capture session was running before, we should ensure that it still running after reconfiguration,
         // because sometimes device could stop session after applying new settings (very unstable and rare issue).
         if isSessionRunning {
@@ -351,7 +381,7 @@ internal class InputService: NSObject {
         }
         #endif // !TARGET_IPHONE_SIMULATOR
     }
-    
+
     private func setupAudioCaptureSessionIfNeeded() {
         guard audioSession == nil else { return }
         let session = AVCaptureSession()
@@ -384,13 +414,13 @@ internal class InputService: NSObject {
             print(Defaults.audioInputInitFailedMessage)
         }
     }
-    
+
     private func defaultPhotoSessionOutput() -> AVCapturePhotoOutput {
         let photoOutput = AVCapturePhotoOutput()
         photoOutput.isHighResolutionCaptureEnabled = true
         return photoOutput
     }
-    
+
     private func defaultVideoSessionOutput() -> AVCaptureVideoDataOutput {
         let videoOutput = AVCaptureVideoDataOutput()
         videoOutput.alwaysDiscardsLateVideoFrames = true
@@ -417,27 +447,27 @@ extension InputService: AVCaptureDataDelegate {
             delegate?.push(cvBuffer: pixelBuffer)
         }
     }
-    
+
     public func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         // handle sampleBuffer drops ?
     }
-    
+
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingRawPhoto rawSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         handlePhotoCapturing(sampleBuffer: rawSampleBuffer, error: error)
     }
-    
+
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         handlePhotoCapturing(sampleBuffer: photoSampleBuffer, error: error)
     }
-    
+
     private func handlePhotoCapturing(sampleBuffer: CMSampleBuffer?, error: Error?) {
         var isMirrored = false
         if flipCamera && isFrontCamera {
             isMirrored = true
         }
-        
+
         defer { photoCompletionHandler = nil }
-        
+
         guard error == nil,
               let imageSample = sampleBuffer,
               let imageBuffer = BanubaSdkManager.scaleBeforeProcessing(
@@ -458,13 +488,14 @@ extension InputService: AVCaptureDataDelegate {
     }
 }
 
+#if BNB_ENABLE_ARKIT
 @available(iOS 11.0, *)
 extension InputService: ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         if shouldSkipFrameAtTime(time: frame.timestamp) {
             return
         }
-        
+
         if let photoCompletionHandler = self.photoCompletionHandler {
             let angle = BanubaSdkManager.currentDeviceOrientation.effectsPlayerAngle ?? 0
             let frameData = BNBFrameData.create(
@@ -480,12 +511,12 @@ extension InputService: ARSessionDelegate {
             )
             self.photoCompletionHandler = nil
         }
-        
+
         self.cameraSessionType = session.configuration is ARFaceTrackingConfiguration ?
             .FrontCameraPhotoSession : .BackCameraPhotoSession
         delegate?.push(frame: frame, useBackCamera: !self.isFrontCamera)
     }
-    
+
     private func shouldSkipFrameAtTime(time: TimeInterval) -> Bool {
         if self.timeOfReceivingLastFrame != 0 && (self.timeOfReceivingLastFrame + Double(1 / fpsLimit)) > time {
             return true
@@ -493,7 +524,7 @@ extension InputService: ARSessionDelegate {
         self.timeOfReceivingLastFrame = time
         return false
     }
-    
+
     public func session(_ session: ARSession, didFailWithError error: Error) {
         guard let arError = error as? ARError else { return }
         let errorWithInfo = arError as NSError
@@ -512,6 +543,7 @@ extension InputService: ARSessionDelegate {
         }
     }
 }
+#endif
 
 extension InputService: InputServicing {
     public func configureExposureSettings(_ point: CGPoint, useContinuousDetection: Bool) {
@@ -532,29 +564,29 @@ extension InputService: InputServicing {
             print(Defaults.changeExposureSettingsFailedMessage)
         }
     }
-    
+
     public func configureFocusSettings(_ point: CGPoint, useContinuousDetection: Bool) {
         guard let camera = cameraDevice, camera.isFocusPointOfInterestSupported else { return }
-        
+
         var convertedPoint: CGPoint? = nil
         if point != .zero {
             convertedPoint = convertToPoint(point, isFrontCamera: isFrontCamera)
         }
-        
+
         do {
             try camera.lockForConfiguration()
-            
+
             let focusMode: AVCaptureDevice.FocusMode = useContinuousDetection ? .continuousAutoFocus: .autoFocus
-            
+
             camera.focusPointOfInterest = convertedPoint ?? camera.focusPointOfInterest
             camera.focusMode = focusMode
-            
+
             camera.unlockForConfiguration()
         } catch {
             print(Defaults.changeFocusSettingsFailedMessage)
         }
     }
-    
+
     /// Initial value uses a coordinate system where {0,0} is the top left of the picture area and {1,1} is the bottom right.
     /// Device exposure point coordinate system is always relative to a landscape device orientation
     /// with the home button on the right, regardless of the actual device orientation.
@@ -564,22 +596,22 @@ extension InputService: InputServicing {
         let convertedY = isFrontCamera ? point.x : 1.0 - point.x
         return CGPoint(x: point.y, y: convertedY)
     }
-    
+
     public var exposurePointOfInterest: CGPoint {
         guard let camera = cameraDevice else { return CGPoint.zero }
         return camera.exposurePointOfInterest
     }
-    
+
     public func setTorch(mode: AVCaptureDevice.TorchMode) -> AVCaptureDevice.TorchMode {
         guard let device = cameraDevice, device.hasTorch, device.isTorchAvailable else {
             return .off
         }
-        
+
         var newMode: AVCaptureDevice.TorchMode = device.isTorchActive ? .on : .off
-        
+
         do {
             try device.lockForConfiguration()
-            
+
             device.torchMode = mode
             device.unlockForConfiguration()
             newMode = mode
@@ -587,21 +619,22 @@ extension InputService: InputServicing {
             device.torchMode = .off
             device.unlockForConfiguration()
         }
-        
+
         return newMode
     }
-    
+
     public func toggleTorch() -> AVCaptureDevice.TorchMode {
         guard let device = cameraDevice else {
             return .off
         }
-        
+
         let isTorchActive = device.isTorchActive
-        
+
         return setTorch(mode: isTorchActive ? .off: .on)
     }
-    
+
     public var currentFieldOfView: Float {
+#if BNB_ENABLE_ARKIT
         if #available(iOS 11.0, *), useARKit, let arSession = arSession, let curFrame = arSession.currentFrame {
             let projection = curFrame.camera.projectionMatrix
             let yScale = projection[1,1]
@@ -612,28 +645,29 @@ extension InputService: InputServicing {
             let xFovDegrees = xFov * 180/Float.pi
             return max(yFovDegrees, xFovDegrees)
         }
+#endif
         guard let camera = cameraDevice else { return 0.0 }
         return Float(camera.activeFormat.videoFieldOfView)
     }
-    
+
     public var isZoomFactorAdjustable: Bool {
         return abs(maxZoomFactor - minZoomFactor) > .ulpOfOne
     }
-    
+
     public var minZoomFactor: Float {
         return 1.0
     }
-    
+
     public var maxZoomFactor: Float {
         guard let camera = cameraDevice else { return minZoomFactor }
         return Float(camera.activeFormat.videoMaxZoomFactor)
     }
-    
+
     public var zoomFactor: Float {
         guard let camera = cameraDevice else { return minZoomFactor }
         return Float(camera.videoZoomFactor)
     }
-    
+
     public func setZoomFactor(_ zoomFactor: Float) -> Float {
         guard let camera = cameraDevice else { return minZoomFactor }
         if isZoomFactorAdjustable {
@@ -650,33 +684,38 @@ extension InputService: InputServicing {
             return minZoomFactor
         }
     }
-    
+
     public func startCamera() {
-        configureAudioSessionWithCategory(.ambient)
+   //   configureAudioSessionWithCategory(.ambient)
+        configureAudioSessionWithCategory(.playback)
+#if BNB_ENABLE_ARKIT
         if #available(iOS 11.0, *), useARKit,
            let arSession = arSession,
            let arConfiguration = arConfiguration {
             arSession.run(arConfiguration, options: .default)
             return
         }
+#endif
         cameraSessionQueue.async { [weak self] in
             guard let self = self, let session = self.cameraCaptureSession else { return }
             session.startRunning()
         }
     }
-    
+
     public func stopCamera() {
+#if BNB_ENABLE_ARKIT
         if #available(iOS 11.0, *), useARKit,
            let arSession = arSession {
             arSession.pause()
             return
         }
+#endif
         cameraSessionQueue.async { [weak self] in
             guard let self = self, let session = self.cameraCaptureSession else { return }
             session.stopRunning()
         }
     }
-    
+
     public func releaseAudioCaptureSession() {
         audioSessionQueue.async { [weak self] in
             guard let audioSession = self?.audioSession else { return }
@@ -692,7 +731,7 @@ extension InputService: InputServicing {
             audioSession.commitConfiguration()
         }
     }
-    
+
     public func initiatePhotoCapture(
         cameraSettings: CameraPhotoSettings,
         completion: @escaping (CVImageBuffer?, BNBFrameData?) -> Void
@@ -715,7 +754,7 @@ extension InputService: InputServicing {
             }
         }
     }
-    
+
     private func makePhoto(cameraPhotoSettings: CameraPhotoSettings) {
         guard isPhotoCameraSession, let photoOutput = cameraPhotoOutput else {
             photoCompletionHandler?(nil, nil)
@@ -733,45 +772,45 @@ extension InputService: InputServicing {
         )
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
-    
+
     public var isPhotoCameraSession: Bool {
         return cameraSessionType == .BackCameraPhotoSession ||
             cameraSessionType == .FrontCameraPhotoSession
     }
-    
+
     public var isFrontCamera: Bool {
         return cameraSessionType == .FrontCameraPhotoSession ||
             cameraSessionType == .FrontCameraVideoSession
     }
-    
+
     public var isCameraCapturing: Bool {
         guard let session = cameraCaptureSession else { return false }
         return session.isRunning
     }
-    
+
     public var currentCameraSessionType: CameraSessionType {
         return cameraSessionType
     }
-    
+
     public func setCameraSessionType(_ type: CameraSessionType, completion: @escaping RotateCameraCallBack) {
         guard cameraSessionType != type else { return }
         setupCameraSession(withType: type) {
             completion()
         }
     }
-    
+
     public func setCameraSessionType(_ type: CameraSessionType) {
         guard cameraSessionType != type else { return }
         setupCameraSession(withType: type)
     }
-    
+
     public func setCameraSessionType(_ type: CameraSessionType, zoomFactor: Float, completion: @escaping RotateCameraCallBack) {
         guard cameraSessionType != type else { return }
         setupCameraSession(withType: type, zoomFactor: zoomFactor) {
             completion()
         }
     }
-    
+
     public func startAudioCapturing() {
         audioSessionQueue.async { [weak self] in
             self?.setupAudioCaptureSessionIfNeeded()
@@ -779,7 +818,7 @@ extension InputService: InputServicing {
             session.startRunning()
         }
     }
-    
+
     public func stopAudioCapturing() {
         audioSessionQueue.async { [weak self] in
             guard let session = self?.audioSession else { return }
@@ -787,18 +826,20 @@ extension InputService: InputServicing {
             self?.duplicatesSampleBuffer = false
         }
     }
-    
+
     private func configureAudioSessionWithCategory(_ category: AVAudioSession.Category) {
         let audioSharedSession = AVAudioSession.sharedInstance()
         do {
-            try audioSharedSession.setCategory(category, mode: .default, options: .mixWithOthers)
+         //   try audioSharedSession.setCategory(category, mode: .default, options: .mixWithOthers)
+            try audioSharedSession.setCategory(category)
             try audioSharedSession.setActive(true)
         } catch {
             print(Defaults.configureAudioSessionFailedMessage)
         }
     }
-    
+
     func setMaxFaces(_ maxFaces: Int) {
+#if BNB_ENABLE_ARKIT
         if #available(iOS 13.0, *),
            useARKit,
            let arConfiguration = arConfiguration as? ARFaceTrackingConfiguration {
@@ -807,6 +848,7 @@ extension InputService: InputServicing {
             arConfiguration.maximumNumberOfTrackedFaces = min(supremum, maxFaces)
             arSession?.run(arConfiguration, options: .default)
         }
+#endif
     }
 }
 
@@ -827,7 +869,7 @@ extension InputService {
         static let adjustingFocusKeyPath = "adjustingFocus"
         static let adjustingExposureKeyPath = "adjustingExposure"
     }
-    
+
     func startObservingCameraAdjusting() {
         guard let device = cameraDevice else { return }
         device.addObserver(
@@ -849,14 +891,14 @@ extension InputService {
             context: &InputService.observingContext
         )
     }
-    
+
     func stopObservingCameraAdjusting() {
         guard let device = cameraDevice else { return }
         device.removeObserver(self, forKeyPath: ObservingKeys.adjustingWhiteBalanceKeyPath)
         device.removeObserver(self, forKeyPath: ObservingKeys.adjustingFocusKeyPath)
         device.removeObserver(self, forKeyPath: ObservingKeys.adjustingExposureKeyPath)
     }
-    
+
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context != &InputService.observingContext {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
@@ -878,7 +920,7 @@ extension CameraSessionType {
     public var isFrontCamera: Bool {
         return self == .FrontCameraPhotoSession || self == .FrontCameraVideoSession
     }
-    
+
     public var isPhotoMode: Bool {
         return self == .BackCameraPhotoSession || self == .FrontCameraPhotoSession
     }
@@ -888,11 +930,11 @@ fileprivate extension AVCaptureDevice {
     var isReadyToMakePhoto: Bool {
         return !isAdjusting
     }
-    
+
     private var isAdjusting: Bool {
         return adjustingProperties.isContainsTrue
     }
-    
+
     private var adjustingProperties: [Bool] {
         return [isAdjustingFocus, isAdjustingExposure, isAdjustingWhiteBalance]
     }
@@ -905,8 +947,10 @@ fileprivate extension Array where Element == Bool {
     }
 }
 
+#if BNB_ENABLE_ARKIT
 @available(iOS 11.0, *)
 fileprivate extension ARSession.RunOptions {
     static var `default`: Self = [.resetTracking, .removeExistingAnchors]
 }
+#endif
 

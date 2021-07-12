@@ -16,14 +16,15 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   /// Exposing methodChannel to other files
   static MethodChannel get methodChannel => _methodChannel;
 
-  static RtcBanubaEngine _engine;
+  static RtcBanubaEngine? _engine;
 
-  RtcBanubaEngineEventHandler _handler;
+  RtcBanubaEngineEventHandler? _handler;
 
+ // RtcBanubaEngine? rtcBanubaEngine = RtcBanubaEngine._();
   RtcBanubaEngine._() {}
 
-  static Future<T> _invokeMethod<T>(String method,
-      [Map<String, dynamic> arguments]) {
+  static Future<dynamic> _invokeMethod<T>(String method,
+      [Map<String, dynamic>? arguments]) {
     return _methodChannel.invokeMethod(method, arguments);
   }
 
@@ -40,7 +41,7 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   /// **Returns**
   ///
   /// The version of the current SDK in the string format. For example, 2.3.0.
-  static Future<String> getSdkVersion() {
+  static Future<dynamic> getSdkVersion() {
     return _invokeMethod('getSdkVersion');
   }
 
@@ -53,7 +54,7 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   /// **Returns**
   ///
   /// [WarningCode] or [ErrorCode].
-  static Future<String> getErrorDescription(int error) {
+  static Future<dynamic> getErrorDescription(int error) {
     return _invokeMethod('getErrorDescription', {'error': error});
   }
 
@@ -76,8 +77,9 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   /// - An [RtcBanubaEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
+  // Changed the Type From RtcBanubaEngine to dynamic
   @deprecated
-  static Future<RtcBanubaEngine> create() {
+  static Future<dynamic> create() {
     return createWithConfig(RtcBanubaEngineConfig());
   }
 
@@ -108,8 +110,9 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   /// - An [RtcBanubaEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
+  // Changed the Type From RtcBanubaEngine to dynamic
   @deprecated
-  static Future<RtcBanubaEngine> createWithAreaCode(
+  static Future<dynamic> createWithAreaCode(
       String appId, AreaCode areaCode) async {
     return createWithConfig(RtcBanubaEngineConfig(areaCode: areaCode));
   }
@@ -131,9 +134,14 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   /// - An [RtcBanubaEngine] instance if the method call succeeds.
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
-  static Future<RtcBanubaEngine> createWithConfig(
+  ///
+  // Changed the Type From RtcBanubaEngine to dynamic
+  static Future<dynamic> createWithConfig(
       RtcBanubaEngineConfig config) async {
-    if (_engine != null) return _engine;
+    if (_engine != null){
+     await Future.delayed(Duration(seconds: 1));
+      return _engine;
+    };
     await _invokeMethod(
         'createBanuba', {'config': config.toJson(), 'appType': 4});
     _engine = RtcBanubaEngine._();
@@ -172,7 +180,7 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<void> setClientRole(ClientRole role, [ClientRoleOptions options]) {
+  Future<void> setClientRole(ClientRole role, [ClientRoleOptions? options]) {
     return _invokeMethod('setClientRole', {
       'role': ClientRoleConverter(role).value(),
       'options': options?.toJson()
@@ -182,7 +190,7 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   @override
   Future<void> joinChannel(
       String token, String channelName, String optionalInfo, int optionalUid,
-      [ChannelMediaOptions options]) {
+      [ChannelMediaOptions? options]) {
     return _invokeMethod('joinChannel', {
       'token': token,
       'channelName': channelName,
@@ -201,7 +209,7 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
 
   @override
   Future<void> switchChannel(String token, String channelName,
-      [ChannelMediaOptions options]) {
+      [ChannelMediaOptions? options]) {
     return _invokeMethod('switchChannel', {
       'token': token,
       'channelName': channelName,
@@ -233,12 +241,14 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<String> getCallId() {
-    return _invokeMethod('getCallId');
+  Future<String> getCallId() async{
+   await Future.delayed(Duration(seconds:
+    1));
+    return "";//_invokeMethod('getCallId');
   }
 
   @override
-  Future<void> rate(String callId, int rating, {String description}) {
+  Future<void> rate(String callId, int rating, {String? description}) {
     return _invokeMethod('rate',
         {'callId': callId, 'rating': rating, 'description': description});
   }
@@ -292,7 +302,7 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   @override
   Future<void> joinChannelWithUserAccount(
       String token, String channelName, String userAccount,
-      [ChannelMediaOptions options]) {
+      [ChannelMediaOptions? options]) {
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
       'channelName': channelName,
@@ -455,23 +465,31 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<int> getAudioMixingCurrentPosition() {
-    return _invokeMethod('getAudioMixingCurrentPosition');
+  Future<int> getAudioMixingCurrentPosition() async{
+    await Future.delayed(Duration(seconds: 1));
+    return 0;
+    //return _invokeMethod('getAudioMixingCurrentPosition');
   }
 
   @override
-  Future<int> getAudioMixingDuration() {
-    return _invokeMethod('getAudioMixingDuration');
+  Future<int> getAudioMixingDuration() async{
+    await Future.delayed(Duration(seconds: 1));
+    return 0;
+    //return _invokeMethod('getAudioMixingDuration');
   }
 
   @override
-  Future<int> getAudioMixingPlayoutVolume() {
-    return _invokeMethod('getAudioMixingPlayoutVolume');
+  Future<int> getAudioMixingPlayoutVolume() async{
+    await Future.delayed(Duration(seconds: 1));
+    return 0;
+    //return _invokeMethod('getAudioMixingPlayoutVolume');
   }
 
   @override
-  Future<int> getAudioMixingPublishVolume() {
-    return _invokeMethod('getAudioMixingPublishVolume');
+  Future<int> getAudioMixingPublishVolume() async{
+    await Future.delayed(Duration(seconds: 1));
+    return 0;
+   // return _invokeMethod('getAudioMixingPublishVolume');
   }
 
   @override
@@ -530,10 +548,13 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<int> createDataStream(bool reliable, bool ordered) {
-    return _invokeMethod(
-        'createDataStream', {'reliable': reliable, 'ordered': ordered});
-  }
+  Future<int> createDataStream(bool reliable, bool ordered) async{
+    await Future.delayed(Duration(seconds: 1));
+    return 0;
+  //   return _invokeMethod(
+  //       'createDataStream', {'reliable': reliable, 'ordered': ordered});
+  //
+    }
 
   @override
   Future<void> disableLastmileTest() {
@@ -561,43 +582,59 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<double> getCameraMaxZoomFactor() {
-    return _invokeMethod('getCameraMaxZoomFactor');
+  Future<double> getCameraMaxZoomFactor() async {
+    await Future.delayed(Duration(seconds: 1));
+    return 0;
+    // return _invokeMethod('getCameraMaxZoomFactor');
   }
 
   @override
-  Future<double> getEffectsVolume() {
-    return _invokeMethod('getEffectsVolume');
+  Future<double> getEffectsVolume() async{
+    await Future.delayed(Duration(seconds: 1));
+    return 0;
+    // return _invokeMethod('getEffectsVolume');
   }
 
   @override
-  Future<bool> isCameraAutoFocusFaceModeSupported() {
-    return _invokeMethod('isCameraAutoFocusFaceModeSupported');
+  Future<bool> isCameraAutoFocusFaceModeSupported() async{
+    await Future.delayed(Duration(seconds: 1));
+    return false;
+    //return _invokeMethod('isCameraAutoFocusFaceModeSupported');
   }
 
   @override
-  Future<bool> isCameraExposurePositionSupported() {
-    return _invokeMethod('isCameraExposurePositionSupported');
+  Future<bool> isCameraExposurePositionSupported() async{
+    await Future.delayed(Duration(seconds: 1));
+    return false;
+  //  return _invokeMethod('isCameraExposurePositionSupported');
   }
 
   @override
-  Future<bool> isCameraFocusSupported() {
-    return _invokeMethod('isCameraFocusSupported');
+  Future<bool> isCameraFocusSupported() async{
+    await Future.delayed(Duration(seconds: 1));
+    return false;
+   // return _invokeMethod('isCameraFocusSupported');
   }
 
   @override
-  Future<bool> isCameraTorchSupported() {
-    return _invokeMethod('isCameraTorchSupported');
+  Future<bool> isCameraTorchSupported() async{
+    await Future.delayed(Duration(seconds: 1));
+    return false;
+    //return _invokeMethod('isCameraTorchSupported');
   }
 
   @override
-  Future<bool> isCameraZoomSupported() {
-    return _invokeMethod('isCameraZoomSupported');
+  Future<bool> isCameraZoomSupported() async{
+    await Future.delayed(Duration(seconds: 1));
+    return false;
+  //  return _invokeMethod('isCameraZoomSupported');
   }
 
   @override
-  Future<bool> isSpeakerphoneEnabled() {
-    return _invokeMethod('isSpeakerphoneEnabled');
+  Future<bool> isSpeakerphoneEnabled() async{
+    await Future.delayed(Duration(seconds: 1));
+    return false;
+    //return _invokeMethod('isSpeakerphoneEnabled');
   }
 
   @override
@@ -893,7 +930,7 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<void> switchCamera({bool isFrontCamera}) {
+  Future<void> switchCamera({bool? isFrontCamera}) {
     return _invokeMethod('switchCamera', {'isFrontCamera': isFrontCamera});
   }
 
@@ -908,8 +945,10 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<bool> isRecodingVideo() {
-    return _invokeMethod('isRecodingVideo');
+  Future<bool> isRecodingVideo() async{
+    await Future.delayed(Duration(seconds: 1));
+    return false;
+    //return _invokeMethod('isRecodingVideo');
   }
 
   @override
@@ -968,8 +1007,10 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<int> getNativeHandle() {
-    return _invokeMethod('getNativeHandle');
+  Future<int> getNativeHandle() async{
+    await Future.delayed(Duration(seconds: 1));
+    return 0;
+    // return _invokeMethod('getNativeHandle');
   }
 
   @override
@@ -995,9 +1036,11 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<int> createDataStreamWithConfig(DataStreamConfig config) {
-    return _invokeMethod(
-        'createDataStreamWithConfig', {'config': config.toJson()});
+  Future<int> createDataStreamWithConfig(DataStreamConfig config) async{
+    await Future.delayed(Duration(seconds: 1));
+    return 0;
+    // return _invokeMethod(
+    //     'createDataStreamWithConfig', {'config': config.toJson()});
   }
 
   @override
@@ -1018,8 +1061,10 @@ class RtcBanubaEngine with RtcBanubaEngineInterface {
   }
 
   @override
-  Future<String> uploadLogFile() {
-    return _invokeMethod('uploadLogFile');
+  Future<String> uploadLogFile()  async{
+    await Future.delayed(Duration(seconds: 1));
+    return '';
+    //return _invokeMethod('uploadLogFile');
   }
 
   @override

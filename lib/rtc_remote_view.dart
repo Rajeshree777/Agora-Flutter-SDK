@@ -18,7 +18,7 @@ class SurfaceView extends RtcSurfaceView {
     zOrderMediaOverlay = false,
     PlatformViewCreatedCallback? onPlatformViewCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
-    int totalJoinedUser,
+    int? totalJoinedUser,
   })  : assert(uid != 0),
         super(
             key: key,

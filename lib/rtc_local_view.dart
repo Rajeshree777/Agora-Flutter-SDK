@@ -18,8 +18,8 @@ class SurfaceView extends RtcSurfaceView {
     zOrderMediaOverlay = false,
     PlatformViewCreatedCallback? onPlatformViewCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
-    String effectName,
-    int totalJoinedUser,
+    String? effectName,
+    int? totalJoinedUser,
     bool isFrontCamera = true,
   }) : super(
             key: key,

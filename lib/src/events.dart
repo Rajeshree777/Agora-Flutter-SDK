@@ -1425,7 +1425,7 @@ class RtcBanubaEngineEventHandler {
   ///
   /// The `WarningCallback` typedef includes the following parameter:
   /// - [WarningCode] `warn`: Warning code.
-  WarningCallback warning;
+  WarningCallback? warning;
 
   /// Reports an error during SDK runtime.
   ///
@@ -1435,7 +1435,7 @@ class RtcBanubaEngineEventHandler {
   ///
   /// The `ErrorCallback` typedef includes the following parameter:
   /// - [ErrorCode] `err`: Error code.
-  ErrorCallback error;
+  ErrorCallback? error;
 
   /// Occurs when an API method is executed.
   ///
@@ -1443,7 +1443,7 @@ class RtcBanubaEngineEventHandler {
   /// - [ErrorCode] `error`: Error code.
   /// - [String] `api`: The method executed by the SDK.
   /// - [String] `result`: The result of the method call.
-  ApiCallCallback apiCallExecuted;
+  ApiCallCallback? apiCallExecuted;
 
   RtcBanubaEngineEventHandler({
     this.warning,

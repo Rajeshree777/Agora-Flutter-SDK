@@ -429,9 +429,7 @@ class _CallScreenState extends State<CallScreen> {
                         // gameId:'${widget.fromId}-${PreferenceHelper.getUserData().id.toString()}'
                       ),
                     ));
-                    if (navBack != null) {
-                      if (isCameraOn) _checkCameraAvailability();
-                    }
+
 
               /* Navigator.of(context).push(new ScalePageRoute(VideoDatingScreen(
                 agoraToken: widget.token,
@@ -532,12 +530,7 @@ class _CallScreenState extends State<CallScreen> {
                           isFromNotification: false,
                           selectedEffect: selectedEffect,
                         ),
-                      ))
-                          .then((navBack) {
-                        if (navBack != null) {
-                          if (isCameraOn) _checkCameraAvailability();
-                        }
-                      });
+                      ));
                     },
                     child: Container(
                       height: Constant.size50,

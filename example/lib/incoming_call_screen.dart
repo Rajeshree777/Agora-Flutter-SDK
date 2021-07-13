@@ -58,8 +58,8 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
                           iconColor: Colors.white,
                           iconSrc: "assets/icons/call_end.svg",
                         ),
-                        new RotationTransition(
-                          turns: new AlwaysStoppedAnimation(220 / 360),
+                        RotationTransition(
+                          turns: AlwaysStoppedAnimation(220 / 360),
                           child: RoundedButton(
                             press: () {
                               // call receive button
@@ -67,7 +67,7 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
                             },
                             color: Colors.green,
                             iconColor: Colors.white,
-                            iconSrc: "assets/icons/call_end.svg",
+                            iconSrc: 'assets/icons/call_end.svg',
                           ),
                         ),
                       ],
@@ -93,7 +93,7 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => CallScreen(
-            token: "0063a7d00163f6d41d6b533653369d4ce0eIAAvOfC9q5DZYCUWOnDX6bhSHv/1l0vMzaB+wyKbkBg9kHPFBqYAAAAAEAARnS3HbUrLYAEAAQBsSstg",
+            token: "0063a7d00163f6d41d6b533653369d4ce0eIABR/8ke/BSITbLl8v9TAAU0IgJSJpvkbrOlLYCyyY753HPFBqYAAAAAEADQXSp/6s/uYAEAAQDqz+5g",
             channel: 'calling',
             isStartCall: false,
             ),

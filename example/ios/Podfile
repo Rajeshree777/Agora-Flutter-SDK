@@ -72,8 +72,8 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
-      
-    
+
+
             config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
               '$(inherited)',
 
@@ -100,30 +100,23 @@ post_install do |installer|
 
               # dart: [PermissionGroup.location, PermissionGroup.locationAlways, PermissionGroup.locationWhenInUse]
               'PERMISSION_LOCATION=1',
-              
+
               # dart: PermissionGroup.notification
               'PERMISSION_NOTIFICATIONS=1',
 
               # dart: PermissionGroup.mediaLibrary
               'PERMISSION_MEDIA_LIBRARY=0',
-              
+
               # dart: PermissionGroup.bluetooth
               'PERMISSION_BLUETOOTH=0',
-              
+
               # dart: PermissionGroup.appTrackingTransparency
               'PERMISSION_APP_TRACKING_TRANSPARENCY=0',
-              
+
               ## dart: PermissionGroup.sensors
                'PERMISSION_SENSORS=0'
             ]
-      
+
     end
   end
-end
-
-target 'ImageNotification' do
-  use_frameworks!
-  pod 'Firebase/Messaging'
-  pod 'Firebase/Crashlytics'
-  pod 'Firebase/Analytics'
 end

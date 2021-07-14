@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:soda_app/incoming_call_screen.dart';
 import 'package:soda_app/ui/call_screen.dart';
 import 'package:soda_app/ui/video_record_screen.dart';
 
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  CupertinoPageRoute(builder: (context) => CallScreen()),
+                  CupertinoPageRoute(builder: (context) => IncomingCallScreen()),
                 );
               },
               child: Text('Video Call'),

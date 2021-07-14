@@ -702,14 +702,14 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
 
   List<String> effectNames = [
     "",
-    "HeadphoneMusic",
     "BeautyBokeh",
-    "BeautyEffectsGrayscale",
     "BGVideoBeach",
-    "Emoji",
-    "HeartsLut",
     "Polaroid",
     "PrideParade",
+    "BeautyEffectsGrayscale",
+    "Emoji",
+    "HeartsLut",
+    "HeadphoneMusic",
     "RainbowBeauty",
     "WhiteCat"
   ];

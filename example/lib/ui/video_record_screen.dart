@@ -28,6 +28,7 @@ import 'package:soda_app/source/image_assets.dart';
 import 'package:soda_app/source/string_assets.dart';
 import 'package:soda_app/source/styles.dart';
 import 'package:soda_app/ui/home_screen.dart';
+import 'package:soda_app/ui/video.dart';
 import 'package:soda_app/utils/common_widgets.dart';
 import 'package:soda_app/utils/constants.dart';
 import 'package:soda_app/utils/constants_methods.dart';
@@ -322,7 +323,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
                             child: InkWell(
                               onTap: () async {
                                 if (_listVideoModel.isNotEmpty) {
-                                  showCloseDialog();
+                                  Navigator.pop(context);
                                 } else {
                                   await stopRecording();
                                   if (widget.updateUI == null) {
@@ -608,19 +609,6 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Visibility(
-                                        visible: _listVideoModel != null &&
-                                            _listVideoModel.isNotEmpty &&
-                                            !_isRecording &&
-                                            !_showDelayText,
-                                        child: InkWell(
-                                          onTap: () => showDeleteLastClipDialog(),
-                                          child: Image.asset(
-                                            ImageAssets.backspaceImage,
-                                            height: ScreenUtil().setHeight(36.0),
-                                          ),
-                                        ),
-                                      ),
 
                                       SizedBox(
                                         width: ScreenUtil().setWidth(24.0),
@@ -1563,27 +1551,19 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
       if (Platform.isIOS && Constants.IS_BANUBA_ON) {
         printLog("leave");
         _engine.cameraPauseStop(true);
-        // _engine.destroyBanubaCamera();
-        // _engine = null;
+        _engine.destroyBanubaCamera();
+        _engine = null;
       } else {
         // _cameraController.dispose();
       }
-      // Navigator.push(
-      //     context,
-      //     CupertinoPageRoute(
-      //         builder: (context) => VideoPlaybackScreen(
-      //               outputVideoPath:
-      //                   (!updatedRecording && mergedVideo != "") ? mergedVideo : _listVideoModel.last.videoPath,
-      //               totalVideoList: _listVideoModel,
-      //               onBack: () {
-      //                 printLog("play");
-      //                 if (Platform.isIOS && Constants.IS_BANUBA_ON) {
-      //                   _engine.cameraPauseStop(false);
-      //                 }
-      //               },
-      //             ))).then((value) {
-      //   if (Platform.isAndroid || !Constants.IS_BANUBA_ON) _checkCameraAvailability();
-      // });
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (context) => VideoApp(
+                        (!updatedRecording && mergedVideo != '') ? mergedVideo : _listVideoModel.last.videoPath,
+                  ))).then((value) {
+        _checkCameraAvailability();
+      });
     } else {
       createScaledVideoList();
     }
@@ -1694,22 +1674,16 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
           //_cameraController.dispose();
         }
 
-        // Navigator.of(context)
-        //     .push(
-        //   CupertinoPageRoute(
-        //       builder: (context) => VideoPlaybackScreen(
-        //             outputVideoPath: outputPath,
-        //             totalVideoList: _listVideoModel,
-        //             onBack: () {
-        //               if (Platform.isIOS && Constants.IS_BANUBA_ON) {
-        //                 _engine.cameraPauseStop(false);
-        //               }
-        //             },
-        //           )),
-        // )
-        //     .then((value) {
-        //   // _checkCameraAvailability();
-        // });
+        Navigator.of(context)
+            .push(
+          CupertinoPageRoute(
+              builder: (context) => VideoApp(
+                     outputPath,
+                  )),
+        )
+            .then((value) {
+          // _checkCameraAvailability();
+        });
       } else {
         setState(() {
           flagForCircle = false;
@@ -1907,54 +1881,10 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
             // }));
   }
 
-  /// To show the dialog on leaving screen...
-    void showCloseDialog() {
-    // stopRecording();
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) => CommonWidgets().customDialog(
-    //         context: context,
-    //         btnKey1: "discard_recording",
-    //         btnKey2: "start_over_recording",
-    //         btnKey3: "close_dialog",
-    //         message: StringAssets.recordingCloseAlertTitle,
-    //         description: StringAssets.recordingCloseAlertDesc,
-    //         button1Text: StringAssets.recordingCloseAlertDiscard,
-    //         button2Text: StringAssets.recordingCloseAlertStartOver,
-    //
-    //         /// Discard Option Close and Close the screen,
-    //         onButton1Click: () async {
-    //           await DatabaseHelper().deleteDeleteUnDraftData();
-    //           Navigator.pop(context);
-    //           Navigator.pop(context);
-    //           if (widget.updateUI == null) {
-    //             Navigator.pushAndRemoveUntil(
-    //                 context,
-    //                 CupertinoPageRoute(builder: (BuildContext context) => BottomTabBarScreen()),
-    //                 (route) => route.settings.name == StringAssets.bottomTabBarScreen);
-    //           } else {
-    //             Navigator.pushAndRemoveUntil(
-    //                 context,
-    //                 CupertinoPageRoute(builder: (BuildContext context) => BottomTabBarScreen()),
-    //                 (route) => route.settings.name == StringAssets.bottomTabBarScreen);
-    //           }
-    //         },
-    //
-    //         ///Start Over Option Close Dialog and Show Video Screen
-    //         onButton2Click: () {
-    //           _statOverRecording();
-    //         },
-    //
-    //         ///Close the dialog;
-    //         onButton3Click: () {
-    //           Navigator.pop(context, true);
-    //         }));
-  }
-
   Future<bool> _onWillPopScopeCallback() async {
-    if (_listVideoModel.length >= 1)
-      showCloseDialog();
-    else {
+    if (_listVideoModel.length >= 1) {
+      Navigator.pop(context);
+    }else {
       await stopRecording();
       if (widget.updateUI == null) {
         Navigator.pushAndRemoveUntil(
@@ -2009,14 +1939,14 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
 
   List<String> effectNames = [
     "",
-    "HeadphoneMusic",
-    "BeautyEffectsGrayscale",
+    "BeautyBokeh",
     "BGVideoBeach",
-    "Emoji",
-    "HeartsLut",
     "Polaroid",
     "PrideParade",
-    "BeautyBokeh",
+    "BeautyEffectsGrayscale",
+    "Emoji",
+    "HeartsLut",
+    "HeadphoneMusic",
     "RainbowBeauty",
     "WhiteCat"
   ];

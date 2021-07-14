@@ -13,4 +13,12 @@ class StringAssets {
   static String joinCall = "Join Call";
   static String decline = "Decline";
   static String startCall = "Start Call";
+
+  // Video record screen
+  static String flip = "Flip";
+  static String flash = "Flash";
+  static String speed = "Speed";
+  static String timer = "Timer";
+  static String effects = "Effects";
+  static String minVideoDuration = "You need at least 5 secs to post, keep recording!";
 }

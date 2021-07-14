@@ -37,6 +37,13 @@ class CommonWidgets {
       ),
     );
   }
+
+  /// progress Loader Widget
+  Widget progressLoading({String message}) {
+    return  Center(
+      child: CircularProgressIndicator(),
+    );
+  }
 }
 
 class RoundedButton extends StatelessWidget {

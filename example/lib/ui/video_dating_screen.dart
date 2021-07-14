@@ -161,7 +161,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
       _addAgoraEventHandlers();
       await _engine.enableWebSdkInteroperability(true);
       VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
-      configuration.dimensions = VideoDimensions(480, 640);
+      configuration.dimensions = VideoDimensions(width:480, height:640);
       await _engine.setVideoEncoderConfiguration(configuration);
       // _engine.setExternalVideoSource();  // TODO: replace this method to every where with effect changing method
       print("Token ${widget.agoraToken} === ${widget.channelName}");

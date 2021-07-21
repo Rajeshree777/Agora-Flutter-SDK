@@ -10,7 +10,7 @@ class FilterSelector extends StatefulWidget {
     Key key,
     @required this.filters,
     @required this.onFilterChanged,
-    this.padding = const EdgeInsets.only(top: 8.0,bottom: 8.0),
+    this.padding = const EdgeInsets.only(top: 8.0, bottom: 8.0),
   }) : super(key: key);
 
   final List<String> filters;
@@ -27,6 +27,7 @@ class _FilterSelectorState extends State<FilterSelector> {
 
   PageController _controller;
   int _page;
+  bool isScrollEnd = false;
 
   int get filterCount => widget.filters.length;
 
@@ -47,7 +48,6 @@ class _FilterSelectorState extends State<FilterSelector> {
     final page = (_controller.page ?? 0).round();
     if (page != _page) {
       _page = page;
-      widget.onFilterChanged(widget.filters[page]);
     }
   }
 
@@ -68,32 +68,41 @@ class _FilterSelectorState extends State<FilterSelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Scrollable(
-        controller: _controller,
-        axisDirection: AxisDirection.right,
-        physics: PageScrollPhysics(),
-        viewportBuilder: (context, viewportOffset) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final itemSize = (constraints.maxWidth * _viewportFractionPerItem);
-              viewportOffset
-                ..applyViewportDimension(constraints.maxWidth)
-                ..applyContentDimensions(0.0, (itemSize) * (filterCount - 1));
-
-              return Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  //_buildShadowGradient(itemSize),
-                  _buildCarousel(
-                    viewportOffset: viewportOffset,
-                    itemSize: itemSize,
-                  ),
-                  _buildSelectionRing(itemSize),
-                ],
-              );
-            },
-          );
+      child: NotificationListener(
+        onNotification: (t) {
+          if (t is ScrollEndNotification) {
+            print("animate to page : ${_controller.page.round()}");
+            widget.onFilterChanged(widget.filters[_controller.page.round()]);
+          }
+          return;
         },
+        child: Scrollable(
+          controller: _controller,
+          axisDirection: AxisDirection.right,
+          physics: PageScrollPhysics(),
+          viewportBuilder: (context, viewportOffset) {
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final itemSize = (constraints.maxWidth * _viewportFractionPerItem);
+                viewportOffset
+                  ..applyViewportDimension(constraints.maxWidth)
+                  ..applyContentDimensions(0.0, (itemSize) * (filterCount - 1));
+
+                return Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    //_buildShadowGradient(itemSize),
+                    _buildCarousel(
+                      viewportOffset: viewportOffset,
+                      itemSize: itemSize,
+                    ),
+                    _buildSelectionRing(itemSize),
+                  ],
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

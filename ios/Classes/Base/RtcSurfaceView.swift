@@ -117,13 +117,13 @@ class RtcSurfaceView: UIView {
 
     @objc func onEffectChange(notification: Notification) {
 //        print("On select effect myFunction \(notification.object) ==== \(banubaSdkManager.currentEffect())" );
-       banubaSdkManager.stopEffectPlayer()
+   //    banubaSdkManager.stopEffectPlayer()
 
         if let effectName = notification.object as? String {
             self.effectName = effectName
             _ = banubaSdkManager.loadEffect(effectName)
         }
-        banubaSdkManager.startEffectPlayer()
+  //      banubaSdkManager.startEffectPlayer()
     }
 
     @objc func onCameraModeChange(notification: Notification) {

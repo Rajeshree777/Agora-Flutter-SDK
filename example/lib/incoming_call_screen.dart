@@ -93,7 +93,7 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => CallScreen(
-            token: "0063a7d00163f6d41d6b533653369d4ce0eIADy8gXlA8LahVK7XcAHXy0CgklJSpqzLmbWprGRDkqA1HPFBqYAAAAAEAC4541oOyrwYAEAAQA6KvBg",
+            token: "0063a7d00163f6d41d6b533653369d4ce0eIAAe+DwRDToyHJz6OH/byZR8oy96buBZLFlH9syuFZHrBnPFBqYAAAAAEACWMZDZpD/5YAEAAQCkP/lg",
             channel: 'calling',
             isStartCall: false,
             ),

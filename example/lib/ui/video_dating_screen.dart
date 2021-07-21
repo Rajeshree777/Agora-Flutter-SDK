@@ -39,11 +39,7 @@ class VideoDatingScreen extends StatefulWidget {
   final ClientRole role;
 
   // Connected User info
-  final String me,
-      gameId,
-      agoraToken,
-      selectedEffect,
-      callerName;
+  final String me, gameId, agoraToken, selectedEffect, callerName;
   final UserType userType;
   final bool cameraOn, isMuted, isFrontCamera, isFromNotification;
 
@@ -68,8 +64,7 @@ class VideoDatingScreen extends StatefulWidget {
   _VideoDatingScreenState createState() => _VideoDatingScreenState();
 }
 
-class _VideoDatingScreenState extends State<VideoDatingScreen>
-    with TickerProviderStateMixin {
+class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProviderStateMixin {
   final _users = <AgoraUserModel>[];
   final _infoStrings = <String>[];
   bool muted = false, cameraEnable = true, remoteCamEnable = true;
@@ -84,13 +79,14 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
   bool completed = false;
   List<String> questionsList = [];
   Animation offsetAnimation;
+
   @override
   void dispose() {
     // clear users
     _users.clear();
     // destroy sdk
     animationController.dispose();
-    offsetAnimation.removeListener(() { });
+    offsetAnimation.removeListener(() {});
     _engine.leaveChannel();
     _engine.destroy();
     Wakelock.disable();
@@ -107,8 +103,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
     offsetAnimation = Tween<Offset>(
       begin: Offset(1.5, 0.0),
       end: const Offset(0.0, 0.0),
-    ).animate(CurvedAnimation(
-        parent: animationController, curve: Curves.linearToEaseOut));
+    ).animate(CurvedAnimation(parent: animationController, curve: Curves.linearToEaseOut));
     animationController.forward();
     animationController.addStatusListener((AnimationStatus status) {
       if (status == AnimationStatus.completed) {
@@ -138,8 +133,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
       offsetAnimation = Tween<Offset>(
         begin: Offset(2.0, 0.0),
         end: const Offset(0.0, 0.0),
-      ).animate(CurvedAnimation(
-          parent: animationController, curve: Curves.fastLinearToSlowEaseIn));
+      ).animate(CurvedAnimation(parent: animationController, curve: Curves.fastLinearToSlowEaseIn));
     });
     animationController.forward();
   }
@@ -160,9 +154,6 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
       await _initAgoraRtcEngine();
       _addAgoraEventHandlers();
       await _engine.enableWebSdkInteroperability(true);
-      VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
-      configuration.dimensions = VideoDimensions(width:480, height:640);
-      await _engine.setVideoEncoderConfiguration(configuration);
       // _engine.setExternalVideoSource();  // TODO: replace this method to every where with effect changing method
       print("Token ${widget.agoraToken} === ${widget.channelName}");
       await _engine.joinChannel(
@@ -195,6 +186,11 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
   // Create agora sdk instance and initialize
   Future<void> _initAgoraRtcEngine() async {
     _engine = await RtcEngine.create(ApiUtils.APP_ID);
+    VideoEncoderConfiguration configuration = VideoEncoderConfiguration();
+    configuration.dimensions = VideoDimensions(width: 360, height: 640);
+    configuration.minFrameRate = VideoFrameRate.Fps7;
+    configuration.frameRate = VideoFrameRate.Fps15;
+    await _engine.setVideoEncoderConfiguration(configuration);
     await _engine.enableVideo();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(widget.role);
@@ -223,7 +219,6 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
     }, userJoined: (uid, elapsed) {
       printLog("Call Answered");
       setState(() {
-
         localVideoRendered = false;
 
         memberNotAvailable = false;
@@ -232,7 +227,6 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
         _infoStrings.add(info);
         _users.add(AgoraUserModel(uid: uid, videoRender: false));
       });
-
     }, userOffline: (uid, elapsed) async {
       setState(() {
         printLog("Call Ended");
@@ -247,8 +241,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
         final info = 'firstRemoteVideo: $uid ${width}x $height';
         _infoStrings.add(info);
       });
-      var remoteUser = _users.firstWhere((element) => element.uid == uid,
-          orElse: () => null);
+      var remoteUser = _users.firstWhere((element) => element.uid == uid, orElse: () => null);
       if (remoteUser != null) {
         remoteUser.videoRender = true;
       }
@@ -263,8 +256,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
         printLog("Failed");
         _infoStrings.add("Failed");
       }
-    }, localVideoStateChanged: (LocalVideoStreamState localVideoStreamState,
-        LocalVideoStreamError videoStreamError) {
+    }, localVideoStateChanged: (LocalVideoStreamState localVideoStreamState, LocalVideoStreamError videoStreamError) {
       // TODO: Not Required in Agora VideoCall with banuba
       // if (localVideoStreamState == LocalVideoStreamState.Stopped) {
       //   printLog("local cam disabled");
@@ -277,8 +269,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
       //     cameraEnable = true;
       //   });
       // }
-    }, remoteVideoStateChanged: (int value, VideoRemoteState videoStats,
-        VideoRemoteStateReason reason, int i) {
+    }, remoteVideoStateChanged: (int value, VideoRemoteState videoStats, VideoRemoteStateReason reason, int i) {
       if (reason == VideoRemoteStateReason.RemoteMuted) {
         printLog("remote cam disabled");
         setState(() {
@@ -298,8 +289,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
       //   localVideoRendered = true;
       // });
     }, firstLocalVideoFramePublished: (int i) {
-      printLog(
-          "Local firstLocalVideoFramePublished $localVideoRendered === $i");
+      printLog("Local firstLocalVideoFramePublished $localVideoRendered === $i");
     }));
   }
 
@@ -392,9 +382,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
         /// Single person view
         return Container(
             child: Column(
-          children: <Widget>[
-            _videoView(cameraEnable ? views[0] : _cameraTurnedOffWidget())
-          ],
+          children: <Widget>[_videoView(cameraEnable ? views[0] : _cameraTurnedOffWidget())],
         ));
       case 2:
 
@@ -404,10 +392,8 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
           children: <Widget>[
             // _expandedVideoRow([views[1]]),
             // _expandedVideoRow([views[0]])
-            _expandedVideoRow(
-                [remoteCamEnable ? views[1] : _cameraTurnedOffWidget()]),
-            _expandedVideoRow(
-                [cameraEnable ? views[0] : _cameraTurnedOffWidget()])
+            _expandedVideoRow([remoteCamEnable ? views[1] : _cameraTurnedOffWidget()]),
+            _expandedVideoRow([cameraEnable ? views[0] : _cameraTurnedOffWidget()])
           ],
         ));
       /* case 3:
@@ -486,7 +472,6 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
     Wakelock.disable();
     //GameState().restart();
 
-
     Navigator.pop(context, true);
   }
 
@@ -536,11 +521,9 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-
                       SizedBox(
                         height: Constant.size12,
                       ),
-
                       SizedBox(
                         height: Constant.size20,
                       ),
@@ -557,11 +540,9 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
                 children: [
                   /// Black circular rectangle
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: Constant.size40, horizontal: Constant.size24),
+                    padding: EdgeInsets.symmetric(vertical: Constant.size40, horizontal: Constant.size24),
                     child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(Constant.size10)),
+                      borderRadius: BorderRadius.all(Radius.circular(Constant.size10)),
                       child: Container(
                         color: ColorAssets.themeColorBlack.withOpacity(0.5),
                         height: Constant.size44,
@@ -573,16 +554,18 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
                             children: [
                               /// Filters button
                               InkResponse(
-                                onTap: (Platform.isIOS &&
-                                    Constants.IS_BANUBA_ON) ? () {
-                                    setState(() {
-                                      showEffectList = !showEffectList;
-                                    });
-                                }: null,
+                                onTap: (Platform.isIOS && Constants.IS_BANUBA_ON)
+                                    ? () {
+                                        setState(() {
+                                          showEffectList = !showEffectList;
+                                        });
+                                      }
+                                    : null,
                                 child: SvgPicture.asset(
                                   ImageAssets.beautyIcon,
-                                  color: (Platform.isIOS &&
-                                      Constants.IS_BANUBA_ON) ? Colors.white : Colors.white.withOpacity(0.5),
+                                  color: (Platform.isIOS && Constants.IS_BANUBA_ON)
+                                      ? Colors.white
+                                      : Colors.white.withOpacity(0.5),
                                   height: Constant.size24,
                                   width: Constant.size24,
                                 ),
@@ -592,9 +575,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
                               InkWell(
                                 onTap: _onToggleMute,
                                 child: SvgPicture.asset(
-                                  muted
-                                      ? ImageAssets.micOffIcon
-                                      : ImageAssets.micOnIcon,
+                                  muted ? ImageAssets.micOffIcon : ImageAssets.micOnIcon,
                                   color: Colors.white,
                                   height: Constant.size24,
                                   width: Constant.size24,
@@ -608,9 +589,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
                               InkWell(
                                 onTap: _onEnableDisableCamera,
                                 child: SvgPicture.asset(
-                                  !cameraEnable
-                                      ? ImageAssets.cameraOffIcon
-                                      : ImageAssets.cameraOnIcon,
+                                  !cameraEnable ? ImageAssets.cameraOffIcon : ImageAssets.cameraOnIcon,
                                   color: Colors.white,
                                   height: Constant.size22,
                                   width: Constant.size24,
@@ -688,7 +667,6 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
     );
   }
 
-
   // AR effects selector
   Widget _buildFilterSelector() {
     return Visibility(
@@ -715,7 +693,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
   ];
 
   void onEffectChanged(String effectName) {
-    printLog(effectName);
+    print('onEffectChanged $effectName');
     selectedEffect = effectName;
     _engine.onEffectSelected(effectName);
   }
@@ -734,15 +712,13 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
 
   bool endCalled = false, endCallButtonPressed = false;
 
-  Future<dynamic> showRemoteUserStatusDialog(BuildContext context,
-      {String code, String message}) {
+  Future<dynamic> showRemoteUserStatusDialog(BuildContext context, {String code, String message}) {
     return showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) {
           return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Constant.size24)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Constant.size24)),
             //this right here
             child: IntrinsicHeight(
               child: Container(
@@ -770,8 +746,8 @@ class _VideoDatingScreenState extends State<VideoDatingScreen>
                       setState(() {
                         endCalled = true;
                       });
-                        Navigator.pop(context, true);
-                        Navigator.pop(context, true);
+                      Navigator.pop(context, true);
+                      Navigator.pop(context, true);
                     })
                   ],
                 ),

@@ -131,19 +131,8 @@ class RtcSurfaceView: UIView {
 
     @objc func onEffectChange(notification: Notification) {
 //        print("On select effect myFunction \(notification.object) ==== \(banubaSdkManager.currentEffect())" );
-       banubaSdkManager.stopEffectPlayer()
-banubaSdkManager.input.stopCamera()
-        banubaSdkManager.destroyEffectPlayer()
         banubaSdkManager.stopEffectPlayer()
-
-        if (canvas.uid == 0) {
-            NotificationCenter.default.removeObserver(self, name: .effectChangeNotification, object: nil)
-            NotificationCenter.default.removeObserver(self, name: .cameraModeChangeNotification, object: nil)
-            NotificationCenter.default.removeObserver(self, name: .destroyBanubaEffectNotification, object: nil)
-            NotificationCenter.default.removeObserver(self, name: .cameraPauseModeChangeNotification, object: nil)
-        }
-        canvas.view = nil
-        removeObserver(self, forKeyPath: observerForKeyPath(), context: nil)
+        
         if let effectName = notification.object as? String {
             self.effectName = effectName
             _ = banubaSdkManager.loadEffect(effectName)

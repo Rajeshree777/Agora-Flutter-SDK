@@ -116,8 +116,8 @@ class RtcSurfaceView: UIView {
 
       @objc func cameraPauseModeChange(notification: Notification) {
                print("cameraPauseModeChangeNotification \(notification.object)")
-               if let isPause = notification.object as? Bool {
-                   if (isPause) {
+               if let isEnabled = notification.object as? Bool {
+                   if (!isEnabled) {
                        banubaSdkManager.input.stopCamera()
      //                   banubaSdkManager.destroyEffectPlayer()
                        banubaSdkManager.stopEffectPlayer()
@@ -163,6 +163,16 @@ class RtcSurfaceView: UIView {
         banubaSdkManager.input.stopCamera()
         banubaSdkManager.destroyEffectPlayer()
         banubaSdkManager.stopEffectPlayer()
+
+        if (canvas.uid == 0) {
+            NotificationCenter.default.removeObserver(self, name: .effectChangeNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: .cameraModeChangeNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: .destroyBanubaEffectNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: .cameraPauseModeChangeNotification, object: nil)
+        }
+        canvas.view = nil
+        removeObserver(self, forKeyPath: observerForKeyPath(), context: nil)
+
     }
 
     func observerForKeyPath() -> String {

@@ -24,7 +24,6 @@ dependencies:
   flutter:
     sdk: flutter
   agora_rtc_engine:
-    # path: Agora-Flutter-SDK/
     git:
       url: https://github.com/Rajeshree777/Agora-Flutter-SDK.git
 #      ref: exclude_banuba                      # remove (this line)ref if want banuba

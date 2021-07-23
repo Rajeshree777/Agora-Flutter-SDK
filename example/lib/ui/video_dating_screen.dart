@@ -227,7 +227,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
     }, userJoined: (uid, elapsed) {
       printLog("Call Answered");
       setState(() {
-        localVideoRendered = false;
+        localVideoRendered = true;
 
         memberNotAvailable = false;
         print("receiver id : $uid");

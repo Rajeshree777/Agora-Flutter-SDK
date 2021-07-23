@@ -301,64 +301,74 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
   List<Widget> _getRenderViews() {
     final List<Widget> list = [];
     if (widget.role == ClientRole.Broadcaster) {
-      list.add(Stack(
-        children: [
-          (Platform.isIOS && Constants.IS_BANUBA_ON)
-              ? RtcLocalView.SurfaceView(
+      list.add(Consumer<LocalCameraProvider>(
+          builder: (context, localCameraProvider, child) {
+            return Stack(
+              children: [
+                (Platform.isIOS && Constants.IS_BANUBA_ON)
+                    ? RtcLocalView.SurfaceView(
                   effectName: selectedEffect,
                   totalJoinedUser: max(_users.length + 1, 1),
                   // mirrorMode: VideoMirrorMode.Disabled,
                   isFrontCamera: widget.isFrontCamera,
                 )
-              : RtcLocalView.SurfaceView(
+                    : RtcLocalView.SurfaceView(
                   totalJoinedUser: max(_users.length + 1, 1),
                   isFrontCamera: widget.isFrontCamera,
                 ),
-          if (!localVideoRendered)
-            Container(
-                color: ColorAssets.themeColorDarkGrey,
-                child: Center(
-                  child: Text(
-                    "Loading",
-                    style: TextStyle(
-                      color: ColorAssets.themeColorWhite,
-                      fontSize: FontSize.s18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: StringAssets.fontFamilyPoppins,
-                    ),
-                  ),
-                ))
-        ],
+                if (!localVideoRendered)
+                  Container(
+                      color: ColorAssets.themeColorDarkGrey,
+                      child: Center(
+                        child: Text(
+                          "Loading",
+                          style: TextStyle(
+                            color: ColorAssets.themeColorWhite,
+                            fontSize: FontSize.s18,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: StringAssets.fontFamilyPoppins,
+                          ),
+                        ),
+                      )),
+                localCameraProvider.cameraEnable ? Container() : _cameraTurnedOffWidget()
+              ],
+            );
+          },
       ));
     }
-    _users.forEach((AgoraUserModel uinfo) => list.add(Stack(
-          children: [
-            (Platform.isIOS && Constants.IS_BANUBA_ON)
-                ? RtcRemoteView.SurfaceView(
-                    uid: uinfo.uid,
-                    totalJoinedUser: _users.length,
-                    mirrorMode: VideoMirrorMode.Enabled,
-                  )
-                : RtcRemoteView.SurfaceView(
-                    uid: uinfo.uid,
-                    totalJoinedUser: _users.length,
-                  ),
-            if (!uinfo.videoRender)
-              Container(
-                  color: ColorAssets.themeColorDarkGrey,
-                  child: Center(
-                    child: Text(
-                      "",
-                      style: TextStyle(
-                        color: ColorAssets.themeColorWhite,
-                        fontSize: FontSize.s18,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: StringAssets.fontFamilyPoppins,
+    _users.forEach((AgoraUserModel uinfo) => list.add(Consumer<RemoteCameraProvider>(
+        builder: (context, remoteCameraProvider, child) {
+          return Stack(
+            children: [
+              (Platform.isIOS && Constants.IS_BANUBA_ON)
+                  ? RtcRemoteView.SurfaceView(
+                uid: uinfo.uid,
+                totalJoinedUser: _users.length,
+                mirrorMode: VideoMirrorMode.Enabled,
+              )
+                  : RtcRemoteView.SurfaceView(
+                uid: uinfo.uid,
+                totalJoinedUser: _users.length,
+              ),
+              if (!uinfo.videoRender)
+                Container(
+                    color: ColorAssets.themeColorDarkGrey,
+                    child: Center(
+                      child: Text(
+                        "",
+                        style: TextStyle(
+                          color: ColorAssets.themeColorWhite,
+                          fontSize: FontSize.s18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: StringAssets.fontFamilyPoppins,
+                        ),
                       ),
-                    ),
-                  ))
-          ],
-        )));
+                    )),
+              remoteCameraProvider.remoteCamEnable ? Container() : _cameraTurnedOffWidget()
+            ],
+          );
+        },
+    )));
     return list;
   }
 
@@ -410,12 +420,8 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
           children: <Widget>[
             // _expandedVideoRow([views[1]]),
             // _expandedVideoRow([views[0]])
-            Consumer<RemoteCameraProvider>( builder: (context, remoteCameraProvider, child){
-              return _expandedVideoRow([remoteCameraProvider.remoteCamEnable ? views[1] : _cameraTurnedOffWidget()]);}),
-            Consumer<LocalCameraProvider>(builder: (context, localCameraProvider, child) {
-              return _expandedVideoRow(
-                  [localCameraProvider.cameraEnable ? views[0] : _cameraTurnedOffWidget()]);
-            })
+            _expandedVideoRow([views[1]]),
+            _expandedVideoRow([views[0]])
           ],
         ));
       /* case 3:

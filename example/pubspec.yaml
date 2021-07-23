@@ -47,6 +47,7 @@ dependencies:
   fluttertoast: ^8.0.7
   video_thumbnail: ^0.3.3
   video_player: 2.1.9
+  provider: ^4.3.3
 
 dev_dependencies:
   flutter_test:

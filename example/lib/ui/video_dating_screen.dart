@@ -17,6 +17,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:soda_app/providers/video_dating_screen_state.dart';
 import 'package:soda_app/source/string_assets.dart';
 import 'package:soda_app/source/styles.dart';
 import 'package:soda_app/utils/constants.dart';
@@ -67,7 +69,7 @@ class VideoDatingScreen extends StatefulWidget {
 class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProviderStateMixin {
   final _users = <AgoraUserModel>[];
   final _infoStrings = <String>[];
-  bool muted = false, cameraEnable = true, remoteCamEnable = true;
+  bool muted = false;
   RtcEngine _engine;
   bool localVideoRendered = true;
   AnimationController animationController;
@@ -79,6 +81,8 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
   bool completed = false;
   List<String> questionsList = [];
   Animation offsetAnimation;
+  LocalCameraProvider _localCameraProvider;
+  RemoteCameraProvider _remoteCameraProvider;
 
   @override
   void dispose() {
@@ -120,8 +124,17 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
     // checkIfGameViewIsOpen();
     // initialize agora sdk
     selectedEffect = widget.selectedEffect;
-
     initialize();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!isCalled) {
+      isCalled = true;
+      _localCameraProvider = Provider.of<LocalCameraProvider>(context);
+      _remoteCameraProvider = Provider.of<RemoteCameraProvider>(context);
+      super.didChangeDependencies();
+    }
   }
 
   animationRepeat() {
@@ -173,12 +186,7 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
         _engine.switchCamera(isFrontCamera: widget.isFrontCamera);
       }
       if (!widget.cameraOn) {
-        _onEnableDisableCamera();
-        if (widget.userType == UserType.CALLER) {
-          cameraEnable = widget.cameraOn;
-        } else {
-          remoteCamEnable = widget.cameraOn;
-        }
+        _onEnableDisableCamera(widget.cameraOn);
       }
     }
   }
@@ -272,14 +280,10 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
     }, remoteVideoStateChanged: (int value, VideoRemoteState videoStats, VideoRemoteStateReason reason, int i) {
       if (reason == VideoRemoteStateReason.RemoteMuted) {
         printLog("remote cam disabled");
-        setState(() {
-          remoteCamEnable = false;
-        });
+        _remoteCameraProvider.enableRCamera(false);
       } else if (reason == VideoRemoteStateReason.RemoteUnmuted) {
         printLog("remote cam enabled");
-        setState(() {
-          remoteCamEnable = true;
-        });
+        _remoteCameraProvider.enableRCamera(true);
       }
     }, firstLocalVideoFrame: (int i, int j, int k) {
       printLog("Local frame rendered $localVideoRendered");
@@ -380,9 +384,23 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
       case 1:
 
         /// Single person view
-        return Container(
-            child: Column(
-          children: <Widget>[_videoView(cameraEnable ? views[0] : _cameraTurnedOffWidget())],
+        return Container(child: Consumer<LocalCameraProvider>(
+          builder: (context, localCameraProvider, child) {
+            return Stack(
+              children: [
+                Column(
+                  children: <Widget>[
+                    _videoView(views[0]),
+                  ],
+                ),
+                localCameraProvider.cameraEnable ? Container() : Column(
+                  children: [
+                    _videoView(_cameraTurnedOffWidget()),
+                  ],
+                )
+              ],
+            );
+          },
         ));
       case 2:
 
@@ -392,8 +410,12 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
           children: <Widget>[
             // _expandedVideoRow([views[1]]),
             // _expandedVideoRow([views[0]])
-            _expandedVideoRow([remoteCamEnable ? views[1] : _cameraTurnedOffWidget()]),
-            _expandedVideoRow([cameraEnable ? views[0] : _cameraTurnedOffWidget()])
+            Consumer<RemoteCameraProvider>( builder: (context, remoteCameraProvider, child){
+              return _expandedVideoRow([remoteCameraProvider.remoteCamEnable ? views[1] : _cameraTurnedOffWidget()]);}),
+            Consumer<LocalCameraProvider>(builder: (context, localCameraProvider, child) {
+              return _expandedVideoRow(
+                  [localCameraProvider.cameraEnable ? views[0] : _cameraTurnedOffWidget()]);
+            })
           ],
         ));
       /* case 3:
@@ -490,12 +512,10 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
     _engine.switchCamera();
   }
 
-  void _onEnableDisableCamera() {
-    setState(() {
-      cameraEnable = !cameraEnable;
-      _engine.enableLocalVideo(cameraEnable);
-    });
-    printLog("widget.cameraOn : ${widget.cameraOn}");
+  void _onEnableDisableCamera(bool cameraEnable) {
+    _localCameraProvider.enableCamera(cameraEnable);
+    _engine.enableLocalVideo(cameraEnable);
+    printLog("widget.cameraOn : ${cameraEnable}");
   }
 
   @override
@@ -587,9 +607,13 @@ class _VideoDatingScreenState extends State<VideoDatingScreen> with TickerProvid
 
                               /// Camera on/off button
                               InkWell(
-                                onTap: _onEnableDisableCamera,
+                                onTap: (){
+                                  _onEnableDisableCamera(!_localCameraProvider.cameraEnable);
+                                },
                                 child: SvgPicture.asset(
-                                  !cameraEnable ? ImageAssets.cameraOffIcon : ImageAssets.cameraOnIcon,
+                                  !_localCameraProvider.cameraEnable
+                                      ? ImageAssets.cameraOffIcon
+                                      : ImageAssets.cameraOnIcon,
                                   color: Colors.white,
                                   height: Constant.size22,
                                   width: Constant.size24,

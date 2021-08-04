@@ -467,7 +467,7 @@ static NSString* const kUnknownRecordingErrorMsg = @"Video recording was termina
 - (void)setupAssetWriterVideoInput
 {
     NSDictionary* videoSettings = @{
-        AVVideoCodecKey: AVVideoCodecH264,
+        AVVideoCodecKey: AVVideoCodecTypeHEVC,
         AVVideoWidthKey: @(_captureSize.width),
         AVVideoHeightKey: @(_captureSize.height)
     };

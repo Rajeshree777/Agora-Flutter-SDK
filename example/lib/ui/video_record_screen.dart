@@ -99,7 +99,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
   bool _showPreview = false;
   bool _isFlashVisible = true;
   bool isDialogShowing = false, showEffectList = false;
-  String selectedEffect = "", filePath;
+  String selectedEffect = "", filePath,tempPath;
 
   /// Initialization
   @override
@@ -620,12 +620,15 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
                                             _listVideoModel.length > 0 &&
                                             (!_isRecording && !_showDelayText) &&
                                             (_listVideoModel.last.duration) >= 5,
-                                        child: Container(
-                                          child: InkWell(
-                                            onTap: () => _nextToRecording(context),
-                                            child: SvgPicture.asset(
-                                              ImageAssets.recordingNextButton,
-                                              height: ScreenUtil().setHeight(30.0),
+                                        child: IgnorePointer(
+                                          ignoring: isMergingInProgress,
+                                          child: Container(
+                                            child: InkWell(
+                                              onTap: () => _nextToRecording(context),
+                                              child: SvgPicture.asset(
+                                                ImageAssets.recordingNextButton,
+                                                height: ScreenUtil().setHeight(30.0),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -1207,13 +1210,13 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
       int _time = DateTime.now().millisecondsSinceEpoch;
 
       final Directory extDir =
-          Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
-      final String dirPath = '${extDir.path}/Movies/FFmpeg';
+      await getTemporaryDirectory();
+      final String dirPath = extDir.path;
       await Directory(dirPath).create(recursive: true);
-      filePath = '$dirPath/soda_$_time.mp4';
+      tempPath = '$dirPath/soda_$_time.mp4';
 
       // printLog("File Path $filePath");
-      _engine.startVideoRecording(filePath).then((value) {});
+      _engine.startVideoRecording(tempPath).then((value) {});
       // printLog("Recording started");
       startCountDown();
     } else {
@@ -1255,10 +1258,13 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
         File us;
         if (Platform.isIOS && Constants.IS_BANUBA_ON) {
           _engine.stopVideoRecording();
-          setState(() {
-            _isRecording = false;
-            _showDelayText = true;
+          await Future.delayed(Duration(milliseconds: 1000)).then((value) {
+            setState(() {
+              _isRecording = false;
+              _showDelayText = true;
+            });
           });
+          us = File(tempPath);
         } else {
           var tempFile = await _cameraController.stopVideoRecording();
           setState(() {
@@ -1269,17 +1275,14 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
         }
         int _time = DateTime.now().millisecondsSinceEpoch;
         final Directory extDir =
-            Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
+        Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
         final String dirPath = '${extDir.path}/Movies/FFmpeg';
         await Directory(dirPath).create(recursive: true);
-        if (Platform.isAndroid || !Constants.IS_BANUBA_ON) {
-          filePath = '$dirPath/soda_$_time.mp4';
-        }
+        filePath = '$dirPath/soda_$_time.mp4';
         final String localOutPutPath = '$dirPath/sodaOutput_$_time.mp4';
-        if (Platform.isAndroid || !Constants.IS_BANUBA_ON) {
-          File outFile = us.copySync(filePath);
-          print('file exists::${outFile.exists()}');
-        }
+
+        File outFile = us.copySync(filePath);
+        print('file exists::${outFile.exists()}');
         // print('localoutputpath::$localOutPutPath');
 
         if (isPlayBackSpeedChanged) {
@@ -1291,61 +1294,76 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
               // });
               await _flutterFFmpeg
                   .execute(
-                      "-y -i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter:v setpts=3.33*PTS -q:v 0 -q:a 0 -r 30 '$localOutPutPath'")
+                  "-y -i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter:v setpts=3.33*PTS -q:v 0 -q:a 0 -r 30 '$localOutPutPath'")
                   .then(
                     (value) => setState(() {
-                      _showDelayText = false;
-                    }),
-                  );
+                  if (value == 1) {
+                    showToast("error found");
+                  }
+                  _showDelayText = false;
+                }),
+              );
             } else if (_videoSpeed == 0.5) {
               // setState(() {
               //   _showDelayText = true;
               // });
               await _flutterFFmpeg
                   .execute(
-                      "-y -i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter:v setpts=2.0*PTS -r 30 '$localOutPutPath'")
+                  "-y -i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter:v setpts=2.0*PTS -r 30 '$localOutPutPath'")
                   .then(
                     (value) => setState(() {
-                      _showDelayText = false;
-                    }),
-                  );
+                  if (value == 1) {
+                    showToast("error found");
+                  }
+                  _showDelayText = false;
+                }),
+              );
             } else if (_videoSpeed == 2) {
               // setState(() {
               //   _showDelayText = true;
               // });
               await _flutterFFmpeg
                   .execute(
-                      "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter_complex [0:v]setpts=0.5*PTS[v];[0:a]atempo=2[a] -map [v] -map [a] -r 30 '$localOutPutPath'")
+                  "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter_complex [0:v]setpts=0.5*PTS[v];[0:a]atempo=2[a] -map [v] -map [a] -r 30 '$localOutPutPath'")
                   .then(
                     (value) => setState(() {
-                      _showDelayText = false;
-                    }),
-                  );
+                  if (value == 1) {
+                    showToast("error found");
+                  }
+                  _showDelayText = false;
+                }),
+              );
             } else if (_videoSpeed == 3) {
               // setState(() {
               //   _showDelayText = true;
               // });
               await _flutterFFmpeg
                   .execute(
-                      "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter_complex [0:v]setpts=0.33*PTS[v];[0:a]atempo=3[a] -map [v] -map [a] -r 30 '$localOutPutPath'")
+                  "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter_complex [0:v]setpts=0.33*PTS[v];[0:a]atempo=3[a] -map [v] -map [a] -r 30 '$localOutPutPath'")
                   .then(
                     (value) => setState(() {
-                      _showDelayText = false;
-                    }),
-                  );
-            } else {
+                  if (value == 1) {
+                    showToast("error found");
+                  }
+                  _showDelayText = false;
+                }),
+              );
+            } else if(_videoSpeed == 1) {
               // setState(() {
               //   _showDelayText = true;
               // });
               await _flutterFFmpeg
                   .execute(
-                      "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -preset ultrafast -filter_complex setpts=1.0*PTS -r 30 '$localOutPutPath'")
+                  "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter_complex [0:v]setpts=1.0*PTS[v];[0:a]atempo=1.0[a] -map [v] -map [a] -r 30 '$localOutPutPath'")
                   .then(
                     (value) => setState(() {
-                      print('flag insert');
-                      _showDelayText = false;
-                    }),
-                  );
+                  if (value == 1) {
+                    showToast("error found");
+                  }
+                  print('flag insert');
+                  _showDelayText = false;
+                }),
+              );
             }
           } else {
             ///if platform is android the code is with the normal config
@@ -1355,67 +1373,79 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
               // });
               await _flutterFFmpeg
                   .execute(
-                      "-y -i '${filePath}' -vcodec libx264 -crf 20 -preset ultrafast -filter:v setpts=3.33*PTS -q:v 0 -q:a 0 -c:v libx264 -preset ultrafast -threads 2 -r 30 '$localOutPutPath'")
+                  "-y -i '${filePath}' -vcodec libx264 -crf 20 -preset ultrafast -filter:v setpts=3.33*PTS -q:v 0 -q:a 0 -c:v libx264 -preset ultrafast -threads 2 -r 30 '$localOutPutPath'")
                   .then(
                     (value) => setState(() {
-                      _showDelayText = false;
-                    }),
-                  );
+                  _showDelayText = false;
+                }),
+              );
             } else if (_videoSpeed == 0.5) {
               // setState(() {
               //   _showDelayText = true;
               // });
               await _flutterFFmpeg
                   .execute(
-                      "-y -i '${filePath}' -vcodec libx264 -crf 20 -preset ultrafast -threads 2 -filter:v setpts=2.0*PTS  -c:v libx264 -preset ultrafast -threads 2 -r 30 '$localOutPutPath'")
+                  "-y -i '${filePath}' -vcodec libx264 -crf 20 -preset ultrafast -threads 2 -filter:v setpts=2.0*PTS  -c:v libx264 -preset ultrafast -threads 2 -r 30 '$localOutPutPath'")
                   .then(
                     (value) => setState(() {
-                      _showDelayText = false;
-                    }),
-                  );
+                  _showDelayText = false;
+                }),
+              );
             } else if (_videoSpeed == 2) {
               // setState(() {
               //   _showDelayText = true;
               // });
               await _flutterFFmpeg
                   .execute(
-                      "-y -i '${filePath}' -vcodec libx264 -crf 20 -preset ultrafast -threads 2 -filter_complex [0:v]setpts=0.5*PTS[v];[0:a]atempo=2[a] -map [v] -map [a] -c:v libx264 -preset ultrafast -threads 2 -r 30 '$localOutPutPath'")
+                  "-y -i '${filePath}' -vcodec libx264 -crf 20 -preset ultrafast -threads 2 -filter_complex [0:v]setpts=0.5*PTS[v];[0:a]atempo=2[a] -map [v] -map [a] -c:v libx264 -preset ultrafast -threads 2 -r 30 '$localOutPutPath'")
                   .then(
                     (value) => setState(() {
-                      _showDelayText = false;
-                    }),
-                  );
+                  _showDelayText = false;
+                }),
+              );
             } else if (_videoSpeed == 3) {
               // setState(() {
               //   _showDelayText = true;
               // });
               await _flutterFFmpeg
                   .execute(
-                      "-y -i '${filePath}' -vcodec libx264 -crf 20 -preset ultrafast -threads 2 -filter_complex [0:v]setpts=0.33*PTS[v];[0:a]atempo=3[a] -map [v] -map [a]  -c:v libx264 -preset ultrafast -threads 2 -r 30 '$localOutPutPath'")
+                  "-y -i '${filePath}' -vcodec libx264 -crf 20 -preset ultrafast -threads 2 -filter_complex [0:v]setpts=0.33*PTS[v];[0:a]atempo=3[a] -map [v] -map [a]  -c:v libx264 -preset ultrafast -threads 2 -r 30 '$localOutPutPath'")
                   .then(
                     (value) => setState(() {
-                      _showDelayText = false;
-                    }),
-                  );
+                  _showDelayText = false;
+                }),
+              );
             } else {
               // setState(() {
               //   _showDelayText = true;
               // });
               await _flutterFFmpeg
                   .execute(
-                      "-i '${filePath}' -vcodec libx264 -crf 20 -preset ultrafast -threads 0 -filter_complex setpts=1.0*PTS  -c:v libx264 -preset ultrafast -threads 0 -r 30 '$localOutPutPath'")
+                  "-i '${filePath}' -vcodec libx264 -crf 20 -preset ultrafast -threads 0 -filter_complex setpts=1.0*PTS  -c:v libx264 -preset ultrafast -threads 0 -r 30 '$localOutPutPath'")
                   .then(
                     (value) => setState(() {
-                      print('flag insert');
-                      _showDelayText = false;
-                    }),
-                  );
+                  print('flag insert');
+                  _showDelayText = false;
+                }),
+              );
             }
           }
         } else {
-          setState(() {
-            _showDelayText = false;
-          });
+          // setState(() {
+          //   _showDelayText = true;
+          // });
+          await _flutterFFmpeg
+              .execute(
+              "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter_complex [0:v]setpts=1.0*PTS[v];[0:a]atempo=1.0[a] -map [v] -map [a] -r 30 '$localOutPutPath'")
+              .then(
+                (value) => setState(() {
+              if (value == 1) {
+                showToast("error found");
+              }
+              print('flag insert');
+              _showDelayText = false;
+            }),
+          );
         }
         // Adding snippet to model class
         VideoModel videoModel;
@@ -1424,8 +1454,8 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
               thumbList: null,
               duration: duration,
               startDuration: _listVideoModel.length == 0 ? 0 : _listVideoModel.last.duration,
-              snippetDuration: _progressValue-(_listVideoModel.length == 0 ? 0 : _listVideoModel.last.duration),
-              videoPath: isPlayBackSpeedChanged ? localOutPutPath : filePath);
+              snippetDuration: _progressValue - (_listVideoModel.length == 0 ? 0 : _listVideoModel.last.duration),
+              videoPath: localOutPutPath);
           _listVideoModel.add(videoModel);
           if (updatedRecording) {
             // if user will add new video to existing clips then extra list for that videos will be created
@@ -1551,8 +1581,8 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
       if (Platform.isIOS && Constants.IS_BANUBA_ON) {
         printLog("leave");
         _engine.cameraPauseStop(true);
-        _engine.destroyBanubaCamera();
-        _engine = null;
+       // _engine.destroyBanubaCamera();
+      //  _engine = null;
       } else {
         // _cameraController.dispose();
       }
@@ -1562,7 +1592,8 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
               builder: (context) => VideoApp(
                         (!updatedRecording && mergedVideo != '') ? mergedVideo : _listVideoModel.last.videoPath,
                   ))).then((value) {
-        _checkCameraAvailability();
+                    _engine.cameraPauseStop(false);
+        //_checkCameraAvailability();
       });
     } else {
       createScaledVideoList();
@@ -1682,6 +1713,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
                   )),
         )
             .then((value) {
+              _engine.cameraPauseStop(false);
           // _checkCameraAvailability();
         });
       } else {

@@ -37,13 +37,12 @@ class _VideoAppState extends State<VideoApp> {
           Container(
             color: Colors.black,
             child: _controller.value.isInitialized
-                ? Align(
-                    alignment: Alignment.topCenter,
-                    child: AspectRatio(
-                      child: VideoPlayer(_controller),
-                      aspectRatio: _controller.value.aspectRatio,
-                    ),
-                  )
+                ? Center(
+                  child: AspectRatio(
+                    child: VideoPlayer(_controller),
+                    aspectRatio: _controller.value.aspectRatio,
+                  ),
+                )
                 : Container(),
           ),
           Positioned(

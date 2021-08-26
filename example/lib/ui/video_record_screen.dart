@@ -100,7 +100,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
   bool _isFlashVisible = true;
   bool isDialogShowing = false, showEffectList = false;
   String selectedEffect = "", filePath,tempPath;
-
+  var platformChannel= const MethodChannel('com.toppointellc.dayo/platform_channel');
   /// Initialization
   @override
   void initState() {
@@ -149,6 +149,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
     _delay = Delay.INSTANT;
     _flash = Flash.FLASH_OFF;
     WidgetsBinding.instance.addObserver(this);
+  //  platformChannel = const MethodChannel('com.toppointellc.dayo/platform_channel');
   }
 
   RtcBanubaEngine _engine;
@@ -1210,7 +1211,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
       int _time = DateTime.now().millisecondsSinceEpoch;
 
       final Directory extDir =
-      await getTemporaryDirectory();
+      await Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
       final String dirPath = extDir.path;
       await Directory(dirPath).create(recursive: true);
       tempPath = '$dirPath/soda_$_time.mp4';
@@ -1265,7 +1266,8 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
             });
           });
           us = File(tempPath);
-        } else {
+        }
+        else {
           var tempFile = await _cameraController.stopVideoRecording();
           setState(() {
             _isRecording = false;
@@ -1292,78 +1294,127 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
               // setState(() {
               //   _showDelayText = true;
               // });
-              await _flutterFFmpeg
-                  .execute(
-                  "-y -i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter:v setpts=3.33*PTS -q:v 0 -q:a 0 -r 30 '$localOutPutPath'")
-                  .then(
-                    (value) => setState(() {
-                  if (value == 1) {
-                    showToast("error found");
-                  }
-                  _showDelayText = false;
-                }),
-              );
+              // await _flutterFFmpeg
+              //     .execute(
+              //     "-y -i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter:v setpts=3.33*PTS -q:v 0 -q:a 0 -r 30 '$localOutPutPath'")
+              //     .then(
+              //       (value) => setState(() {
+              //     if (value == 1) {
+              //       showToast("error found");
+              //     }
+              //     _showDelayText = false;
+              //   }),
+              // );
+              try{
+                final result=  await platformChannel.invokeMethod("slowMotionVideo",<String,dynamic>{
+                  'urlPath':filePath,
+                  'speed':3.0,
+                  'writingPath':localOutPutPath
+                });
+                if(result){
+                  setState(() {
+                    _showDelayText = false;
+                  });
+                }
+              }on PlatformException catch (error) { // handle error
+                print('Error: $error'); // here
+              }
+
+
             } else if (_videoSpeed == 0.5) {
               // setState(() {
               //   _showDelayText = true;
               // });
-              await _flutterFFmpeg
-                  .execute(
-                  "-y -i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter:v setpts=2.0*PTS -r 30 '$localOutPutPath'")
-                  .then(
-                    (value) => setState(() {
-                  if (value == 1) {
-                    showToast("error found");
-                  }
-                  _showDelayText = false;
-                }),
-              );
+              // await _flutterFFmpeg
+              //     .execute(
+              //     "-y -i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter:v setpts=2.0*PTS -r 30 '$localOutPutPath'")
+              //     .then(
+              //       (value) => setState(() {
+              //     if (value == 1) {
+              //       showToast("error found");
+              //     }
+              //     _showDelayText = false;
+              //   }),
+              // );
+              try{
+                final result=  await platformChannel.invokeMethod("slowMotionVideo",<String,dynamic>{
+                  'urlPath':filePath,
+                  'speed':2.0,
+                  'writingPath':localOutPutPath
+                });
+                if(result){
+                  setState(() {
+                    _showDelayText = false;
+                  });
+                }
+              }on PlatformException catch (error) { // handle error
+                print('Error: $error'); // here
+              }
             } else if (_videoSpeed == 2) {
               // setState(() {
               //   _showDelayText = true;
               // });
-              await _flutterFFmpeg
-                  .execute(
-                  "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter_complex [0:v]setpts=0.5*PTS[v];[0:a]atempo=2[a] -map [v] -map [a] -r 30 '$localOutPutPath'")
-                  .then(
-                    (value) => setState(() {
-                  if (value == 1) {
-                    showToast("error found");
-                  }
-                  _showDelayText = false;
-                }),
-              );
+              // await _flutterFFmpeg
+              //     .execute(
+              //     "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter_complex [0:v]setpts=0.5*PTS[v];[0:a]atempo=2[a] -map [v] -map [a] -r 30 '$localOutPutPath'")
+              //     .then(
+              //       (value) => setState(() {
+              //     if (value == 1) {
+              //       showToast("error found");
+              //     }
+              //     _showDelayText = false;
+              //   }),
+              // );
+              try{
+                final result=  await platformChannel.invokeMethod("timeLapseVideo",<String,dynamic>{
+                  'urlPath':filePath,
+                  'speed':2.0,
+                  'writingPath':localOutPutPath
+                });
+                if(result){
+                  setState(() {
+                    _showDelayText = false;
+                  });
+                }
+              }on PlatformException catch (error) { // handle error
+                print('Error: $error'); // here
+              }
             } else if (_videoSpeed == 3) {
               // setState(() {
               //   _showDelayText = true;
               // });
-              await _flutterFFmpeg
-                  .execute(
-                  "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter_complex [0:v]setpts=0.33*PTS[v];[0:a]atempo=3[a] -map [v] -map [a] -r 30 '$localOutPutPath'")
-                  .then(
-                    (value) => setState(() {
-                  if (value == 1) {
-                    showToast("error found");
-                  }
-                  _showDelayText = false;
-                }),
-              );
+              try{
+                final result=  await platformChannel.invokeMethod("timeLapseVideo",<String,dynamic>{
+                  'urlPath':filePath,
+                  'speed':3.0,
+                  'writingPath':localOutPutPath
+                });
+                if(result){
+                  setState(() {
+                    _showDelayText = false;
+                  });
+                }
+              }on PlatformException catch (error) { // handle error
+                print('Error: $error'); // here
+              }
             } else if(_videoSpeed == 1) {
               // setState(() {
               //   _showDelayText = true;
               // });
-              await _flutterFFmpeg
-                  .execute(
-                  "-i '${filePath}' -c:v h264_videotoolbox -b:v 2200k -b:a 220k -preset ultrafast -threads 0 -filter_complex [0:v]setpts=1.0*PTS[v];[0:a]atempo=1.0[a] -map [v] -map [a] -r 30 '$localOutPutPath'")
-                  .then(
-                    (value) => setState(() {
-                  if (value == 1) {
-                    showToast("error found");
-                  }
-                  print('flag insert');
-                  _showDelayText = false;
-                }),
-              );
+              try{
+                final result=  await platformChannel.invokeMethod("timeLapseVideo",<String,dynamic>{
+                  'urlPath':filePath,
+                  'speed':0.0,
+                  'writingPath':localOutPutPath
+                });
+                if(result){
+                  setState(() {
+                    _showDelayText = false;
+                  });
+                }
+              }on PlatformException catch (error) { // handle error
+                print('Error: $error'); // here
+              }
             }
           } else {
             ///if platform is android the code is with the normal config
@@ -1605,10 +1656,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
       flagForCircle = true;
       isMergingInProgress = true;
     });
-    String status;
-    final Directory extDir =
-        Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
-    final String dirPath = '${extDir.path}';
+ var status;
     final FlutterFFmpeg _flutterFFmpeg = new FlutterFFmpeg();
     String cmdForMerging, localCommand, localOutPutPath;
     scaledPath.clear();
@@ -1675,59 +1723,111 @@ class _VideoRecordScreenState extends State<VideoRecordScreen> with TickerProvid
     //   printLog(" scaled Path ${element.videoPath}");
     //   printLog(" scaled Path length  ${scaledPath.length}");
     // });
-    List<String> commandList = await mergeVideoLoops(_listVideoModel);
-    // List<String> commandList = await mergeVideo(_listVideoModel);
-    cmdForMerging = commandList[0];
-    printLog("cmdForMerging : " + cmdForMerging);
-    String outputPath = commandList[1];
-    printLog("output path : " + outputPath);
-    printLog(cmdForMerging);
-    _flutterFFmpeg.execute(cmdForMerging).then((rc) {
-      printLog("FFMPEG process exited with rc $rc");
-      if (rc == 0) {
-        setState(() {
-          isMergingInProgress = false;
-        });
-        status = "Success";
-        setState(() {
-          flagForCircle = false;
-        });
-        showToast("Saving Successful");
-        mergedVideo = outputPath;
-        updatedRecording = false;
-        _newlyRecordedVideos.clear();
-        if (Platform.isIOS && Constants.IS_BANUBA_ON) {
-          printLog("leave");
-          _engine.cameraPauseStop(true);
-          // _engine.destroyBanubaCamera();
-          // _engine = null;
-        } else {
-          //_cameraController.dispose();
-        }
-
-        Navigator.of(context)
-            .push(
-          CupertinoPageRoute(
-              builder: (context) => VideoApp(
-                     outputPath,
-                  )),
-        )
-            .then((value) {
-              _engine.cameraPauseStop(false);
-          // _checkCameraAvailability();
-        });
-      } else {
-        setState(() {
-          flagForCircle = false;
-          isMergingInProgress = false;
-        });
-        status = "Error";
-        showToast("error occurred");
-      }
+    final Directory extDir =
+    Platform.isAndroid ? await getExternalStorageDirectory() : await getApplicationDocumentsDirectory();
+    final String dirPath = '${extDir.path}/Movies';
+    final writingPath = '$dirPath/${DateTime.now().millisecondsSinceEpoch}_merged.mp4';
+    List<String> pathList = List();
+    for(int i =0;i<_listVideoModel.length;i++){
+      pathList.add(_listVideoModel[i].videoPath);
+    }
+  var result = await platformChannel.invokeMethod("Merge",<String,dynamic>{
+'writingPath':writingPath,
+    'urlPath':pathList,
+  });
+    if (result) {
       setState(() {
-        //filePaths.clear();
+        isMergingInProgress = false;
       });
-    });
+      status = "Success";
+      setState(() {
+        flagForCircle = false;
+      });
+      showToast("Saving Successful");
+      mergedVideo =writingPath;
+      updatedRecording = false;
+      _newlyRecordedVideos.clear();
+      if (Platform.isIOS && Constants.IS_BANUBA_ON) {
+        printLog("leave");
+        _engine.cameraPauseStop(true);
+        // _engine.destroyBanubaCamera();
+        // _engine = null;
+      } else {
+        //_cameraController.dispose();
+      }
+
+      Navigator.of(context)
+          .push(
+        CupertinoPageRoute(
+            builder: (context) => VideoApp(
+              writingPath,
+            )),
+      )
+          .then((value) {
+        _engine.cameraPauseStop(false);
+        // _checkCameraAvailability();
+      });
+    } else {
+      setState(() {
+        flagForCircle = false;
+        isMergingInProgress = false;
+      });
+      status = "Error";
+      showToast("error occurred");
+    }
+    // List<String> commandList = await mergeVideoLoops(_listVideoModel);
+    // // List<String> commandList = await mergeVideo(_listVideoModel);
+    // cmdForMerging = commandList[0];
+    // printLog("cmdForMerging : " + cmdForMerging);
+    // String outputPath = commandList[1];
+    // printLog("output path : " + outputPath);
+    // printLog(cmdForMerging);
+    // _flutterFFmpeg.execute(cmdForMerging).then((rc) {
+    //   printLog("FFMPEG process exited with rc $rc");
+    //   if (rc == 0) {
+    //     setState(() {
+    //       isMergingInProgress = false;
+    //     });
+    //     status = "Success";
+    //     setState(() {
+    //       flagForCircle = false;
+    //     });
+    //     showToast("Saving Successful");
+    //     mergedVideo = outputPath;
+    //     updatedRecording = false;
+    //     _newlyRecordedVideos.clear();
+    //     if (Platform.isIOS && Constants.IS_BANUBA_ON) {
+    //       printLog("leave");
+    //       _engine.cameraPauseStop(true);
+    //       // _engine.destroyBanubaCamera();
+    //       // _engine = null;
+    //     } else {
+    //       //_cameraController.dispose();
+    //     }
+    //
+    //     Navigator.of(context)
+    //         .push(
+    //       CupertinoPageRoute(
+    //           builder: (context) => VideoApp(
+    //                  outputPath,
+    //               )),
+    //     )
+    //         .then((value) {
+    //           _engine.cameraPauseStop(false);
+    //       // _checkCameraAvailability();
+    //     });
+    //   } else {
+    //     setState(() {
+    //       flagForCircle = false;
+    //       isMergingInProgress = false;
+    //     });
+    //     status = "Error";
+    //     showToast("error occurred");
+    //   }
+    //   setState(() {
+    //     //filePaths.clear();
+    //   });
+    // });
     printLog("Scaled path length : ${scaledPath.length}");
   }
 

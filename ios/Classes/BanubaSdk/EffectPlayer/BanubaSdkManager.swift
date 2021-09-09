@@ -15,14 +15,14 @@ import ARKit
 }
 
 @objc public class BanubaSdkManager: NSObject {
-    
+
     @objc public weak var delegate: BanubaSdkManagerDelegate?
-    
+
     /**
      * Access to current instance of BNBEffectPlayer
      */
     @objc public private(set) var effectPlayer: BNBEffectPlayer?
-    
+
     /**
      * Face orintation in frame (degrees).
      */
@@ -30,7 +30,7 @@ import ARKit
     @objc public func effectManager() -> BNBEffectManager? {
         return effectPlayer?.effectManager()
     }
-    
+
     /**
      * Enable autorotation mode. Camera orientation and render size should change along with UI orientation
      */
@@ -40,7 +40,7 @@ import ARKit
             faceOrientation = 0
         }
     }
-    
+
     /**
      * - parameter effectUrl: path to effect relative to resource paths passed to `initialize`.
      * - parameter synchronous: block the call until effect is loaded.
@@ -62,25 +62,25 @@ import ARKit
         }
         return effect
     }
-    
+
     /** Extra parameters to be passed during on-CPU processing */
     @objc public var featureParameters: [BNBFeatureParameter]? = nil
-    
+
     @objc public func currentEffect() -> BNBEffect? {
         return effectManager()?.current()
     }
-    
+
     /**
      * Maximum number of faces to trace simultaneously
      */
     @objc public func setMaxFaces(_ maxFaces: Int) {
         effectPlayer?.setMaxFaces(Int32(maxFaces))
-        inputService.setMaxFaces(maxFaces) 
+        inputService.setMaxFaces(maxFaces)
     }
-    
+
     private struct Defaults {
         static let NothingToDraw = Int64(-1)
-        
+
         // Delay in ms after switching camera session preset, before starting to adjust camera settings.
         // (Otherwise camera device won't recognize that all needed properties needs to be adjusted).
         static let CameraDeviceInitializationDelay = 10
@@ -88,11 +88,11 @@ import ARKit
         static let startPhotoJSCall = "onTakePhotoStart"
         static let endPhotoJSCall = "onTakePhotoEnd"
     }
-    
+
     private var isUsingARKit: Bool {
         return inputService.useARKit
     }
-    
+
     public private(set) var voiceChanger: VoiceChangeable?
     private lazy var inputService: InputServicing = {
         if let configuration = currentEffectPlayerConfiguration {
@@ -112,7 +112,7 @@ import ARKit
             delayedCameraInitialization: false
         )
     }()
-    
+
     @objc public var input: InputServicing  {
         get {
             return inputService
@@ -122,9 +122,9 @@ import ARKit
             inputService.delegate = self
         }
     }
-    
+
     private var outputService: OutputService?
-    
+
     @objc public var output: OutputServicing?  {
         return outputService
     }
@@ -132,20 +132,20 @@ import ARKit
         label: "com.banuba.sdk.synchronization-queue",
         qos: .userInitiated
     )
-    
+
     //MARK: - GL
     private let context = EAGLContext(api: .openGLES3)
     private var currentEffectPlayerConfiguration: EffectPlayerConfiguration?
     @objc public var renderTarget: RenderTarget?
-    
+
     internal class var currentDeviceOrientation: UIDeviceOrientation {
         return deviceOrientationHandler.deviceOrientation
     }
-    
+
     @objc public var playerConfiguration: EffectPlayerConfiguration? {
         return currentEffectPlayerConfiguration
     }
-    
+
     @objc public func setRenderTarget(layer: CAEAGLLayer, renderMode: EffectPlayerRenderMode, contentMode: RenderContentMode = .resizeAspectFill) {
         // During reconfiguration on setRenderTarget videoSize and paths params aren't used, so we can leave them non-initialized.
         setRenderTarget(
@@ -154,9 +154,9 @@ import ARKit
             playerConfiguration: .init(renderMode: renderMode)
         )
     }
-    
+
     @objc public func setRenderTarget(layer: CAEAGLLayer, contentMode: RenderContentMode = .resizeAspectFill, playerConfiguration: EffectPlayerConfiguration?) {
-        
+
         // If we didn't provided new configuration, let's use current one as source for renderSize value.
         currentEffectPlayerConfiguration = playerConfiguration ?? currentEffectPlayerConfiguration
         if let configuration = currentEffectPlayerConfiguration {
@@ -178,7 +178,7 @@ import ARKit
             }
         }
     }
-    
+
     @objc public func removeRenderTarget() {
         stopRenderLoop()
         renderRunLoop.renderQueue.sync {
@@ -186,18 +186,18 @@ import ARKit
             renderTarget = nil
         }
     }
-    
+
     //MARK: - Device Orientation
     private static let deviceOrientationHandler = OrientationHandler()
     private var deviceOrientation = UIDeviceOrientation.portrait
-    
+
     //MARK: - Render RunLoop
     private var renderRunLoop: DisplayLinkRunLoop!
     private var editingImageFrameData: BNBFrameData?
     private var editingImageSize: CGSize?
     private var pushSize: CGSize?
     private var surfaceSize: CGSize?
-    
+
     private func setupRenderRunLoop() {
         renderRunLoop = DisplayLinkRunLoop(label: "com.banubaSdk.renderQueue") { [weak self] in
             guard let `self` = self else { return false }
@@ -207,7 +207,7 @@ import ARKit
     @objc public var renderQueue: DispatchQueue {
         return renderRunLoop.renderQueue
     }
-    
+
     private func startRenderLoop() {
         synchronizationQueue.sync {
             let framerate = currentEffectPlayerConfiguration?.preferredRenderFrameRate ??
@@ -216,13 +216,13 @@ import ARKit
             renderRunLoop.start(framerate: framerate)
         }
     }
-    
+
     private func stopRenderLoop() {
         synchronizationQueue.sync {
             renderRunLoop.isStoped = true
         }
     }
-    
+
     //MARK: - App State Handling
     @objc public var shouldAutoStartOnEnterForeground = true
     private var appStateHandler: AppStateHandler!
@@ -230,13 +230,13 @@ import ARKit
         self.appStateHandler.add(name: UIApplication.didEnterBackgroundNotification) { [weak self] (_) in
             print("App Background")
             guard let self = self, self.isLoaded else { return }
-            
+
             self.stopEffectPlayer()
         }
         self.appStateHandler.add(name: UIApplication.willEnterForegroundNotification) { [weak self] (_) in
             print("App Forground")
             guard let self = self, self.isLoaded, self.shouldAutoStartOnEnterForeground else { return }
-            
+
             self.startEffectPlayer()
         }
         self.appStateHandler.add(name: UIApplication.willTerminateNotification) { [weak self] (_) in
@@ -245,14 +245,14 @@ import ARKit
             BanubaSdkManager.deinitialize()
         }
     }
-    
+
     //MARK: - Effect Player life circle
     @objc public private(set) var isLoaded = false
     @objc public override init() {
         super.init()
         setupRenderRunLoop()
     }
-    
+
     /**
      * Intialize common banuba SDK resources. This must be called before `BanubaSdkManger` instance
      * creation. Counterpart `deinitialize` exists.
@@ -274,12 +274,12 @@ import ARKit
         )
         BNBUtilityManager.setLogLevel(logLevel)
     }
-    
+
     /** Release common Banuba SDK resources */
     @objc public class func deinitialize() {
         BNBUtilityManager.release()
     }
-    
+
     @objc deinit {
         inputService.stopCamera()
         if isLoaded {
@@ -287,17 +287,17 @@ import ARKit
             destroyEffectPlayer()
         }
     }
-    
+
     internal func setupOutputService() {
         addSnapshotHandler { [weak self] (provider) in
             self?.outputService?.handle(snapshotProvider: provider)
         }
-        
+
         addPixelBufferHandler { [weak self] (provider) in
             self?.outputService?.handle(bufferProvider: provider)
         }
     }
-    
+
     @objc public func setup(configuration: EffectPlayerConfiguration) {
         renderRunLoop.removeAllHandlers()
         appStateHandler = AppStateHandler(notificationCenter: configuration.notificationCenter)
@@ -311,7 +311,7 @@ import ARKit
             isLoaded = true
         }
     }
-    
+
     @objc public func destroy() {
         renderRunLoop.removeAllHandlers()
         stopOrientationDetection()
@@ -319,7 +319,7 @@ import ARKit
             isLoaded = false
         }
         inputService.delegate = nil
-        
+
         //ALL listeners must be removed to avoid reference cycle
         effectPlayer?.remove(self as BNBCameraPoiListener)
         effectPlayer?.remove(self as BNBFaceNumberListener)
@@ -334,9 +334,9 @@ import ARKit
         }
         surfaceDestroyed()
     }
-    
+
     private static let maxInputSize = Float(1024 * 768)
-    
+
     /**
      * BNBEffectPlayer may crash on certain devices. So, we downscale the input image before processing.
      */
@@ -365,7 +365,7 @@ private extension BanubaSdkManager {
     func startOrientationDetection() {
         BanubaSdkManager.deviceOrientationHandler.start()
     }
-    
+
     func stopOrientationDetection() {
         BanubaSdkManager.deviceOrientationHandler.stop()
     }
@@ -376,13 +376,13 @@ private extension BanubaSdkManager {
         guard isLoaded else { return }
         self.outputService?.handle(audioBuffer: cmBuffer)
     }
-    
+
     public func push(cvBuffer: CVPixelBuffer) {
         guard isLoaded else { return }
         updateOrientation()
         pushFrame(frameBuffer: cvBuffer)
     }
-    
+
 #if BNB_ENABLE_ARKIT
     @available(iOS 11.0, *)
     public func push(frame: ARFrame, useBackCamera: Bool) {
@@ -406,7 +406,7 @@ private extension BanubaSdkManager {
         else {
             effectPlayer?.stopFramedataCapture()
         }
-        
+
     }
 }
 
@@ -422,21 +422,21 @@ internal extension BanubaSdkManager {
             faceOrientation = autoRotationEnabled ? 0 : angle
         }
     }
-    
+
     func addSnapshotHandler(handler:@escaping ((SnapshotProvider)->Void)) {
         renderRunLoop.addPostRender { [weak self] in
             guard let renderTarget = self?.renderTarget else { return }
             handler((renderTarget))
         }
     }
-    
+
     func addPixelBufferHandler(handler:@escaping ((PixelBufferProvider)->Void)) {
         renderRunLoop.addPostRender { [weak self] in
             guard let renderTarget = self?.renderTarget else { return }
             handler((renderTarget))
         }
     }
-    
+
     private func drawToContext() -> Bool {
         guard !renderRunLoop.isStoped, let renderTarget = self.renderTarget else {
             return false
@@ -474,7 +474,7 @@ internal extension BanubaSdkManager {
             startRenderLoop()
         }
     }
-    
+
     public func stopEffectPlayer() {
         stopOrientationDetection()
         stopRenderLoop()
@@ -485,7 +485,7 @@ internal extension BanubaSdkManager {
             self.stopRenderLoop()
         }
     }
-    
+
     public func destroyEffectPlayer() {
         stopRenderLoop()
         removeRenderTarget()
@@ -494,7 +494,7 @@ internal extension BanubaSdkManager {
             destroy()
         }
     }
-    
+
     /// Image editing mode - renders effect on single frame prepared from image, applies effect on image in full resolution.
     ///
     /// Workflow to use editing:
@@ -571,7 +571,7 @@ internal extension BanubaSdkManager {
             }
         }
     }
-    
+
     public func captureEditedImage(
         imageOrientation: BNBCameraOrientation = .deg0,
         resetEffect: Bool = false,
@@ -606,7 +606,7 @@ internal extension BanubaSdkManager {
             }
         }
     }
-    
+
     public func stopEditingImage(startCameraInput: Bool = false) {
         guard isLoaded else { return }
         stopRenderLoop()
@@ -620,17 +620,17 @@ internal extension BanubaSdkManager {
             inputService.startCamera()
         }
     }
-    
+
     public func makeCameraPhoto(cameraSettings: CameraPhotoSettings, flipFrontCamera: Bool = false, srcImageHandler: ((CVPixelBuffer) -> Void)? = nil, completion: @escaping (UIImage?) -> Void) {
         guard inputService.isPhotoCameraSession else {
             completion(nil)
             return
         }
-        
+
         if flipFrontCamera {
             self.input.flipCamera = true
         }
-        
+
         let cameraInitDelay: DispatchTime = DispatchTime.now() + DispatchTimeInterval.milliseconds(Defaults.CameraDeviceInitializationDelay)
         DispatchQueue.main.asyncAfter(deadline: cameraInitDelay, execute: { [weak self] in
             self?.inputService.initiatePhotoCapture(
@@ -644,7 +644,7 @@ internal extension BanubaSdkManager {
                     srcImageHandler?(imageBuffer)
                     let width = UInt(CVPixelBufferGetWidth(imageBuffer))
                     let height = UInt(CVPixelBufferGetHeight(imageBuffer))
-                    
+
                     // TODO:
                     // Frontal camera already makes mirrored photo, so if user wants non-mirrored photo (flipFrontCamera is set to false),
                     // we should mirror it again. For other cases we shouldn't do anything.
@@ -663,7 +663,7 @@ internal extension BanubaSdkManager {
                 })
         })
     }
-    
+
     public func processImageData(
         _ inputData: CVImageBuffer,
         orientation: BNBCameraOrientation = .deg0,
@@ -693,7 +693,7 @@ internal extension BanubaSdkManager {
             completion: completion
         )
     }
-    
+
     private func processImageFrameData(
         _ inputFrameData: BNBFrameData?,
         width: UInt,
@@ -731,7 +731,7 @@ internal extension BanubaSdkManager {
             completion(processedImage)
         }
     }
-    
+
     public func processImageData(
         _ imputImage: UIImage,
         orientation: BNBCameraOrientation = .deg0,
@@ -784,15 +784,15 @@ internal extension BanubaSdkManager {
             }
         }
     }
-    
+
     public func configureWatermark(_ watermarkInfo: WatermarkInfo) {
         outputService?.configureWatermark(watermarkInfo)
     }
-    
+
     public func removeWatermark() {
         outputService?.removeWatermark()
     }
-    
+
     public func startVideoProcessing(
         width: UInt,
         height: UInt,
@@ -810,14 +810,14 @@ internal extension BanubaSdkManager {
                 offlineMode: true)
         }
     }
-    
+
     public func stopVideoProcessing(resetEffect: Bool = false) {
         stopRenderLoop()
         renderQueue.async { [weak self] in
             self?.effectPlayer?.stopVideoProcessing(resetEffect)
         }
     }
-    
+
     public func processVideoFrame(
         from: CVPixelBuffer,
         to: CVPixelBuffer,
@@ -842,21 +842,21 @@ internal extension BanubaSdkManager {
                 faceOrientation: faceOrientation,
                 fieldOfView: fieldOfView
             )
-            
+
             // TODO ep.processVideoFrameAllocated
             let fd = effectPlayer.processVideoFrame(
                 image,
                 params: processImageParams,
                 recognizerIterations: iterations
             )
-            
+
             autoreleasepool {
                 let processed = effectPlayer.drawVideoFrame(
                     fd,
                     timeNs: timeNs,
                     outputPixelFormat: .bgra
                 )
-                
+
                 // For debug:
                 // let uiImage = UIImage(rgbaDataNoCopy: processed as NSData, width: outW, height: outH)
                 let lockRwFlag = CVPixelBufferLockFlags(rawValue: 0)
@@ -888,7 +888,7 @@ internal extension BanubaSdkManager {
             }
         }
     }
-    
+
     // After making photo iOs camera produces image rotated CCW by 90 degrees,
     // so we should map device orientation onto image orientation for processing
     // Add ARKit orientation check in landcapeLeft and landscapeRight cases: ARKit camera produces flipped by horizontal image instead of standart camera. So we need to swap degrees for ARKit camera to correct UIImage.orientation.up and UIImage.orientation.down cases
@@ -914,7 +914,7 @@ internal extension BanubaSdkManager {
             return .deg90
         }
     }
-    
+
     private func activateContext() {
         guard let renderTarget = renderTarget else {
             EAGLContext.setCurrent(context)
@@ -957,10 +957,10 @@ private extension BanubaSdkManager {
             effectPlayer.add(self as BNBFrameDurationListener)
         }
     }
-    
+
     func pushFrame(frameBuffer buffer:CVPixelBuffer) {
         delegate?.willOutput(pixelBuffer: buffer)
-        
+
         synchronizationQueue.sync {
             guard !renderRunLoop.isStoped, isLoaded else { return }
             //TODO account pushSize for rotation
@@ -978,12 +978,12 @@ private extension BanubaSdkManager {
             effectPlayer?.push(fd)
         }
     }
-    
+
 #if BNB_ENABLE_ARKIT
     @available(iOS 11.0, *)
     func pushFrame(frame: ARFrame, useBackCamera: Bool) {
         delegate?.willOutput(arFrame: frame)
-        
+
         synchronizationQueue.sync {
             guard !renderRunLoop.isStoped, isLoaded else { return }
             let fd = BNBFrameData.create(
@@ -997,19 +997,19 @@ private extension BanubaSdkManager {
         }
     }
 #endif
-    
+
     func surfaceCreated(width: Int32, height: Int32) {
         surfaceSize = CGSize(width: Int(width), height: Int(height))
         EAGLContext.setCurrent(context)
         effectPlayer?.surfaceCreated(width, height: height)
     }
-    
+
     func surfaceDestroyed() {
         surfaceSize = nil
         EAGLContext.setCurrent(context)
         effectPlayer?.surfaceDestroyed()
     }
-    
+
     func addFeatureParameters(frameData: BNBFrameData?) {
         if let params = self.featureParameters {
             frameData?.add(params)
@@ -1059,7 +1059,7 @@ extension BanubaSdkManager: BNBFrameDurationListener {
     private static let interval = 3.0
     fileprivate static let dumpFps = false
     private static let startTime = Date()
-    
+
     public func onRecognizerFrameDurationChanged(
         _ instant: Float,
         averaged: Float
@@ -1071,7 +1071,7 @@ extension BanubaSdkManager: BNBFrameDurationListener {
             BanubaSdkManager.lastPrintTime[0] = Date()
         }
     }
-    
+
     public func onCameraFrameDurationChanged(_ instant: Float, averaged: Float) {
         if -BanubaSdkManager.lastPrintTime[1].timeIntervalSinceNow >=
             BanubaSdkManager.interval {
@@ -1080,7 +1080,7 @@ extension BanubaSdkManager: BNBFrameDurationListener {
             BanubaSdkManager.lastPrintTime[1] = Date()
         }
     }
-    
+
     public func onRenderFrameDurationChanged(_ instant: Float, averaged: Float) {
         if -BanubaSdkManager.lastPrintTime[2].timeIntervalSinceNow >=
             BanubaSdkManager.interval {
@@ -1089,7 +1089,7 @@ extension BanubaSdkManager: BNBFrameDurationListener {
             BanubaSdkManager.lastPrintTime[2] = Date()
         }
     }
-    
+
     private static var duration: String {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute, .second]

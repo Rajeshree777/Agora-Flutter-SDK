@@ -11,10 +11,12 @@ abstract class EnumConverter<E, T> {
 
   EnumConverter(this.e);
 
-  EnumConverter.fromValue(Map<E, T> map, T t) : e = _$enumDecode(map, t);
+  EnumConverter.fromValue(Map<E, T> map, T t) {
+    e = _$enumDecodeNullable(map, t);
+  }
 
   T toValue(Map<E, T> map) {
-    return map[e] as T;
+    return map[e];
   }
 }
 
@@ -82,14 +84,15 @@ class AudioLocalStateConverter extends EnumConverter<AudioLocalState, int> {
 }
 
 @JsonSerializable()
-class AudioMixingReasonConverter extends EnumConverter<AudioMixingReason, int> {
-  AudioMixingReasonConverter(AudioMixingReason e) : super(e);
+class AudioMixingErrorCodeConverter
+    extends EnumConverter<AudioMixingErrorCode, int> {
+  AudioMixingErrorCodeConverter(AudioMixingErrorCode e) : super(e);
 
-  AudioMixingReasonConverter.fromValue(int value)
-      : super.fromValue(_$AudioMixingReasonEnumMap, value);
+  AudioMixingErrorCodeConverter.fromValue(int value)
+      : super.fromValue(_$AudioMixingErrorCodeEnumMap, value);
 
   int value() {
-    return super.toValue(_$AudioMixingReasonEnumMap);
+    return super.toValue(_$AudioMixingErrorCodeEnumMap);
   }
 }
 
@@ -141,19 +144,6 @@ class AudioRecordingQualityConverter
 
   int value() {
     return super.toValue(_$AudioRecordingQualityEnumMap);
-  }
-}
-
-@JsonSerializable()
-class AudioRecordingPositionConverter
-    extends EnumConverter<AudioRecordingPosition, int> {
-  AudioRecordingPositionConverter(AudioRecordingPosition e) : super(e);
-
-  AudioRecordingPositionConverter.fromValue(int value)
-      : super.fromValue(_$AudioRecordingPositionEnumMap, value);
-
-  int value() {
-    return super.toValue(_$AudioRecordingPositionEnumMap);
   }
 }
 

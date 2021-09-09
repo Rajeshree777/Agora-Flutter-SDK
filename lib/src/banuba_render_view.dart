@@ -16,7 +16,7 @@ final Map<int, MethodChannel> _channels = {};
 /// Use [UIView](https://developer.apple.com/documentation/uikit/uiview) in iOS.
 class BanubaSurfaceView extends StatefulWidget {
   /// User ID.
-  final int? uid;
+  final int uid;
 
   /// The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
   /// - All lowercase English letters: a to z.
@@ -28,7 +28,7 @@ class BanubaSurfaceView extends StatefulWidget {
   /// **Note**
   /// - The default value is the empty string "". Use the default value if the user joins the channel using the [RtcEngine.joinChannel] method in the [RtcEngine] class.
   /// - If the user joins the channel using the [RtcChannel.joinChannel] method in the [RtcChannel] class, set this parameter as the channelId of the [RtcChannel] object.
-  final String? channelId;
+  final String channelId;
 
   /// The rendering mode of the video view.
   final VideoRenderMode renderMode;
@@ -39,17 +39,17 @@ class BanubaSurfaceView extends StatefulWidget {
   /// Control whether the surface view's surface is placed on top of its window.
   ///
   /// See [TargetPlatform.android].
-  final bool? zOrderOnTop;
+  final bool zOrderOnTop;
 
   /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
   ///
   /// See [TargetPlatform.android].
-  final bool? zOrderMediaOverlay;
+  final bool zOrderMediaOverlay;
 
   /// Callback signature for when a platform view was created.
   ///
   /// `id` is the platform view's unique identifier.
-  final PlatformViewCreatedCallback? onPlatformViewCreated;
+  final PlatformViewCreatedCallback onPlatformViewCreated;
 
   /// Which gestures should be consumed by the web view.
   ///
@@ -60,20 +60,20 @@ class BanubaSurfaceView extends StatefulWidget {
   ///
   /// When this set is empty or null, the web view will only handle pointer events for gestures that
   /// were not claimed by any other gesture recognizer.
-  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
-  final String? effectName;
+  final String effectName;
 
-  final int? surfaceHeight;
-  final int? surfaceWidth;
+  final int surfaceHeight;
+  final int surfaceWidth;
 
   final bool isFrontCamera;
 
   /// Constructs a [BanubaSurfaceView]
   BanubaSurfaceView({
-    Key? key,
+    Key key,
     @required this.uid,
-    required this.channelId,
+    this.channelId,
     this.renderMode = VideoRenderMode.Hidden,
     this.mirrorMode = VideoMirrorMode.Auto,
     this.zOrderOnTop = false,
@@ -93,9 +93,9 @@ class BanubaSurfaceView extends StatefulWidget {
 }
 
 class _BanubaSurfaceViewState extends State<BanubaSurfaceView> {
-  int? _id;
-  int? _renderMode;
-  int? _mirrorMode;
+  int _id;
+  int _renderMode;
+  int _mirrorMode;
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +238,7 @@ class _BanubaSurfaceViewState extends State<BanubaSurfaceView> {
 /// [TargetPlatform.android]
 class BanubaTextureView extends StatefulWidget {
   /// User ID.
-  final int? uid;
+  final int uid;
 
   /// The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
   /// - All lowercase English letters: a to z.
@@ -250,7 +250,7 @@ class BanubaTextureView extends StatefulWidget {
   /// **Note**
   /// - The default value is the empty string "". Use the default value if the user joins the channel using the [RtcEngine.joinChannel] method in the [RtcEngine] class.
   /// - If the user joins the channel using the [RtcChannel.joinChannel] method in the [RtcChannel] class, set this parameter as the channelId of the [RtcChannel] object.
-  final String? channelId;
+  final String channelId;
 
   /// The rendering mode of the video view.
   final VideoRenderMode renderMode;
@@ -261,7 +261,7 @@ class BanubaTextureView extends StatefulWidget {
   /// Callback signature for when a platform view was created.
   ///
   /// `id` is the platform view's unique identifier.
-  final PlatformViewCreatedCallback? onPlatformViewCreated;
+  final PlatformViewCreatedCallback onPlatformViewCreated;
 
   /// Which gestures should be consumed by the web view.
   ///
@@ -272,11 +272,11 @@ class BanubaTextureView extends StatefulWidget {
   ///
   /// When this set is empty or null, the web view will only handle pointer events for gestures that
   /// were not claimed by any other gesture recognizer.
-  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
   /// Constructs a [BanubaTextureView]
   BanubaTextureView({
-    Key? key,
+    Key key,
     @required this.uid,
     this.channelId,
     this.renderMode = VideoRenderMode.Hidden,
@@ -292,9 +292,9 @@ class BanubaTextureView extends StatefulWidget {
 }
 
 class _BanubaTextureViewState extends State<BanubaTextureView> {
-  int? _id;
-  int? _renderMode;
-  int? _mirrorMode;
+  int _id;
+  int _renderMode;
+  int _mirrorMode;
 
   @override
   Widget build(BuildContext context) {

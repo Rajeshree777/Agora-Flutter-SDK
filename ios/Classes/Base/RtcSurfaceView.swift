@@ -6,9 +6,9 @@
 //  Copyright © 2020 Syan. All rights reserved.
 //
 
-import AgoraRtcKit
 import Foundation
 import UIKit
+import AgoraRtcKit
 
 class RtcSurfaceView: UIView {
     private var surface: UIView
@@ -84,6 +84,10 @@ class RtcSurfaceView: UIView {
                 print("Surface Back camera init")
                 config = EffectPlayerConfiguration(renderMode: .video, isFrontCam: isFrontCamera)
             }
+         //   config.fpsLimit = 24
+         //   config.captureSessionPreset = .medium
+         //   config.renderSize = CGSize(width: 360, height: 640)
+         //   config.preferredRenderFrameRate = 24
 //            BanubaSdkManager.deinitialize()
 //            BanubaSdkManager.initialize(
 //                resourcePath: [Bundle.main.bundlePath + "/effects"], clientTokenString: banubaClientToken)
@@ -131,13 +135,13 @@ class RtcSurfaceView: UIView {
 
     @objc func onEffectChange(notification: Notification) {
 //        print("On select effect myFunction \(notification.object) ==== \(banubaSdkManager.currentEffect())" );
-    //    banubaSdkManager.stopEffectPlayer()
+//    banubaSdkManager.stopEffectPlayer()
 
         if let effectName = notification.object as? String {
             self.effectName = effectName
             _ = banubaSdkManager.loadEffect(effectName)
         }
-   //     banubaSdkManager.startEffectPlayer()
+//        banubaSdkManager.startEffectPlayer()
     }
 
     @objc func onCameraModeChange(notification: Notification) {
@@ -172,15 +176,13 @@ class RtcSurfaceView: UIView {
         }
         canvas.view = nil
         removeObserver(self, forKeyPath: observerForKeyPath(), context: nil)
-
     }
 
     func observerForKeyPath() -> String {
         return "frame"
     }
 
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -188,8 +190,8 @@ class RtcSurfaceView: UIView {
         if (canvas.uid == 0) {
             NotificationCenter.default.removeObserver(self, name: .effectChangeNotification, object: nil)
             NotificationCenter.default.removeObserver(self, name: .cameraModeChangeNotification, object: nil)
-            NotificationCenter.default.removeObserver(self, name: .destroyBanubaEffectNotification, object: nil)
             NotificationCenter.default.removeObserver(self, name: .cameraPauseModeChangeNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: .destroyBanubaEffectNotification, object: nil)
         }
         canvas.view = nil
         removeObserver(self, forKeyPath: observerForKeyPath(), context: nil)
@@ -199,7 +201,7 @@ class RtcSurfaceView: UIView {
         self.channel = channel
         canvas.channelId = channel?.getId()
         canvas.uid = uid
-        print("Effect \(effectName) uid = \(uid) total \(totalJoinedUser) === new \(newJoinList)")
+  //      print("init Effect \(effectName) uid = \(uid) total \(totalJoinedUser) === new \(newJoinList)")
 
         self.effectName = effectName
 
@@ -215,6 +217,7 @@ class RtcSurfaceView: UIView {
     }
 
     override func layoutSubviews() {
+        print("init Layout Subviews \(canvas.uid )")
         if (canvas.uid == 0) {
             banubaSdkManager.effectPlayer?.setEffectVolume(0)
             banubaSdkManager.input.startCamera()
@@ -245,7 +248,6 @@ class RtcSurfaceView: UIView {
 //            setUpRenderSize()
 
             canvas.view = surface
-
         }
         print("Setup Video Canvas Banuba \(canvas.uid ) \(self.frame.size) === \(surface.frame)")
 
@@ -309,7 +311,7 @@ class RtcSurfaceView: UIView {
         if canvas.uid == 0 {
             engine.setLocalRenderMode(canvas.renderMode, mirrorMode: canvas.mirrorMode)
         } else {
-            if let channel = channel {
+            if let `channel` = channel {
                 channel.setRemoteRenderMode(canvas.uid, renderMode: canvas.renderMode, mirrorMode: canvas.mirrorMode)
             } else {
                 engine.setRemoteRenderMode(canvas.uid, renderMode: canvas.renderMode, mirrorMode: canvas.mirrorMode)
@@ -317,7 +319,7 @@ class RtcSurfaceView: UIView {
         }
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of _: Any?, change: [NSKeyValueChangeKey: Any]?, context _: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == observerForKeyPath() {
             if let rect = change?[.newKey] as? CGRect {
                 print("Frame auto change \(canvas.uid)")

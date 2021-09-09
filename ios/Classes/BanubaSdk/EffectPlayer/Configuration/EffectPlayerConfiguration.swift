@@ -9,12 +9,12 @@ import AVKit
 @objc public class EffectPlayerConfiguration: NSObject {
     @objc public class Defaults: NSObject {
         @objc public static let videoSessionPreset: AVCaptureSession.Preset = .hd1280x720
-        @objc public static let photoSessionPreset: AVCaptureSession.Preset = .photo
-        @objc public static let photoRenderSize: CGSize = CGSize(width: 720, height: 1280)
-        @objc public static let videoRenderSize: CGSize = CGSize(width: 720, height: 1280)
-        @objc public static let defaultFrameRate: Int = 60
+                @objc public static let photoSessionPreset: AVCaptureSession.Preset = .photo
+                @objc public static let photoRenderSize: CGSize = CGSize(width: 720, height: 1280)
+                @objc public static let videoRenderSize: CGSize = CGSize(width: 720, height: 1280)
+                @objc public static let defaultFrameRate: Int = 60
     }
-    
+
     @objc public let cameraMode: CameraSessionType
     @objc public var renderContentMode: RenderContentMode
     @objc public var renderSize: CGSize
@@ -29,11 +29,11 @@ import AVKit
     @objc public var notificationCenter: NotificationCenter
     @objc public var useARKitWhenAvailable: Bool
     @objc public var fpsLimit: Double
-    
+
     @objc public override convenience init() {
         self.init(renderMode: .video)
     }
-    
+
     @objc public convenience init(
         renderMode: EffectPlayerRenderMode,
         renderContentMode: RenderContentMode = .resizeAspect,
@@ -67,7 +67,7 @@ import AVKit
             notificationCenter: notificationCenter
         )
     }
-    
+
     @objc public init(
         cameraMode: CameraSessionType,
         renderContentMode: RenderContentMode = .resizeAspect,
@@ -86,13 +86,13 @@ import AVKit
         self.cameraMode = cameraMode
         self.captureSessionPreset = captureSessionPreset
         self.renderContentMode = renderContentMode
-        
+
         // Render size - specifies in which resolution effect player will render input data, and provide it back for further usage.
         // As described below, input size and render size should have same aspect ratio.
         // Also, surfaceCreated method should use the same value (renderSize) for width and height, to correctly display render on layer.
         // Layer itself could have any size, render will be scaled properly (Of course, layer should have same aspect ratio to prevent scaling distortions).
         self.renderSize = renderSize
-        
+
         // Render loop triggers draw method with 60 fps by default, but in editing mode, when we render the same frame,
         // it's not needed, so we can make it lower with this parameter.
         self.preferredRenderFrameRate = preferredRenderFrameRate

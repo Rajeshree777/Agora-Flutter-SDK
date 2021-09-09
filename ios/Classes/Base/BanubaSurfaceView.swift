@@ -44,8 +44,11 @@ class BanubaSurfaceView: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(flashModeChange), name: .flashModeChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(videoRecordChange), name: .videoRecodingChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(audioRecordChange), name: .audioChangeNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(destroyBanubaEffectPlayer), name: .destroyBanubaEffectNotification, object: nil)
+
         NotificationCenter.default.addObserver(self, selector: #selector(cameraPauseModeChange), name: .cameraPauseModeChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(destroyBanubaEffectPlayer), name: .destroyBanubaEffectNotification, object: nil)
+
+
 
 //        banubaSdkManager.input.switchCamera(to: .BackCameraVideoSession) {
 //            print("Camera Switched")
@@ -85,13 +88,13 @@ class BanubaSurfaceView: UIView {
 
     @objc func onEffectChange(notification: Notification) {
         //        print("On select effect myFunction \(notification.object) ==== \(banubaSdkManager.currentEffect())" );
-     //   banubaSdkManager.stopEffectPlayer()
+        banubaSdkManager.stopEffectPlayer()
 
         if let effectName = notification.object as? String {
             self.effectName = effectName
             _ = banubaSdkManager.loadEffect(effectName)
         }
-   //     banubaSdkManager.startEffectPlayer()
+        banubaSdkManager.startEffectPlayer()
     }
 
     @objc func onCameraModeChange(notification: Notification) {
@@ -159,11 +162,10 @@ class BanubaSurfaceView: UIView {
            }
        }
 
-        @objc func destroyBanubaEffectPlayer(notification: Notification) {
-          print("destroyBanubaEffectPlayer from surfaceview")
-             banubaSdkManager.destroyEffectPlayer()
-         }
-
+   @objc func destroyBanubaEffectPlayer(notification: Notification) {
+   print("destroyBanubaEffectPlayer from surfaceview")
+      banubaSdkManager.destroyEffectPlayer()
+  }
 
     func observerForKeyPath() -> String {
         return "frame"
@@ -180,8 +182,8 @@ class BanubaSurfaceView: UIView {
         NotificationCenter.default.removeObserver(self, name: .flashModeChangeNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .videoRecodingChangeNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .audioChangeNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .destroyBanubaEffectNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: .cameraPauseModeChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .destroyBanubaEffectNotification, object: nil)
 
         removeObserver(self, forKeyPath: observerForKeyPath(), context: nil)
     }
@@ -193,9 +195,8 @@ class BanubaSurfaceView: UIView {
     }
 
     override func layoutSubviews() {
-
-        banubaSdkManager.input.startCamera()
         banubaSdkManager.effectPlayer?.setEffectVolume(0)
+        banubaSdkManager.input.startCamera()
         if (self.effectName != nil) {
             _ = banubaSdkManager.loadEffect(self.effectName ?? "")
         }

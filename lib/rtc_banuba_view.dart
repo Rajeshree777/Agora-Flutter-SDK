@@ -10,15 +10,15 @@ import 'src/enums.dart';
 class SurfaceView extends BanubaSurfaceView {
   /// Constructs a [SurfaceView]
   SurfaceView({
-    Key? key,
+    Key key,
     bool zOrderMediaOverlay = false,
     bool zOrderOnTop = false,
     VideoRenderMode renderMode = VideoRenderMode.Hidden,
-    String? channelId,
+    String channelId,
     VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
-    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
-    PlatformViewCreatedCallback? onPlatformViewCreated,
-    String? effectName,
+    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    PlatformViewCreatedCallback onPlatformViewCreated,
+    String effectName,
     int surfaceHeight = 0,
     int surfaceWidth = 0,
     bool isFrontCamera = true,
@@ -42,12 +42,12 @@ class SurfaceView extends BanubaSurfaceView {
 class TextureView extends BanubaTextureView {
   /// Constructs a [TextureView]
   TextureView({
-    Key? key,
+    Key key,
     VideoRenderMode renderMode = VideoRenderMode.Hidden,
-    String? channelId,
+    String channelId,
     VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
-    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
-    PlatformViewCreatedCallback? onPlatformViewCreated,
+    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    PlatformViewCreatedCallback onPlatformViewCreated,
   }) : super(
             key: key,
             renderMode: renderMode,

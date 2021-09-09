@@ -3,23 +3,23 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import 'src/enums.dart';
-import 'src/rtc_render_view.dart';
+import './src/enums.dart';
+import './src/rtc_render_view.dart';
 
 /// SurfaceView.
 class SurfaceView extends RtcSurfaceView {
   /// Constructs a [SurfaceView]
   SurfaceView({
-    Key? key,
-    String? channelId,
-    renderMode = VideoRenderMode.Hidden,
-    mirrorMode = VideoMirrorMode.Auto,
-    zOrderOnTop = false,
-    zOrderMediaOverlay = false,
-    PlatformViewCreatedCallback? onPlatformViewCreated,
-    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
-    String? effectName,
-    int? totalJoinedUser,
+    Key key,
+    bool zOrderMediaOverlay = false,
+    bool zOrderOnTop = false,
+    VideoRenderMode renderMode = VideoRenderMode.Hidden,
+    String channelId,
+    VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
+    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    PlatformViewCreatedCallback onPlatformViewCreated,
+    String effectName,
+    int totalJoinedUser,
     bool isFrontCamera = true,
   }) : super(
             key: key,
@@ -36,23 +36,22 @@ class SurfaceView extends RtcSurfaceView {
             isFrontCamera: isFrontCamera);
 }
 
-/// TextureView.
+/// (Android only) TextureView.
 class TextureView extends RtcTextureView {
   /// Constructs a [TextureView]
   TextureView({
-    Key? key,
-    String? channelId,
-    renderMode = VideoRenderMode.Hidden,
-    mirrorMode = VideoMirrorMode.Auto,
-    PlatformViewCreatedCallback? onPlatformViewCreated,
-    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
+    Key key,
+    VideoRenderMode renderMode = VideoRenderMode.Hidden,
+    String channelId,
+    VideoMirrorMode mirrorMode = VideoMirrorMode.Auto,
+    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    PlatformViewCreatedCallback onPlatformViewCreated,
   }) : super(
-          key: key,
-          uid: 0,
-          channelId: channelId,
-          renderMode: renderMode,
-          mirrorMode: mirrorMode,
-          onPlatformViewCreated: onPlatformViewCreated,
-          gestureRecognizers: gestureRecognizers,
-        );
+            key: key,
+            renderMode: renderMode,
+            channelId: channelId,
+            mirrorMode: mirrorMode,
+            gestureRecognizers: gestureRecognizers,
+            onPlatformViewCreated: onPlatformViewCreated,
+            uid: 0);
 }

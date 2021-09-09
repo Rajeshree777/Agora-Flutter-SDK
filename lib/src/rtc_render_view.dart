@@ -6,11 +6,14 @@ import 'package:flutter/widgets.dart';
 
 import 'enum_converter.dart';
 import 'enums.dart';
+import 'rtc_channel.dart';
+import 'rtc_engine.dart';
 
 final Map<int, MethodChannel> _channels = {};
 
-/// Use SurfaceView on Android.
-/// Use UIView on iOS.
+/// Use SurfaceView in Android.
+///
+/// Use [UIView](https://developer.apple.com/documentation/uikit/uiview) in iOS.
 class RtcSurfaceView extends StatefulWidget {
   /// User ID.
   final int uid;
@@ -25,7 +28,7 @@ class RtcSurfaceView extends StatefulWidget {
   /// **Note**
   /// - The default value is the empty string "". Use the default value if the user joins the channel using the [RtcEngine.joinChannel] method in the [RtcEngine] class.
   /// - If the user joins the channel using the [RtcChannel.joinChannel] method in the [RtcChannel] class, set this parameter as the channelId of the [RtcChannel] object.
-  final String? channelId;
+  final String channelId;
 
   /// The rendering mode of the video view.
   final VideoRenderMode renderMode;
@@ -35,18 +38,18 @@ class RtcSurfaceView extends StatefulWidget {
 
   /// Control whether the surface view's surface is placed on top of its window.
   ///
-  /// Only support [TargetPlatform.android].
+  /// See [TargetPlatform.android].
   final bool zOrderOnTop;
 
   /// Control whether the surface view's surface is placed on top of another regular surface view in the window (but still behind the window itself).
   ///
-  /// Only support [TargetPlatform.android].
+  /// See [TargetPlatform.android].
   final bool zOrderMediaOverlay;
 
   /// Callback signature for when a platform view was created.
   ///
   /// `id` is the platform view's unique identifier.
-  final PlatformViewCreatedCallback? onPlatformViewCreated;
+  final PlatformViewCreatedCallback onPlatformViewCreated;
 
   /// Which gestures should be consumed by the web view.
   ///
@@ -57,18 +60,18 @@ class RtcSurfaceView extends StatefulWidget {
   ///
   /// When this set is empty or null, the web view will only handle pointer events for gestures that
   /// were not claimed by any other gesture recognizer.
-  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
-  final String? effectName;
+  final String effectName;
 
-  final int? totalJoinedUser;
+  final int totalJoinedUser;
 
   final bool isFrontCamera;
 
   /// Constructs a [RtcSurfaceView]
   RtcSurfaceView({
-    Key? key,
-    required this.uid,
+    Key key,
+    @required this.uid,
     this.channelId,
     this.renderMode = VideoRenderMode.Hidden,
     this.mirrorMode = VideoMirrorMode.Auto,
@@ -88,9 +91,9 @@ class RtcSurfaceView extends StatefulWidget {
 }
 
 class _RtcSurfaceViewState extends State<RtcSurfaceView> {
-  int? _id;
-  int? _renderMode;
-  int? _mirrorMode;
+  int _id;
+  int _renderMode;
+  int _mirrorMode;
 
   @override
   Widget build(BuildContext context) {
@@ -182,40 +185,39 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
   }
 
   void setData() {
+    if (widget.uid == null) return;
     _channels[_id]?.invokeMethod('setData', {
       'data': {
         'uid': widget.uid,
         'channelId': widget.channelId,
         'totalJoinedUser': widget.totalJoinedUser,
         // 'isFrontCamera': widget.isFrontCamera,
-      },
+      }
     });
   }
 
   void setRenderMode() {
+    if (widget.renderMode == null) return;
     _renderMode = VideoRenderModeConverter(widget.renderMode).value();
-    _channels[_id]?.invokeMethod('setRenderMode', {
-      'renderMode': _renderMode,
-    });
+    _channels[_id]?.invokeMethod('setRenderMode', {'renderMode': _renderMode});
   }
 
   void setMirrorMode() {
+    if (widget.mirrorMode == null) return;
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
-    _channels[_id]?.invokeMethod('setMirrorMode', {
-      'mirrorMode': _mirrorMode,
-    });
+    _channels[_id]?.invokeMethod('setMirrorMode', {'mirrorMode': _mirrorMode});
   }
 
   void setZOrderOnTop() {
-    _channels[_id]?.invokeMethod('setZOrderOnTop', {
-      'onTop': widget.zOrderOnTop,
-    });
+    if (widget.zOrderOnTop == null) return;
+    _channels[_id]
+        ?.invokeMethod('setZOrderOnTop', {'onTop': widget.zOrderOnTop});
   }
 
   void setZOrderMediaOverlay() {
-    _channels[_id]?.invokeMethod('setZOrderMediaOverlay', {
-      'isMediaOverlay': widget.zOrderMediaOverlay,
-    });
+    if (widget.zOrderMediaOverlay == null) return;
+    _channels[_id]?.invokeMethod(
+        'setZOrderMediaOverlay', {'isMediaOverlay': widget.zOrderMediaOverlay});
   }
 
   Future<void> onPlatformViewCreated(int id) async {
@@ -227,8 +229,9 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
   }
 }
 
-/// Use TextureView on Android.
-/// Not support iOS.
+/// Use TextureView in Android.
+/// Not support for iOS.
+/// [TargetPlatform.android]
 class RtcTextureView extends StatefulWidget {
   /// User ID.
   final int uid;
@@ -243,7 +246,7 @@ class RtcTextureView extends StatefulWidget {
   /// **Note**
   /// - The default value is the empty string "". Use the default value if the user joins the channel using the [RtcEngine.joinChannel] method in the [RtcEngine] class.
   /// - If the user joins the channel using the [RtcChannel.joinChannel] method in the [RtcChannel] class, set this parameter as the channelId of the [RtcChannel] object.
-  final String? channelId;
+  final String channelId;
 
   /// The rendering mode of the video view.
   final VideoRenderMode renderMode;
@@ -254,7 +257,7 @@ class RtcTextureView extends StatefulWidget {
   /// Callback signature for when a platform view was created.
   ///
   /// `id` is the platform view's unique identifier.
-  final PlatformViewCreatedCallback? onPlatformViewCreated;
+  final PlatformViewCreatedCallback onPlatformViewCreated;
 
   /// Which gestures should be consumed by the web view.
   ///
@@ -265,12 +268,12 @@ class RtcTextureView extends StatefulWidget {
   ///
   /// When this set is empty or null, the web view will only handle pointer events for gestures that
   /// were not claimed by any other gesture recognizer.
-  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
   /// Constructs a [RtcTextureView]
   RtcTextureView({
-    Key? key,
-    required this.uid,
+    Key key,
+    @required this.uid,
     this.channelId,
     this.renderMode = VideoRenderMode.Hidden,
     this.mirrorMode = VideoMirrorMode.Auto,
@@ -285,9 +288,9 @@ class RtcTextureView extends StatefulWidget {
 }
 
 class _RtcTextureViewState extends State<RtcTextureView> {
-  int? _id;
-  int? _renderMode;
-  int? _mirrorMode;
+  int _id;
+  int _renderMode;
+  int _mirrorMode;
 
   @override
   Widget build(BuildContext context) {
@@ -340,26 +343,22 @@ class _RtcTextureViewState extends State<RtcTextureView> {
   }
 
   void setData() {
+    if (widget.uid == null) return;
     _channels[_id]?.invokeMethod('setData', {
-      'data': {
-        'uid': widget.uid,
-        'channelId': widget.channelId,
-      },
+      'data': {'uid': widget.uid, 'channelId': widget.channelId}
     });
   }
 
   void setRenderMode() {
+    if (widget.renderMode == null) return;
     _renderMode = VideoRenderModeConverter(widget.renderMode).value();
-    _channels[_id]?.invokeMethod('setRenderMode', {
-      'renderMode': _renderMode,
-    });
+    _channels[_id]?.invokeMethod('setRenderMode', {'renderMode': _renderMode});
   }
 
   void setMirrorMode() {
+    if (widget.mirrorMode == null) return;
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
-    _channels[_id]?.invokeMethod('setMirrorMode', {
-      'mirrorMode': _mirrorMode,
-    });
+    _channels[_id]?.invokeMethod('setMirrorMode', {'mirrorMode': _mirrorMode});
   }
 
   Future<void> onPlatformViewCreated(int id) async {
